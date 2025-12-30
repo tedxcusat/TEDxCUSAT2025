@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 
-
 type Speaker = {
   name: string;
   title: string;
@@ -14,49 +13,49 @@ type Speaker = {
 
 const speakers: Speaker[] = [
   {
-    name: "Olivia Lorem",
+    name: "Olivia Lorem1",
     title: "Actress",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare orci diam, a dictum diam luctus vel.",
     img: "/speakers/mystery.jpg",
   },
   {
-    name: "Michael Amet",
+    name: "Michael Amet2",
     title: "Entrepreneur",
     description:
       "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     img: "/speakers/mystery.jpg",
   },
   {
-    name: "Olivia Lorem",
+    name: "Olivia Lorem3",
     title: "Creative Director",
     description:
       "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     img: "/speakers/mystery.jpg",
   },
   {
-    name: "Olivia Lorem",
+    name: "Olivia Lorem4",
     title: "Creative Director",
     description:
       "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     img: "/speakers/mystery.jpg",
   },
   {
-    name: "Olivia Lorem",
+    name: "Olivia Lorem5",
     title: "Creative Director",
     description:
       "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     img: "/speakers/mystery.jpg",
   },
   {
-    name: "Olivia Lorem",
+    name: "Olivia Lorem6",
     title: "Creative Director",
     description:
       "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     img: "/speakers/mystery.jpg",
   },
-    {
-    name: "Michael Amet",
+  {
+    name: "Michael Amet7",
     title: "Entrepreneur",
     description:
       "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
@@ -65,100 +64,273 @@ const speakers: Speaker[] = [
 ];
 
 export default function Newspeakers() {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const cardRefs = useRef<HTMLDivElement[]>([]);
+  const spotlightRef = useRef<HTMLDivElement>(null);
+  const bg26Ref = useRef<HTMLDivElement>(null);
+  const bg26MaskRef = useRef<HTMLDivElement>(null);
+  const voicesRef = useRef<HTMLHeadingElement>(null);
+  const speakersHeaderRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement | null>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const startIndex = useRef(0);
 
-  const positions = [
-  { x: -800, y: 80, rotation: -10 },
-  { x: -400, y: 20, rotation: -6 },
-  { x: 0, y: 0, rotation: 0 },
-  { x: 400, y: 20, rotation: 6 },
-  { x: 800, y: 80, rotation: 10 },
-];
+  useEffect(() => {
+    gsap.set(bg26MaskRef.current, {
+      clipPath: "inset(0 0 100% 0)",
+    });
 
-useEffect(() => {
-  cardRefs.current.forEach((card, i) => {
-    if (!card) return;
+    gsap.set(spotlightRef.current, {
+      y: -400,
+    });
 
-    const position =
-      (i - currentIndex + speakers.length) % speakers.length;
+    const tl = gsap.timeline();
 
-    if (position > 4) {
-      gsap.set(card, { opacity: 0 });
-      return;
-    }
+    // Stage 2 — spotlight + bg '26
+    tl.fromTo(
+      spotlightRef.current,
+      {
+        y: -500,
+        opacity: 0,
+      },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 3.5,
+        ease: "expo.out",
+      }
+    ).to(
+      bg26MaskRef.current,
+      {
+        clipPath: "inset(0 0 0% 0)",
+        duration: 2,
+        ease: "sine.out",
+      },
+      "<"
+    );
 
-    gsap.to(card, {
-      ...positions[position],
+    // Hold
+    tl.to({}, { duration: 0.1 });
+
+    // Stage 3 — Voices of '26
+    tl.to(voicesRef.current, {
       opacity: 1,
-      duration: 0.7,
+      duration: 2,
+      scale: 1.5,
       ease: "power3.out",
     });
-  });
-}, [currentIndex]);
+
+    // Stage 4 — spotlight + bg fade out
+    tl.to([spotlightRef.current, bg26Ref.current], {
+      opacity: 0,
+      duration: 0.8,
+      ease: "power2.in",
+    });
+
+    // Stage 5 — Voices moves to final position
+    tl.to(voicesRef.current, {
+      top: "10%",
+      scale: 0.8,
+      duration: 0.7,
+      ease: "power3.inOut",
+    });
+
+    // Stage 6 — Speakers header
+    tl.to(speakersHeaderRef.current, {
+      opacity: 1,
+      duration: 0.5,
+      ease: "power3.out",
+    });
+
+    tl.to(
+      lineRef.current,
+      {
+        opacity: 1,
+        duration: 0.5,
+        ease: "power3.out",
+      },
+      "<"
+    );
+
+    // Stage 7 — Cards
+    tl.to(cardsContainerRef.current, {
+      opacity: 1,
+      duration: 0.4,
+    });
+  }, []);
+
+  const layoutCards = () => {
+    const containerWidth =
+      cardsContainerRef.current?.offsetWidth || window.innerWidth;
+
+    const CARD_WIDTH = Math.min(containerWidth * 0.42, 380);
+    const BASE_Y = 20;
+    const center = 2;
+    const VISIBLE_RANGE = 2;
+
+    cardRefs.current.forEach((card, i) => {
+      if (!card) return;
+
+      const total = speakers.length;
+
+      let offset = i - center - startIndex.current;
+      offset = ((offset % total) + total) % total;
+      if (offset > total / 2) offset -= total;
+
+      gsap.to(card, {
+        x: offset * (CARD_WIDTH + 20),
+        y: BASE_Y + Math.abs(offset) * 40 + (offset === 0 ? 25 : 0),
+        rotation: offset * 4,
+        opacity: Math.abs(offset) > VISIBLE_RANGE ? 0 : 1,
+        duration: 0.85,
+        ease: "expo.inOut",
+        overwrite: "auto",
+      });
+    });
+  };
+
+  useEffect(() => {
+    layoutCards();
+  }, []);
+
+  const handleNext = () => {
+    startIndex.current = (startIndex.current + 1) % speakers.length;
+
+    layoutCards();
+  };
+
+  const handlePrev = () => {
+    startIndex.current =
+      (startIndex.current - 1 + speakers.length) % speakers.length;
+
+    layoutCards();
+  };
 
   return (
-    <section id="speakers" className="bg-black text-white py-20 overflow-hidden">
+    <section
+      id="speakers"
+      className="relative bg-black text-white py-20 overflow-hidden"
+    >
+      {/* Spotlight */}
+      <div
+        ref={spotlightRef}
+        className="pointer-events-none absolute inset-0 flex justify-center opacity-0 relative"
+      >
+        <svg
+          width="900"
+          height="500"
+          viewBox="0 0 1000 500"
+          className="absolute top-0 z-10 overflow-visible"
+        >
+          <defs>
+            <linearGradient id="spotGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#e62b1e" stopOpacity="0.85" />
+              <stop offset="70%" stopColor="#e62b1e" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#e62b1e" stopOpacity="0" />
+            </linearGradient>
+            <filter
+              id="blurFilter"
+              x="-60%"
+              y="-60%"
+              width="220%"
+              height="220%"
+            >
+              <feGaussianBlur stdDeviation="25" />
+            </filter>
+          </defs>
+
+          <polygon
+            points="350,-120 650,-120 1150,520 -150,520"
+            fill="url(#spotGrad)"
+            filter="url(#blurFilter)"
+          />
+        </svg>
+      </div>
+
+      {/* Background '26 */}
+      <div
+        ref={bg26Ref}
+        className="pointer-events-none absolute inset-0 flex justify-center"
+      >
+        <div
+          ref={bg26MaskRef}
+          className="absolute top-[5%] left-1/2 -translate-x-1/2 flex whitespace-nowrap gap-16 text-[15rem] font-bold text-white/5 tracking-widest overflow-hidden"
+        >
+          {Array.from({ length: 10 }).map((_, i) => (
+            <span key={i}>’26</span>
+          ))}
+        </div>
+      </div>
+
       {/* Heading */}
-      <div className="px-[10%] mb-12 ">        
-        <h1 className="text-4xl md:text-8xl font-semibold text-center">
-          Voices of <span className="text-[#e62b1e]">’26</span> 
+      <div className="px-[10%] mb-12 ">
+        <h1
+          ref={voicesRef}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl md:text-8xl font-semibold opacity-0 "
+        >
+          Voices of <span className="text-[#e62b1e]">’26</span>
         </h1>
 
-        <div className="flex items-center justify-between gap-6">
-        <h2 className="uppercase opacity-60 text-2xl font-bold mb-2 mt-5">Speakers.2026</h2>
-      
+        <div
+          ref={speakersHeaderRef}
+          className="flex items-center justify-between gap-6 opacity-0 mt-24"
+        >
+          <h2 className="uppercase opacity-60 text-2xl font-bold mb-2 mt-5">
+            Speakers.2026
+          </h2>
 
-    <div className="flex gap-10">
-    <button 
-      onClick={() => {
-      setOpenIndex(null);
-      setCurrentIndex(
-        (prev) => (prev - 1 + speakers.length) % speakers.length
-      );
-    }}
-  >
-    <Image src="/left arrow.png" alt="Prev" width={40} height={25} />
-      </button>
+          <div className="flex gap-10">
+            <button
+              onClick={() => {
+                setOpenIndex(null);
+                handlePrev();
+              }}
+            >
+              <Image src="/left arrow.png" alt="Prev" width={40} height={25} />
+            </button>
 
-      <button 
-        onClick={() => {
-        setOpenIndex(null);
-        setCurrentIndex(
-        (prev) => (prev + 1) % speakers.length
-      );
-    }}
-  >
-    <Image src="/right arrow.png" alt="Next" width={40} height={25} />
-      </button>
-    </div>
-    </div>
-    </div>
+            <button
+              onClick={() => {
+                setOpenIndex(null);
+                handleNext();
+              }}
+            >
+              <Image src="/right arrow.png" alt="Next" width={40} height={25} />
+            </button>
+          </div>
+        </div>
+      </div>
 
-      <div className="h-px flex-1 bg-white/30  mx-[10%]" />
+      <div
+        ref={lineRef}
+        className="h-px flex-1 bg-white/30  mx-[10%] opacity-0"
+      />
 
       {/* Cards */}
-      <div className="relative flex items-center justify-center h-[600px] overflow-hidden ">
+      <div
+        ref={cardsContainerRef}
+        className="relative flex items-center justify-center h-[600px] overflow-hidden opacity-0"
+      >
         {speakers.map((sp, i) => {
-          const position =
-      (i - currentIndex + speakers.length) % speakers.length;
-
-    if (position > 4) return null; //only 5 cards
-
-     const isOpen = openIndex === i;
+          const isOpen = openIndex === i;
 
           return (
             <div
               ref={(el) => {
-                  if (el) cardRefs.current[i] = el;
-                }}
-                key={sp.name + i}
-                className={`absolute top-[45%] -translate-y-1/2 w-[350px] aspect-square bg-[#111] border
+                if (el) cardRefs.current[i] = el;
+              }}
+              key={sp.name + i}
+              className={`absolute top-[5%]  w-[350px] aspect-square bg-[#111] border
                   ${isOpen ? "border-[#e62b1e] z-50" : "border-white z-10"}`}
             >
               {/* Image */}
-              <Image src={sp.img} alt={sp.name} width={260} height={360} className="w-full h-full object-cover" />
+              <Image
+                src={sp.img}
+                alt={sp.name}
+                width={260}
+                height={360}
+                className="w-full h-full object-cover"
+              />
 
               {/* Name */}
               <p className="absolute bottom-4 left-4 text-[#e62b1e] font-medium">
@@ -172,29 +344,30 @@ useEffect(() => {
                   className="absolute bottom-0 right-4   transition-transform cursor-pointer"
                   aria-label="Open speaker details"
                 >
-                  <Image src="/top arrow.png" alt="Open" width={28} height={25} />
+                  <Image
+                    src="/up arrow.png"
+                    alt="Open"
+                    width={28}
+                    height={25}
+                  />
                 </button>
               )}
 
               {/* Details Overlay */}
               {isOpen && (
                 <div className="absolute inset-0 bg-black bg-opacity-95 p-4 flex flex-col pt-8">
-                  {/* Close Arrow - top center, red bg with white arrow */}
+                  {/* Close Arrow*/}
                   <button
                     onClick={() => setOpenIndex(null)}
-                    className="absolute top-0 right-4 bg-[#e62b1e] p-1  z-10 cursor-pointer"
+                    className="absolute top-0 right-4 z-10 cursor-pointer rotate-90"
                     aria-label="Close speaker details"
                   >
-                    <svg
-                      width="25"
-                      height="22"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="white"
-                      strokeWidth="2"
-                    >
-                      <polyline points="3 7 12 19 21 7" />
-                    </svg>
+                    <Image
+                      src="/right arrow.png"
+                      alt="Prev"
+                      width={28}
+                      height={25}
+                    />
                   </button>
 
                   <p className="text-[#e62b1e] font-semibold text-lg">
