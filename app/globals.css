@@ -24,3 +24,150 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* src/app/globals.css */
+
+:root {
+  --ted-red: #E62B1E;
+  --bg-black: #050505;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-black);
+  color: white;
+  font-family: 'Arial', sans-serif;
+  overflow-x: hidden; /* Important for the animation */
+}
+
+/* Navbar */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+  position: absolute; /* Sits on top of everything */
+  width: 100%;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.logo span {
+  color: var(--ted-red);
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.btn-book {
+  background-color: var(--ted-red);
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-content {
+  z-index: 50; /* Ensures text is above background but below hands if needed */
+  margin-top: -50px;
+}
+
+.hero-content h1 {
+  font-size: clamp(40px, 8vw, 80px); /* Responsive font size */
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.red-text {
+  color: var(--ted-red);
+  font-weight: bold;
+}
+
+.hero-content p {
+  max-width: 600px;
+  line-height: 1.6;
+  color: #ccc;
+  margin: 0 auto;
+}
+
+/* Gallery Animation */
+.scrolling-gallery {
+  width: 100%;
+  margin-bottom: 50px;
+  transition: transform 0.2s ease-out; /* Smooth tilt */
+  transform-origin: center bottom;
+}
+
+.gallery-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: scroll-left 40s linear infinite;
+}
+
+.float-img {
+  width: 200px;
+  height: auto;
+  opacity: 0.8;
+  border-radius: 8px;
+  filter: grayscale(100%); /* Cool effect: B&W photos until hovered */
+  transition: 0.3s;
+}
+
+.float-img:hover {
+  filter: grayscale(0%);
+}
+
+/* Rotations for the "Arc" look */
+.img-1 { transform: rotate(-10deg) translateY(20px); }
+.img-2 { transform: rotate(-5deg); }
+.img-3 { transform: rotate(0deg) translateY(-10px); }
+.img-4 { transform: rotate(5deg); }
+
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* The Hands */
+.hand-left, .hand-right {
+  position: absolute;
+  bottom: -300px; /* Start hidden below screen */
+  width: 25vw;
+  max-width: 400px;
+  transition: transform 0.1s ease-out; /* Snappy movement */
+  z-index: 20;
+  pointer-events: none; /* Lets you click text behind the hands */
+}
+
+.hand-left { left: 0; }
+.hand-right { right: 0; }

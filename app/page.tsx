@@ -1,65 +1,95 @@
-import Image from "next/image";
+'use client';
+
+import { useEffect, useRef } from 'react';
 
 export default function Home() {
+  // 👇 WE ADD <HTMLImageElement> and <HTMLDivElement> HERE
+  const leftHandRef = useRef<HTMLImageElement>(null);
+  const rightHandRef = useRef<HTMLImageElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 👇 We also specify the type for the event
+    const handleMouseMove = (event: MouseEvent) => {
+      const screenWidth = window.innerWidth;
+      const mouseX = event.clientX;
+      const centerY = screenWidth / 2;
+
+      // 1. Calculate how far mouse is from center (-1 to 1)
+      const factor = (mouseX - centerY) / centerY;
+      
+      // 2. Set how high hands should rise (in pixels)
+      const riseHeight = 350; 
+
+      // 3. Logic: If mouse is left, raise left hand. If right, raise right hand.
+      if (mouseX < centerY) {
+        // Left Side
+        const intensity = Math.abs(factor);
+        if (leftHandRef.current) leftHandRef.current.style.transform = `translateY(-${intensity * riseHeight}px)`;
+        if (rightHandRef.current) rightHandRef.current.style.transform = `translateY(0px)`;
+      } else {
+        // Right Side
+        const intensity = factor;
+        if (rightHandRef.current) rightHandRef.current.style.transform = `translateY(-${intensity * riseHeight}px)`;
+        if (leftHandRef.current) leftHandRef.current.style.transform = `translateY(0px)`;
+      }
+
+      // 4. Logic: Tilt the gallery
+      const rotation = factor * -5; // Max 5 degrees tilt
+      if (galleryRef.current) {
+        galleryRef.current.style.transform = `rotate(${rotation}deg)`;
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // Cleanup when leaving the page
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="hero">
+      {/* Navbar */}
+      <nav>
+        <div className="logo">TED<span>x</span>CUSAT</div>
+        <ul className="nav-links">
+          <li><a href="#">HOME</a></li>
+          <li><a href="#">ABOUT</a></li>
+          <li><a href="#">SPEAKERS</a></li>
+          <li><a href="#">STORIES</a></li>
+        </ul>
+        <a href="#" className="btn-book">BOOK NOW</a>
+      </nav>
+
+      {/* Scrolling Gallery */}
+      <div className="scrolling-gallery" ref={galleryRef}>
+        <div className="gallery-track">
+          {/* Images must be in public/images/ folder */}
+          <img src="/images/photo1.png" className="float-img img-1" alt="gallery" />
+          <img src="/images/photo2.png" className="float-img img-2" alt="gallery" />
+          <img src="/images/photo3.png" className="float-img img-3" alt="gallery" />
+          <img src="/images/photo4.png" className="float-img img-4" alt="gallery" />
+          {/* Repeat images for seamless loop */}
+          <img src="/images/photo1.png" className="float-img img-1" alt="gallery" />
+          <img src="/images/photo2.png" className="float-img img-2" alt="gallery" />
+          <img src="/images/photo3.png" className="float-img img-3" alt="gallery" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+
+      {/* Hero Content */}
+      <div className="hero-content">
+        <h1><span className="red-text">TED<sup>x</sup></span>CUSAT</h1>
+        <p>
+          Where the brightest minds of Cochin University of Science And Technology 
+          come together to share ideas that inspire meaningful change.
+        </p>
+      </div>
+
+      {/* The Hands */}
+      <img ref={leftHandRef} src="/images/hand-left.png" className="hand-left" alt="Left Hand" />
+      <img ref={rightHandRef} src="/images/hand-right.png" className="hand-right" alt="Right Hand" />
+    </main>
   );
 }
