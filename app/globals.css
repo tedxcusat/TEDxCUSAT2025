@@ -35,10 +35,28 @@ body {
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--bg-black);
+  
+  /* 1. Set the dark background color */
+  background-color: #050505; 
+  
+  /* 2. Add the texture image */
+  /* Note: In Next.js CSS, the path starts with /images/ */
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), /* 80% black overlay */
+    url('/images/bg-texture.png');
+  
+  /* 3. Make sure it covers the whole screen */
+  background-size: cover; /* Or 'repeat' if it's a small tile pattern */
+  background-position: center;
+  background-attachment: fixed; /* Keeps texture still while you scroll */
+  
+  /* OPTIONAL: Blend it so it doesn't look too grey/bright */
+  /* This mixes the black color with your image */
+  background-blend-mode: overlay; 
+
   color: white;
   font-family: 'Arial', sans-serif;
-  overflow-x: hidden; /* Important for the animation */
+  overflow-x: hidden;
 }
 
 /* Navbar */
@@ -171,3 +189,20 @@ nav {
 
 .hand-left { left: 0; }
 .hand-right { right: 0; }
+
+/* Inside src/app/globals.css */
+
+.planet-glow {
+  position: absolute;
+  bottom: 0; /* Keeps it grounded at the bottom */
+  left: 50%;
+  transform: translateX(-50%); 
+  
+  width: 100%;       
+  max-width: 800px; /* Adjust this: Planets usually look better if they aren't too stretched */
+  height: auto;      
+  
+  z-index: 5; /* Behind hands (20), on top of bg (0) */
+  pointer-events: none; 
+  opacity: 0.3; 
+}
