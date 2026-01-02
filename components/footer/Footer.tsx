@@ -1,8 +1,39 @@
-import ContactCard from "./ContactCard";
+"use client";
+
+import { useEffect, useState, useRef } from "react";
 
 export default function Footer() {
+  // State to trigger animations
+  const [isInView, setIsInView] = useState(false);
+  const footerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        // If footer is visible, trigger animations and stop observing
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.1, // Trigger when 10% of the footer is visible
+      }
+    );
+
+    if (footerRef.current) {
+      observer.observe(footerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <footer className="bg-black text-white overflow-hidden">
+    // Attached ref here to monitor visibility
+    <footer ref={footerRef} className="bg-black text-white overflow-hidden">
       {/* MAIN FOOTER CONTENT */}
       <div className="relative mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-16 lg:py-24">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-0">
@@ -10,40 +41,48 @@ export default function Footer() {
           {/* LEFT COLUMN */}
           <div className="relative w-full overflow-hidden lg:pr-16">
             
-            {/* Heading */}
-            <h3 className="font-orbitron text-3xl md:text-[48px] tracking-[-2%]">
-              Got a <span className="text-[#EB0028]">Question?</span>
-            </h3>
+            {/* Heading & Subheading */}
+            {/* ANIMATION: Appears first (Fade In) */}
+            <div 
+              className={`transform transition-all duration-1000 ease-out ${
+                isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
+            >
+              <h3 className="font-orbitron text-3xl md:text-[48px] tracking-[-2%]">
+                Got a <span className="text-[#EB0028]">Question?</span>
+              </h3>
 
-            {/* Subheading */}
-            <p className="mt-2 font-orbitron text-xl md:text-[24px] opacity-80">
-              Contact
-            </p>
+              <p className="mt-2 font-orbitron text-xl md:text-[24px] opacity-80">
+                Contact
+              </p>
+            </div>
 
             {/* HAND IMAGE — TOP RIGHT (Hidden on Mobile) */}
-           <img
-  src="/footer-hand.png"
-  alt=""
-  className="
-    absolute
-    /* Position the hand */
-    right-[-253px]
-    top-[-225px]
-    origin-top-right
-    
-    /* VISIBILITY SETTINGS */
-    hidden       /* Hidden by default on Mobile, Tablet, and Small Laptops */
-    xl:block     /* Visible ONLY on Extra Large screens (1280px+) */
-    
-    pointer-events-none
-  "
-/>
+            {/* ANIMATION: Fades in from the middle side partition */}
+            <img
+              src="/footer-hand.png"
+              alt=""
+              className={`
+                absolute
+                right-[-253px]
+                top-[-225px]
+                origin-top-right
+                hidden xl:block pointer-events-none
+                transform transition-all duration-1000 delay-300 ease-out
+                ${isInView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-20"}
+              `}
+            />
 
             {/* CONTACT CARDS */}
             <div className="mt-10 lg:mt-[100px] space-y-6 lg:space-y-10">
               
-              {/* CONTACT CARD 1 - Using responsive width */}
-              <div className="border border-white px-5 py-4 w-full max-w-[380px]">
+              {/* CONTACT CARD 1 */}
+              {/* ANIMATION: Fades directly in (Delay 500ms) */}
+              <div 
+                className={`border border-white px-5 py-4 w-full max-w-[380px] transform transition-opacity duration-1000 delay-500 ease-out ${
+                  isInView ? "opacity-100" : "opacity-0"
+                }`}
+              >
                 <p className="font-clash text-2xl md:text-[26px] tracking-[-2%] text-[#EB0028]">
                   IVINE JOJU
                 </p>
@@ -68,7 +107,12 @@ export default function Footer() {
               </div>
 
               {/* CONTACT CARD 2 */}
-              <div className="border border-white px-5 py-4 w-full max-w-[380px]">
+              {/* ANIMATION: Fades directly in (Delay 700ms) */}
+              <div 
+                className={`border border-white px-5 py-4 w-full max-w-[380px] transform transition-opacity duration-1000 delay-700 ease-out ${
+                  isInView ? "opacity-100" : "opacity-0"
+                }`}
+              >
                 <p className="font-clash text-2xl md:text-[26px] tracking-[-2%] text-[#EB0028]">
                   IVINE JOJU
                 </p>
@@ -97,7 +141,12 @@ export default function Footer() {
           <div className="hidden lg:block absolute left-1/2 top-0 h-full w-px bg-white/40" />
 
           {/* RIGHT COLUMN */}
-          <div className="w-full lg:pl-16">
+          {/* ANIMATION: Drops and fades in from the top (Delay 1000ms) */}
+          <div 
+            className={`w-full lg:pl-16 transform transition-all duration-1000 delay-1000 ease-out ${
+              isInView ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-20"
+            }`}
+          >
             <h3 className="font-orbitron text-3xl md:text-[42px] tracking-[5%]">
               See You <span className="text-[#EB0028]">there!</span>
             </h3>
@@ -140,7 +189,12 @@ export default function Footer() {
       </div>
 
       {/* BOTTOM BAR */}
-      <div className="border-t border-white/40">
+      {/* ANIMATION: Fades directly in (Delay 1200ms) */}
+      <div 
+        className={`border-t border-white/40 transform transition-opacity duration-1000 delay-1200 ease-out ${
+          isInView ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <div className="mx-auto flex w-full max-w-[1440px] flex-col md:flex-row items-center justify-between gap-6 md:gap-0 px-6 py-6 lg:px-16">
           
           {/* LEFT — LOGO */}
