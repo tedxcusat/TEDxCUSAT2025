@@ -75,9 +75,14 @@ export default function Newspeakers() {
   const speakersHeaderRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement | null>(null);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const renderMobileRef = useRef<() => void>(() => {});
   const startIndex = useRef(0);
   const isManual = useRef(false);
   const isAnimating = useRef(false);
+  const CARD = 260;
+  const GAP = 20;
+  const mobileOffset = useRef(0);
+  const mobileAuto = useRef<gsap.core.Tween | null>(null);
 
   useEffect(() => {
     gsap.set(bg26MaskRef.current, {
@@ -192,30 +197,6 @@ export default function Newspeakers() {
     const total = speakers.length;
     const center = 2;
 
-    // ---------- MOBILE ----------
-    if (screen === "mobile") {
-      const CARD_WIDTH = Math.min(containerWidth * 0.7, 260);
-      const GAP = containerWidth < 360 ? 30 : 6;
-
-      cardRefs.current.forEach((card, i) => {
-        if (!card) return;
-
-        let offset = i - startIndex.current;
-        offset = ((offset % total) + total) % total;
-
-        gsap.to(card, {
-          x: offset * (CARD_WIDTH + GAP)- (containerWidth / 2) + (CARD_WIDTH / 2)+14,
-          y: 0,
-          rotation: 0,
-          opacity: 1,
-          duration: 0.6,
-          ease: "linear",
-        });
-      });
-
-      return;
-    }
-
     // ---------- TABLET ----------
     if (screen === "tablet") {
       const CARD_WIDTH = Math.min(containerWidth * 0.45, 360);
@@ -271,12 +252,103 @@ export default function Newspeakers() {
   };
 
   useEffect(() => {
-    layoutCards();
-    window.addEventListener("resize", layoutCards);
-    return () => window.removeEventListener("resize", layoutCards);
+    if (window.innerWidth >= 640) {
+      layoutCards();
+      window.addEventListener("resize", layoutCards);
+      return () => window.removeEventListener("resize", layoutCards);
+    }
   }, []);
 
-  
+  useEffect(() => {
+    if (!cardsContainerRef.current) return;
+    if (window.innerWidth >= 640) return;
+
+    const cards = cardRefs.current;
+    const STEP = CARD + GAP;
+    const TOTAL = STEP * cards.length;
+
+    const render = () => {
+      if (openIndex !== null) return; 
+
+      cards.forEach((card, i) => {
+        const x = (((i * STEP + mobileOffset.current) % TOTAL) + TOTAL) % TOTAL;
+        gsap.set(card, { x: x - TOTAL / 2 });
+      });
+    };
+    renderMobileRef.current = render;
+
+    render(); 
+
+    mobileAuto.current = gsap.to(
+      {},
+      {
+        repeat: -1,
+        ease: "none",
+        duration: 9999,
+        onUpdate() {
+          mobileOffset.current -= 0.25;
+          render();
+        },
+      }
+    );
+
+    const proxy = document.createElement("div");
+
+    Draggable.create(proxy, {
+      trigger: cardsContainerRef.current,
+      type: "x",
+      inertia: true,
+
+      onPress() {
+        mobileAuto.current?.pause();
+      },
+
+      onDrag() {
+        mobileOffset.current += this.deltaX;
+        render();
+      },
+
+      onRelease() {
+        mobileAuto.current?.resume();
+      },
+
+      onThrowUpdate() {
+        mobileOffset.current += this.deltaX;
+        render();
+      },
+    });
+
+    return () => {
+      mobileAuto.current?.kill();
+    };
+  }, []);
+
+  const moveMobile = (dir: number) => {
+    mobileAuto.current?.pause();
+
+    gsap.to(mobileOffset, {
+      current: mobileOffset.current + dir * (CARD + GAP),
+      duration: 0.6,
+      ease: "power2.out",
+      onUpdate() {
+        renderMobileRef.current();
+      },
+      onComplete() {
+        if (openIndex === null) {
+          mobileAuto.current?.resume();
+        }
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (window.innerWidth < 640) {
+      openIndex !== null
+        ? mobileAuto.current?.pause()
+        : mobileAuto.current?.resume();
+    }
+  }, [openIndex]);
+
   const handleNext = () => {
     if (isAnimating.current) return;
     isAnimating.current = true;
@@ -307,7 +379,7 @@ export default function Newspeakers() {
   useEffect(() => {
     let auto: gsap.core.Timeline | null = null;
 
-    if (openIndex === null) {
+    if (openIndex === null && window.innerWidth >= 640) {
       auto = gsap.timeline({ repeat: -1 });
 
       auto.to(
@@ -333,7 +405,7 @@ export default function Newspeakers() {
         {/* Spotlight */}
         <div
           ref={spotlightRef}
-          className="pointer-events-none absolute inset-0 flex justify-center opacity-0 relative"
+          className="pointer-events-none absolute inset-0 flex justify-center opacity-0 "
         >
           <svg
             width="900"
@@ -347,13 +419,6 @@ export default function Newspeakers() {
                 <stop offset="70%" stopColor="#e62b1e" stopOpacity="0.15" />
                 <stop offset="100%" stopColor="#e62b1e" stopOpacity="0" />
               </linearGradient>
-              <filter
-                id="blurFilter"
-                x="-60%"
-                y="-60%"
-                width="220%"
-                height="220%"
-              ></filter>
             </defs>
 
             <polygon
@@ -403,7 +468,11 @@ export default function Newspeakers() {
                 <button
                   onClick={() => {
                     setOpenIndex(null);
-                    handlePrev();
+                    if (window.innerWidth < 640) {
+                      moveMobile(1);
+                    } else {
+                      handlePrev();
+                    }
                   }}
                 >
                   <Image
@@ -418,7 +487,11 @@ export default function Newspeakers() {
                 <button
                   onClick={() => {
                     setOpenIndex(null);
-                    handleNext();
+                    if (window.innerWidth < 640) {
+                      moveMobile(-1);
+                    } else {
+                      handleNext();
+                    }
                   }}
                 >
                   <Image
@@ -439,7 +512,7 @@ export default function Newspeakers() {
         {/* Cards */}
         <div
           ref={cardsContainerRef}
-          className="relative flex items-center justify-center h-[500px] md:h-[600px] overflow-hidden opacity-0 mt-5 touch-pan-x"
+          className="relative flex items-center justify-center h-[500px] md:h-[600px] overflow-hidden opacity-0 mt-5 "
         >
           {speakers.map((sp, i) => {
             const isOpen = openIndex === i;
