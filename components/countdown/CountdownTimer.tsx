@@ -15,7 +15,15 @@ function calculateTimeLeft(): TimeLeft | null {
   const now = Date.now();
   const diff = target - now;
 
-  if (diff <= 0) return null;
+  // MODIFIED: If time is up, return 0s instead of null so it stays visible.
+  if (diff <= 0) {
+    return {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    };
+  }
 
   return {
     days: Math.floor(diff / (1000 * 60 * 60 * 24)),
@@ -56,8 +64,8 @@ export default function CountdownTimer() {
             {/* Reduced clamp vw from 4vw to 3vw to prevent overflow on tablets */}
             <span
               className="font-orbitron font-bold text-[#EB0028]
-                   text-[clamp(14px,3vw,82px)] 
-                   tabular-nums text-center leading-none"
+                    text-[clamp(14px,3vw,82px)] 
+                    tabular-nums text-center leading-none"
               style={{ width: "2.3ch" }}
             >
               {value.toString().padStart(2, "0")}
@@ -66,7 +74,7 @@ export default function CountdownTimer() {
             {/* LETTER (D, H, M, S) */}
             <span
               className="font-orbitron font-bold
-                   text-[clamp(14px,3vw,82px)] leading-none"
+                    text-[clamp(14px,3vw,82px)] leading-none"
               style={{
                 WebkitTextStroke: "1px #EB0028",
                 color: "transparent",
