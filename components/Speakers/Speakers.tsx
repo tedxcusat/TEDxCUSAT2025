@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import gsap from "gsap";
+import { Draggable } from "gsap/dist/Draggable";
+gsap.registerPlugin(Draggable);
 
 type Speaker = {
   name: string;
@@ -74,6 +76,8 @@ export default function Newspeakers() {
   const lineRef = useRef<HTMLDivElement | null>(null);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
   const startIndex = useRef(0);
+  const isManual = useRef(false);
+  const isAnimating = useRef(false);
 
   useEffect(() => {
     gsap.set(bg26MaskRef.current, {
@@ -190,8 +194,8 @@ export default function Newspeakers() {
 
     // ---------- MOBILE ----------
     if (screen === "mobile") {
-      const CARD_WIDTH = Math.min(containerWidth * 0.8, 300);
-      const GAP = 10;
+      const CARD_WIDTH = Math.min(containerWidth * 0.7, 260);
+      const GAP = containerWidth < 360 ? 30 : 6;
 
       cardRefs.current.forEach((card, i) => {
         if (!card) return;
@@ -200,12 +204,12 @@ export default function Newspeakers() {
         offset = ((offset % total) + total) % total;
 
         gsap.to(card, {
-          x: offset * (CARD_WIDTH + GAP),
+          x: offset * (CARD_WIDTH + GAP)- (containerWidth / 2) + (CARD_WIDTH / 2)+14,
           y: 0,
           rotation: 0,
           opacity: 1,
           duration: 0.6,
-          ease: "power2.out",
+          ease: "linear",
         });
       });
 
@@ -217,6 +221,7 @@ export default function Newspeakers() {
       const CARD_WIDTH = Math.min(containerWidth * 0.45, 360);
       const GAP = 60;
       const BASE_Y = 10;
+      const VISIBLE_RANGE = 2;
 
       cardRefs.current.forEach((card, i) => {
         if (!card) return;
@@ -229,9 +234,10 @@ export default function Newspeakers() {
           x: offset * (CARD_WIDTH + GAP),
           y: BASE_Y + Math.abs(offset) * 28 + (offset === 0 ? 18 : 0),
           rotation: offset * 3,
-          opacity: 1,
-          duration: 0.8,
-          ease: "expo.inOut",
+          opacity: Math.abs(offset) > VISIBLE_RANGE ? 0 : 1,
+          immediateRender: false,
+          duration: isManual.current ? 0.7 : 3.2,
+          ease: "linear",
         });
       });
 
@@ -256,8 +262,9 @@ export default function Newspeakers() {
         y: BASE_Y + Math.abs(offset) * 40 + (offset === 0 ? 25 : 0),
         rotation: offset * 4,
         opacity: Math.abs(offset) > VISIBLE_RANGE ? 0 : 1,
-        duration: 0.85,
-        ease: "expo.inOut",
+        immediateRender: false,
+        duration: isManual.current ? 0.7 : 6,
+        ease: "linear",
         overwrite: "auto",
       });
     });
@@ -269,18 +276,53 @@ export default function Newspeakers() {
     return () => window.removeEventListener("resize", layoutCards);
   }, []);
 
+  
   const handleNext = () => {
+    if (isAnimating.current) return;
+    isAnimating.current = true;
+    isManual.current = true;
+    gsap.killTweensOf(cardRefs.current);
     startIndex.current = (startIndex.current + 1) % speakers.length;
-
     layoutCards();
+    setTimeout(() => {
+      isManual.current = false;
+      isAnimating.current = false;
+    }, 100);
   };
 
   const handlePrev = () => {
+    if (isAnimating.current) return;
+    isAnimating.current = true;
+    isManual.current = true;
+    gsap.killTweensOf(cardRefs.current);
     startIndex.current =
       (startIndex.current - 1 + speakers.length) % speakers.length;
-
     layoutCards();
+    setTimeout(() => {
+      isManual.current = false;
+      isAnimating.current = false;
+    }, 300);
   };
+
+  useEffect(() => {
+    let auto: gsap.core.Timeline | null = null;
+
+    if (openIndex === null) {
+      auto = gsap.timeline({ repeat: -1 });
+
+      auto.to(
+        {},
+        {
+          duration: 6,
+          onComplete: handleNext,
+        }
+      );
+    }
+
+    return () => {
+      auto?.kill();
+    };
+  }, [openIndex]);
 
   return (
     <section
@@ -311,9 +353,7 @@ export default function Newspeakers() {
                 y="-60%"
                 width="220%"
                 height="220%"
-              >
-               
-              </filter>
+              ></filter>
             </defs>
 
             <polygon
@@ -349,8 +389,8 @@ export default function Newspeakers() {
           </h1>
         </div>
 
-        <div className="relative z-10 pt-10  ">
-          <div className="flex flex-col gap-5 lg:gap-8 px-[10%]">
+        <div className="relative z-10 pt-10 md:pt-12px lg:pt-20 ">
+          <div className="flex flex-col gap-5 lg:gap-8 px-[5%] ">
             <div
               ref={speakersHeaderRef}
               className="flex items-center justify-between gap-6 opacity-0 mt-0 "
@@ -399,7 +439,7 @@ export default function Newspeakers() {
         {/* Cards */}
         <div
           ref={cardsContainerRef}
-          className="relative flex items-center justify-center h-[500px] md:h-[600px] overflow-hidden opacity-0 mt-5"
+          className="relative flex items-center justify-center h-[500px] md:h-[600px] overflow-hidden opacity-0 mt-5 touch-pan-x"
         >
           {speakers.map((sp, i) => {
             const isOpen = openIndex === i;
