@@ -5,6 +5,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { Draggable } from "gsap/dist/Draggable";
 gsap.registerPlugin(Draggable);
+import SpeakersMarquee from "./SpeakersMarquee";
 
 type Speaker = {
   name: string;
@@ -75,6 +76,7 @@ export default function Newspeakers() {
   const speakersHeaderRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement | null>(null);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const marqueeRef = useRef<HTMLDivElement>(null);
   const renderMobileRef = useRef<() => void>(() => {});
   const startIndex = useRef(0);
   const isManual = useRef(false);
@@ -89,13 +91,9 @@ export default function Newspeakers() {
       clipPath: "inset(0 0 100% 0)",
     });
 
-    gsap.set(spotlightRef.current, {
-      y: -400,
-    });
-
     gsap.set(voicesRef.current, {
-      position: "fixed",
-      top: "50%",
+      position: "absolute",
+      top: "calc(50% + 40px)",
       left: "50%",
       xPercent: -50,
       yPercent: -50,
@@ -108,7 +106,7 @@ export default function Newspeakers() {
     tl.fromTo(
       spotlightRef.current,
       {
-        y: -500,
+        y: "-100%",
         opacity: 0,
       },
       {
@@ -135,7 +133,6 @@ export default function Newspeakers() {
       opacity: 1,
       duration: 2,
       scale: window.innerWidth < 640 ? 1 : 1.5,
-      yPercent: window.innerWidth < 640 ? -200 : -50,
       ease: "power3.out",
     });
 
@@ -149,11 +146,9 @@ export default function Newspeakers() {
     // Stage 5 — Voices moves to final position
     tl.to(voicesRef.current, {
       top: "5%",
-      left: "50%",
-      xPercent: -50,
       yPercent: 0,
       scale: 0.8,
-      duration: 0.7,
+      duration: 0.8,
       ease: "power3.inOut",
     });
 
@@ -175,7 +170,7 @@ export default function Newspeakers() {
     );
 
     // Stage 7 — Cards
-    tl.to(cardsContainerRef.current, {
+    tl.to([cardsContainerRef.current, marqueeRef.current], {
       opacity: 1,
       duration: 0.4,
     });
@@ -268,7 +263,7 @@ export default function Newspeakers() {
     const TOTAL = STEP * cards.length;
 
     const render = () => {
-      if (openIndex !== null) return; 
+      if (openIndex !== null) return;
 
       cards.forEach((card, i) => {
         const x = (((i * STEP + mobileOffset.current) % TOTAL) + TOTAL) % TOTAL;
@@ -277,7 +272,7 @@ export default function Newspeakers() {
     };
     renderMobileRef.current = render;
 
-    render(); 
+    render();
 
     mobileAuto.current = gsap.to(
       {},
@@ -399,195 +394,205 @@ export default function Newspeakers() {
   return (
     <section
       id="speakers"
-      className="relative bg-black text-white overflow-hidden"
+      className="relative bg-black text-white isolate min-h-screen flex flex-col"
     >
-      <div className="relative overflow-hidden h-screen">
-        {/* Spotlight */}
-        <div
-          ref={spotlightRef}
-          className="pointer-events-none absolute inset-0 flex justify-center opacity-0 "
-        >
-          <svg
-            width="900"
-            height="500"
-            viewBox="0 0 1000 500"
-            className="absolute top-0 z-10 overflow-visible origin-top scale-[0.6] sm:scale-[0.85] md:scale-100 "
-          >
-            <defs>
-              <linearGradient id="spotGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#e62b1e" stopOpacity="0.85" />
-                <stop offset="70%" stopColor="#e62b1e" stopOpacity="0.15" />
-                <stop offset="100%" stopColor="#e62b1e" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-
-            <polygon
-              points="350,-120 650,-120 1150,520 -150,520"
-              fill="url(#spotGrad)"
-              className="[filter:blur(14px)] sm:[filter:blur(20px)] md:[filter:blur(25px)]"
-            />
-          </svg>
-        </div>
-
-        {/* Background '26 */}
-        <div
-          ref={bg26Ref}
-          className="pointer-events-none absolute inset-0 flex justify-center"
-        >
-          <div
-            ref={bg26MaskRef}
-            className="absolute top-[5%] left-1/2 -translate-x-1/2 flex whitespace-nowrap gap-16 text-[7rem] sm:text-[10rem] md:text-[15rem] font-bold text-white/5 tracking-widest overflow-hidden z-20"
-          >
-            {Array.from({ length: 10 }).map((_, i) => (
-              <span key={i}>’26</span>
-            ))}
-          </div>
-        </div>
-
-        {/* Heading */}
-        <div className="relative overflow-hidden h-[100px] md:h-[140px]">
-          <h1
-            ref={voicesRef}
-            className="absolute z-30 whitespace-nowrap text-5xl sm:text-5xl md:text-6xl lg:text-8xl font-semibold opacity-0 will-change-transform mt-5"
-          >
-            Voices of <span className="text-[#e62b1e]">’26</span>
-          </h1>
-        </div>
-
-        <div className="relative z-10 pt-10 md:pt-12px lg:pt-20 ">
-          <div className="flex flex-col gap-5 lg:gap-8 px-[5%] ">
+      <div className="flex-1">
+        <div className="relative overflow-x-visible overflow-y-hidden">
+          {/* Spotlight */}
+          <div className="absolute inset-0 -z-10  overflow-hidden">
             <div
-              ref={speakersHeaderRef}
-              className="flex items-center justify-between gap-6 opacity-0 mt-0 "
+              ref={spotlightRef}
+              className="pointer-events-none absolute inset-0 flex justify-center opacity-0 "
             >
-              <h2 className="uppercase opacity-60 text-sm sm:text-base md:text-lg lg:text-2xl font-bold">
-                Speakers.2026
-              </h2>
+              <svg
+                width="1500"
+                height="500"
+                viewBox="0 0 1000 500"
+                className="absolute left-1/2 -translate-x-1/2 origin-top scale-[0.6] sm:scale-[0.85] md:scale-100 "
+              >
+                <defs>
+                  <linearGradient id="spotGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#e62b1e" stopOpacity="0.85" />
+                    <stop offset="70%" stopColor="#e62b1e" stopOpacity="0.15" />
+                    <stop offset="100%" stopColor="#e62b1e" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
 
-              <div className="flex gap-10">
-                <button
-                  onClick={() => {
-                    setOpenIndex(null);
-                    if (window.innerWidth < 640) {
-                      moveMobile(1);
-                    } else {
-                      handlePrev();
-                    }
-                  }}
-                >
-                  <Image
-                    src="/left arrow.png"
-                    alt="Prev"
-                    width={40}
-                    height={25}
-                    className="w-6 sm:w-7 md:w-8 lg:w-10 h-auto"
-                  />
-                </button>
-
-                <button
-                  onClick={() => {
-                    setOpenIndex(null);
-                    if (window.innerWidth < 640) {
-                      moveMobile(-1);
-                    } else {
-                      handleNext();
-                    }
-                  }}
-                >
-                  <Image
-                    src="/right arrow.png"
-                    alt="Next"
-                    width={40}
-                    height={25}
-                    className="w-6 sm:w-7 md:w-8 lg:w-10 h-auto"
-                  />
-                </button>
-              </div>
+                <polygon
+                  points="350,0 650,0 1150,520 -150,520"
+                  fill="url(#spotGrad)"
+                  className="[filter:blur(14px)] sm:[filter:blur(20px)] md:[filter:blur(25px)]"
+                />
+              </svg>
             </div>
 
-            <div ref={lineRef} className="h-px bg-white/30 opacity-0" />
-          </div>
-        </div>
-
-        {/* Cards */}
-        <div
-          ref={cardsContainerRef}
-          className="relative flex items-center justify-center h-[500px] md:h-[600px] overflow-hidden opacity-0 mt-5 "
-        >
-          {speakers.map((sp, i) => {
-            const isOpen = openIndex === i;
-
-            return (
+            {/* Background '26 */}
+            <div
+              ref={bg26Ref}
+              className="pointer-events-none absolute inset-x-0 top-0 bottom-0 flex justify-center"
+            >
               <div
-                ref={(el) => {
-                  if (el) cardRefs.current[i] = el;
-                }}
-                key={sp.name + i}
-                className={`absolute top-[2%]  w-[240px] sm:w-[280px] md:w-[320px] lg:w-[350px] aspect-square bg-[#111] border
-                  ${isOpen ? "border-[#e62b1e] z-50" : "border-white z-10"}`}
+                ref={bg26MaskRef}
+                className="absolute top-10 left-1/2 -translate-x-1/2 flex whitespace-nowrap gap-16 text-[5rem] sm:text-[5rem] md:text-[12rem] lg:text-[15rem] font-bold text-white/5 tracking-widest overflow-hidden"
               >
-                {/* Image */}
-                <Image
-                  src={sp.img}
-                  alt={sp.name}
-                  width={260}
-                  height={360}
-                  className="w-full h-full object-cover"
-                />
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <span key={i}>’26</span>
+                ))}
+              </div>
+            </div>
+          </div>
 
-                {/* Name */}
-                <p className="absolute bottom-4 left-4 text-[#e62b1e] font-medium">
-                  {sp.name}
-                </p>
+          {/* Heading */}
+          <div className="gap-10 flex flex-col">
+            <h1
+              ref={voicesRef}
+              className="absolute z-30 whitespace-nowrap text-5xl sm:text-5xl md:text-6xl lg:text-8xl font-semibold opacity-0 will-change-transform "
+            >
+              Voices of <span className="text-[#e62b1e]">’26</span>
+            </h1>
 
-                {/* Toggle Arrow */}
-                {!isOpen && (
-                  <button
-                    onClick={() => setOpenIndex(i)}
-                    className="absolute bottom-0 right-4   transition-transform cursor-pointer"
-                    aria-label="Open speaker details"
-                  >
-                    <Image
-                      src="/up arrow.png"
-                      alt="Open"
-                      width={28}
-                      height={25}
-                    />
-                  </button>
-                )}
+            <div className="relative z-10 pt-8 md:pt-10px lg:pt-17 mt-20">
+              <div className="flex flex-col gap-5  md:gap-10 lg:gap-8 px-[5%] ">
+                <div
+                  ref={speakersHeaderRef}
+                  className="flex items-center justify-between gap-6 opacity-0 mt-0 "
+                >
+                  <h2 className="uppercase opacity-60 text-sm sm:text-base md:text-lg lg:text-2xl font-bold">
+                    Speakers.2026
+                  </h2>
 
-                {/* Details Overlay */}
-                {isOpen && (
-                  <div className="absolute inset-0 bg-black bg-opacity-95 p-4 flex flex-col pt-8">
-                    {/* Close Arrow*/}
+                  <div className="flex gap-10">
                     <button
-                      onClick={() => setOpenIndex(null)}
-                      className="absolute top-0 right-4 z-10 cursor-pointer rotate-90"
-                      aria-label="Close speaker details"
+                      onClick={() => {
+                        setOpenIndex(null);
+                        if (window.innerWidth < 640) {
+                          moveMobile(1);
+                        } else {
+                          handlePrev();
+                        }
+                      }}
+                    >
+                      <Image
+                        src="/left arrow.png"
+                        alt="Prev"
+                        width={40}
+                        height={25}
+                        className="w-6 sm:w-7 md:w-8 lg:w-10 h-auto"
+                      />
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setOpenIndex(null);
+                        if (window.innerWidth < 640) {
+                          moveMobile(-1);
+                        } else {
+                          handleNext();
+                        }
+                      }}
                     >
                       <Image
                         src="/right arrow.png"
-                        alt="Prev"
+                        alt="Next"
+                        width={40}
+                        height={25}
+                        className="w-6 sm:w-7 md:w-8 lg:w-10 h-auto"
+                      />
+                    </button>
+                  </div>
+                </div>
+
+                <div ref={lineRef} className="h-px bg-white/30 opacity-0" />
+              </div>
+            </div>
+          </div>
+
+          {/* Cards */}
+          <div
+            ref={cardsContainerRef}
+            className="relative flex items-center justify-center h-[330px] md:h-[500px] overflow-hidden opacity-0 mt-5 "
+          >
+            {speakers.map((sp, i) => {
+              const isOpen = openIndex === i;
+
+              return (
+                <div
+                  ref={(el) => {
+                    if (el) cardRefs.current[i] = el;
+                  }}
+                  key={sp.name + i}
+                  className={`absolute top-[2%]  w-[240px]  sm:w-[280px]  md:w-[320px] lg:w-[320px] h-[280px] md:h-[350px] lg:h-[370px] bg-[#111] border
+                  ${isOpen ? "border-[#e62b1e] z-50" : "border-white z-10"}`}
+                >
+                  {/* Image */}
+                  <Image
+                    src={sp.img}
+                    alt={sp.name}
+                    width={260}
+                    height={360}
+                    className="w-full h-full object-cover"
+                  />
+
+                  {/* Bottom gradient */}
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/90 via-black/50 to-transparent"/>
+
+                  {/* Name */}
+                  <p className="absolute bottom-4 left-4 text-[#e62b1e] font-medium">
+                    {sp.name}
+                  </p>
+
+                  {/* Toggle Arrow */}
+                  {!isOpen && (
+                    <button
+                      onClick={() => setOpenIndex(i)}
+                      className="absolute bottom-0 right-4   transition-transform cursor-pointer"
+                      aria-label="Open speaker details"
+                    >
+                      <Image
+                        src="/up arrow.png"
+                        alt="Open"
                         width={28}
                         height={25}
                       />
                     </button>
+                  )}
 
-                    <p className="text-[#e62b1e] font-semibold text-lg">
-                      {sp.name}
-                    </p>
-                    <p className="uppercase text-sm opacity-70 mb-3">
-                      {sp.title}
-                    </p>
-                    <p className="text-sm leading-relaxed opacity-90">
-                      {sp.description}
-                    </p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  {/* Details Overlay */}
+                  {isOpen && (
+                    <div className="absolute inset-0 bg-black bg-opacity-95 p-4 flex flex-col pt-8">
+                      {/* Close Arrow*/}
+                      <button
+                        onClick={() => setOpenIndex(null)}
+                        className="absolute top-0 right-4 z-10 cursor-pointer rotate-90"
+                        aria-label="Close speaker details"
+                      >
+                        <Image
+                          src="/right arrow.png"
+                          alt="Prev"
+                          width={28}
+                          height={25}
+                        />
+                      </button>
+
+                      <p className="text-[#e62b1e] font-semibold text-lg">
+                        {sp.name}
+                      </p>
+                      <p className="uppercase text-sm opacity-70 mb-3">
+                        {sp.title}
+                      </p>
+                      <p className="text-sm leading-relaxed opacity-90">
+                        {sp.description}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
+      </div>
+      <div ref={marqueeRef} className="relative opacity-0">
+        <SpeakersMarquee />
       </div>
     </section>
   );
