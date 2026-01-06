@@ -142,34 +142,45 @@ nav {
   width: 100%;
   margin-bottom: 50px;
   transition: transform 0.2s ease-out; /* Smooth tilt */
-  transform-origin: center bottom;
 }
+
+/* src/app/globals.css */
 
 .gallery-track {
   display: flex;
-  gap: 20px;
+  
+  /* 1. Ensure this gap matches the padding below */
+  gap: 20px; 
+  
+  /* 2. ADD THIS LINE */
+  /* This adds the missing "gap" at the end of the list so 50% is exact */
+  padding-right: 20px; 
+  
   width: max-content;
   animation: scroll-left 40s linear infinite;
 }
 
 .float-img {
-  width: 200px;
+  width: 230px;
   height: auto;
   opacity: 0.8;
   border-radius: 8px;
   filter: grayscale(100%); /* Cool effect: B&W photos until hovered */
-  transition: 0.3s;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.3s ease;
 }
 
 .float-img:hover {
   filter: grayscale(0%);
 }
 
-/* Rotations for the "Arc" look */
-.img-1 { transform: rotate(-10deg) translateY(20px); }
-.img-2 { transform: rotate(-5deg); }
-.img-3 { transform: rotate(0deg) translateY(-10px); }
-.img-4 { transform: rotate(5deg); }
+
+
+/* Mobile Tweak: Ensure the extra height doesn't overlap the text */
+@media (max-width: 768px) {
+  .scrolling-gallery {
+    margin-bottom: 60px; /* Add more space below gallery for the deep curve */
+  }
+}
 
 @keyframes scroll-left {
   0% { transform: translateX(0); }
@@ -179,7 +190,7 @@ nav {
 /* The Hands */
 .hand-left, .hand-right {
   position: absolute;
-  bottom: -300px; /* Start hidden below screen */
+  bottom: -450px; /* Start hidden below screen */
   width: 25vw;
   max-width: 400px;
   transition: transform 0.1s ease-out; /* Snappy movement */
@@ -205,4 +216,71 @@ nav {
   z-index: 5; /* Behind hands (20), on top of bg (0) */
   pointer-events: none; 
   opacity: 0.3; 
+}
+
+/* src/app/globals.css */
+
+/* ... existing code ... */
+
+/* MOBILE STYLES */
+@media (max-width: 768px) {
+  
+  /* 1. Make the text manageable */
+  .hero-content h1 {
+    font-size: 12vw; /* Big text, but fits screen width */
+    margin-top: 20px;
+  }
+  
+  .hero-content p {
+    font-size: 14px;
+    padding: 0 20px; /* Prevent text touching edges */
+  }
+
+  /* 2. Hands need to be bigger on mobile */
+  /* On desktop they are 25vw, but that's too small for a phone */
+  /* Inside @media (max-width: 768px) */
+
+.hand-left, .hand-right {
+  /* 1. Make them big enough to see */
+  width: 50vw;  
+  
+  /* 2. Pull them UP. Change from -150px to 0 or even -20px */
+  bottom: -150px; 
+  
+  /* 3. Force them to sit on top of everything else */
+  z-index: 50; 
+  
+  /* 4. Ensure opacity isn't hidden */
+  opacity: 1; 
+
+  transition: transform 3.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+  /* 3. Planet needs to be visible */
+  .planet-glow {
+    max-width: 90%; /* Don't let it overflow */
+    bottom: -20px;
+  }
+
+  /* 4. Adjust the Gallery Arc */
+  .scrolling-gallery {
+     /* Ensure this is clean (no negative margins or top adjustments) */
+     margin-bottom: 20px; 
+     position: static; 
+  }
+
+  /* 2. Push the Text Down */
+  .hero-content {
+    /* Desktop was -50px. We change it to a positive number to push it down. */
+    margin-top: 60px; 
+  }
+  
+  /* Optional: If you want even more space specifically above the big "TEDxCUSAT" */
+  .hero-content h1 {
+    margin-top: 20px; /* Keep or increase this if needed */
+  }
+  
+  .float-img {
+    width: 180px; /* Smaller images for mobile */
+  }
 }
