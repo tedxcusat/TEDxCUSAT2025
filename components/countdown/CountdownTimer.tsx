@@ -15,7 +15,6 @@ function calculateTimeLeft(): TimeLeft | null {
   const now = Date.now();
   const diff = target - now;
 
-  // MODIFIED: If time is up, return 0s instead of null so it stays visible.
   if (diff <= 0) {
     return {
       days: 0,
@@ -51,59 +50,80 @@ export default function CountdownTimer() {
   if (!mounted || !timeLeft) return null;
 
   return (
-    // Changed to justify-center: Spacing is now controlled strictly by the divider margins
-    <div className="flex items-center justify-center w-full py-4 sm:py-6">
+    <div className="flex flex-wrap lg:flex-nowrap items-center justify-center w-full py-4 sm:py-6">
       
-      {Object.entries(timeLeft).map(([label, value], index) => (
-        <div key={label} className="flex items-center">
-          
-          {/* UNIT GROUP (Number + Letter) */}
-          <div className="flex items-end gap-[2px] sm:gap-2">
+      {Object.entries(timeLeft).map(([label, value], index) => {
+        const isDays = index === 0;
+
+        return (
+            <div 
+                key={label} 
+                className={`
+                    flex items-center 
+                    ${isDays ? "w-full flex-col justify-center mb-4 lg:flex-row lg:w-auto lg:justify-start lg:mb-0" : ""}
+                `}
+            >
             
-            {/* NUMBER */}
-            {/* Reduced clamp vw from 4vw to 3vw to prevent overflow on tablets */}
-            <span
-              className="font-orbitron font-bold text-[#EB0028]
-                    text-[clamp(14px,3vw,82px)] 
-                    tabular-nums text-center leading-none"
-              style={{ width: "2.3ch" }}
-            >
-              {value.toString().padStart(2, "0")}
-            </span>
+            {/* UNIT GROUP (Number + Letter) */}
+            <div className="flex items-end gap-[2px] sm:gap-2">
+                
+                {/* NUMBER */}
+                <span
+                className="font-orbitron font-bold text-[#EB0028]
+                        text-[32px] sm:text-[clamp(14px,3vw,82px)] 
+                        tabular-nums text-center leading-none"
+                style={{ width: "2.3ch" }}
+                >
+                {value.toString().padStart(2, "0")}
+                </span>
 
-            {/* LETTER (D, H, M, S) */}
-            <span
-              className="font-orbitron font-bold
-                    text-[clamp(14px,3vw,82px)] leading-none"
-              style={{
-                WebkitTextStroke: "1px #EB0028",
-                color: "transparent",
-              }}
-            >
-              {label.charAt(0).toUpperCase()}
-            </span>
-          </div>
+                {/* LETTER (D, H, M, S) */}
+                <span
+                className="font-orbitron font-bold
+                        text-[32px] sm:text-[clamp(14px,3vw,82px)] leading-none"
+                style={{
+                    WebkitTextStroke: "1px #EB0028",
+                    color: "transparent",
+                }}
+                >
+                {label.charAt(0).toUpperCase()}
+                </span>
+            </div>
 
-          {/* DIVIDER */}
-          {/* This logic ensures uniform spacing everywhere */}
-          {index < 3 && (
-            <div
-              className="
-                mx-2         /* Mobile gap */
-                sm:mx-6      /* Tablet gap */
-                lg:mx-8      /* Desktop gap */
-                xl:mx-12     /* Large Desktop gap */
-                h-6 sm:h-10 lg:h-16
-              "
-              style={{
-                width: "1px",
-                backgroundColor: "#ffffff",
-                opacity: 0.6,
-              }}
-            />
-          )}
-        </div>
-      ))}
+            {/* Horizontal Line for 'Days' Row (Mobile Only) */}
+            {isDays && (
+                 <div
+                 className="lg:hidden mt-3 mb-1"
+                 style={{
+                   width: "100%",
+                   height: "1px",
+                   backgroundColor: "#ffffff",
+                   opacity: 0.6,
+                 }}
+               />
+            )}
+
+            {/* VERTICAL DIVIDER (For Hrs, Min, Sec) */}
+            {index < 3 && (
+                <div
+                // MODIFIED: 
+                // Changed mobile height from h-6 to h-14 to be longer than the text (32px).
+                // Kept lg:h-16 for desktop.
+                className={`
+                    mx-2 sm:mx-6 lg:mx-8 xl:mx-12
+                    h-14 sm:h-10 lg:h-16
+                    ${isDays ? "hidden lg:block" : "block"} 
+                `}
+                style={{
+                    width: "1px",
+                    backgroundColor: "#ffffff",
+                    opacity: 0.6,
+                }}
+                />
+            )}
+            </div>
+        );
+      })}
     </div>
   );
 }
