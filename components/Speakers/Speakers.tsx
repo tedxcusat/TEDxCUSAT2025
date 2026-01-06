@@ -183,7 +183,7 @@ export default function Newspeakers() {
     return "desktop";
   };
 
-  const layoutCards = () => {
+  const layoutCards = (): gsap.core.Tween | null => {
     const screen = getScreenType();
 
     const containerWidth =
@@ -191,6 +191,10 @@ export default function Newspeakers() {
 
     const total = speakers.length;
     const center = 2;
+    let lastTween: gsap.core.Tween | null = null;
+  const animate = (card: HTMLDivElement, vars: gsap.TweenVars) => {
+    lastTween = gsap.to(card, vars);
+  };
 
     // ---------- TABLET ----------
     if (screen === "tablet") {
@@ -206,7 +210,7 @@ export default function Newspeakers() {
         offset = ((offset % total) + total) % total;
         if (offset > total / 2) offset -= total;
 
-        gsap.to(card, {
+        animate(card, {
           x: offset * (CARD_WIDTH + GAP),
           y: BASE_Y + Math.abs(offset) * 28 + (offset === 0 ? 18 : 0),
           rotation: offset * 3,
@@ -214,10 +218,11 @@ export default function Newspeakers() {
           immediateRender: false,
           duration: isManual.current ? 0.7 : 3.2,
           ease: "linear",
+          overwrite: "auto",
         });
       });
 
-      return;
+      return lastTween;
     }
 
     // ---------- DESKTOP ----------
@@ -233,7 +238,7 @@ export default function Newspeakers() {
       offset = ((offset % total) + total) % total;
       if (offset > total / 2) offset -= total;
 
-      gsap.to(card, {
+      animate(card, {
         x: offset * (CARD_WIDTH + GAP),
         y: BASE_Y + Math.abs(offset) * 40 + (offset === 0 ? 25 : 0),
         rotation: offset * 4,
@@ -244,6 +249,7 @@ export default function Newspeakers() {
         overwrite: "auto",
       });
     });
+    return lastTween
   };
 
   useEffect(() => {
@@ -350,11 +356,11 @@ export default function Newspeakers() {
     isManual.current = true;
     gsap.killTweensOf(cardRefs.current);
     startIndex.current = (startIndex.current + 1) % speakers.length;
-    layoutCards();
-    setTimeout(() => {
-      isManual.current = false;
-      isAnimating.current = false;
-    }, 100);
+    const tween = layoutCards();
+    tween?.eventCallback("onComplete", () => {
+    isManual.current = false;
+    isAnimating.current = false;
+  });
   };
 
   const handlePrev = () => {
@@ -364,11 +370,11 @@ export default function Newspeakers() {
     gsap.killTweensOf(cardRefs.current);
     startIndex.current =
       (startIndex.current - 1 + speakers.length) % speakers.length;
-    layoutCards();
-    setTimeout(() => {
-      isManual.current = false;
-      isAnimating.current = false;
-    }, 300);
+    const tween = layoutCards();
+    tween?.eventCallback("onComplete", () => {
+    isManual.current = false;
+    isAnimating.current = false;
+    });
   };
 
   useEffect(() => {
