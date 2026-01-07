@@ -30,6 +30,11 @@ export default function Home() {
     }
   }, [navbarFinished]);
 
+  useEffect(() => {
+    window.history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+  }, []);
+
   useGSAP(() => {
     if (loaderFinished) {
       ScrollTrigger.create({
@@ -52,12 +57,12 @@ export default function Home() {
       <Loader onComplete={() => setLoaderFinished(true)} />
       <Navbar startAnimation={heroFinished} onComplete={() => setNavbarFinished(true)} />
       <Hero startAnimation={loaderFinished} onComplete={() => setHeroFinished(true)} />
-      <div ref={placeholderWrapperRef1}>
+      {/* <div ref={placeholderWrapperRef1}>
         <Placeholder startAnimation={placeholderInView1} />
       </div>
       <div ref={placeholderWrapperRef2}>
         <Placeholder startAnimation={placeholderInView2} />
-      </div>
+      </div> */}
     </main>
   );
 }
