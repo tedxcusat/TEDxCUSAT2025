@@ -68,7 +68,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           filter: "blur(10px) brightness(0)",
         },
         {
-          z: 0,
+          z: 20,
           y: 0,
           scale: 1,
           opacity: 1,
@@ -204,7 +204,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
         <div className="absolute bottom-20 w-full max-w-7xl px-42 flex justify-between items-end z-40 text-white font-clash pointer-events-none">
           <div className="text-left pointer-events-auto" ref={infoRef}>
             <p className="text-2xl font-clash leading-tight tracking-[-0.02em]">
-              ON 30<br />
+              ON 31<br />
               JAN<br />
               2026
             </p>
@@ -220,7 +220,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
 
 
       {/* ================= MOBILE LAYOUT ================= */}
-      <div className="md:hidden relative w-full h-full flex flex-col pb-12">
+      <div className="md:hidden relative w-full h-full flex flex-col pb-12 -mt-8">
         {/* Mobile Background Gradient (Behind Title) */}
         <Image
           src="/hero-grad.svg"
@@ -256,8 +256,8 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
         </div>
 
         {/* Mobile Center: Head Image */}
-        <div className="relative flex items-center justify-center -mt-3.5 w-full pointer-events-none select-none">
-          <div ref={mobileHeadRef} className="relative w-[80vw] h-auto">
+        <div className="relative z-20 flex items-center justify-center -ml-1.5 -mt-3.5 w-full pointer-events-none select-none">
+          <div ref={mobileHeadRef} className="relative w-[85vw] h-auto">
             <Image
               src="/hero-img.svg"
               alt="Hero Image"
@@ -275,7 +275,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           {/* Date */}
           <div className="text-left pointer-events-auto" ref={mobileInfoRef}>
             <p className="text-xl font-clash leading-tight tracking-[-0.02em]">
-              ON 30<br />
+              ON 31<br />
               JAN<br />
               2026
             </p>

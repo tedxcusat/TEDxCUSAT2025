@@ -70,12 +70,13 @@ const Loader = ({ onComplete }: { onComplete?: () => void }) => {
         <div className="flex justify-center mb-1.5 w-full overflow-hidden">
           <div ref={logoRef} className="w-full opacity-0">
             <Image
-              src="/logo-white.svg"
+              src="/logo-white.png"
               alt="TEDxCUSAT"
               width={504}
               height={101}
               className="w-full h-auto"
               priority
+              unoptimized
             />
           </div>
         </div>
@@ -98,12 +99,13 @@ const Loader = ({ onComplete }: { onComplete?: () => void }) => {
         <div className="flex justify-center mb-1.5 w-full overflow-hidden">
           <div ref={mobileLogoRef} className="w-full opacity-0">
             <Image
-              src="/logo-white.svg"
+              src="/logo-white.png"
               alt="TEDxCUSAT"
               width={504}
               height={101}
               className="w-full h-auto"
               priority
+              unoptimized
             />
           </div>
         </div>
