@@ -38,3 +38,29 @@ body {
 .font-clash {
   font-family: var(--font-clash);
 }
+
+.font-orbitron {
+  font-family: var(--font-orbitron);
+}
+
+/* TEMP fallback for Clash Display */
+.font-clash {
+  font-family: var(--font-clash);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  width: max-content;
+  animation: marquee 55s linear infinite;
+  will-change: transform;
+}
+
+
