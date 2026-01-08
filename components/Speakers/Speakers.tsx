@@ -85,6 +85,9 @@ export default function Newspeakers() {
   const GAP = 20;
   const mobileOffset = useRef(0);
   const mobileAuto = useRef<gsap.core.Tween | null>(null);
+  const [screenType, setScreenType] = useState<"mobile" | "tablet" | "desktop">(
+    "desktop"
+  );
 
   useEffect(() => {
     gsap.set(bg26MaskRef.current, {
@@ -192,9 +195,9 @@ export default function Newspeakers() {
     const total = speakers.length;
     const center = 2;
     let lastTween: gsap.core.Tween | null = null;
-  const animate = (card: HTMLDivElement, vars: gsap.TweenVars) => {
-    lastTween = gsap.to(card, vars);
-  };
+    const animate = (card: HTMLDivElement, vars: gsap.TweenVars) => {
+      lastTween = gsap.to(card, vars);
+    };
 
     // ---------- TABLET ----------
     if (screen === "tablet") {
@@ -249,8 +252,18 @@ export default function Newspeakers() {
         overwrite: "auto",
       });
     });
-    return lastTween
+    return lastTween;
   };
+  useEffect(() => {
+    const update = () => {
+      setScreenType(getScreenType());
+    };
+
+    update();
+    window.addEventListener("resize", update);
+
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   useEffect(() => {
     if (window.innerWidth >= 640) {
@@ -358,9 +371,9 @@ export default function Newspeakers() {
     startIndex.current = (startIndex.current + 1) % speakers.length;
     const tween = layoutCards();
     tween?.eventCallback("onComplete", () => {
-    isManual.current = false;
-    isAnimating.current = false;
-  });
+      isManual.current = false;
+      isAnimating.current = false;
+    });
   };
 
   const handlePrev = () => {
@@ -372,8 +385,8 @@ export default function Newspeakers() {
       (startIndex.current - 1 + speakers.length) % speakers.length;
     const tween = layoutCards();
     tween?.eventCallback("onComplete", () => {
-    isManual.current = false;
-    isAnimating.current = false;
+      isManual.current = false;
+      isAnimating.current = false;
     });
   };
 
@@ -410,26 +423,59 @@ export default function Newspeakers() {
               ref={spotlightRef}
               className="pointer-events-none absolute inset-0 flex justify-center opacity-0 "
             >
-              <svg
-                width="1500"
-                height="500"
-                viewBox="0 0 1000 500"
-                className="absolute left-1/2 -translate-x-1/2 origin-top scale-[0.6] sm:scale-[0.85] md:scale-100 "
-              >
-                <defs>
-                  <linearGradient id="spotGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#e62b1e" stopOpacity="0.85" />
-                    <stop offset="70%" stopColor="#e62b1e" stopOpacity="0.15" />
-                    <stop offset="100%" stopColor="#e62b1e" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
+              <div className="relative w-[1500px] h-[500px]">
+                <svg
+                  width="1500"
+                  height="500"
+                  viewBox="0 0 1000 500"
+                  className="absolute left-1/2 -translate-x-1/2 origin-top scale-[0.6] sm:scale-[0.85] md:scale-100"
+                >
+                  <defs>
+                    <linearGradient id="spotGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="0%"
+                        stopColor="#EB0028"
+                        stopOpacity="0.85"
+                      />
+                      <stop
+                        offset="70%"
+                        stopColor="#EB0028"
+                        stopOpacity="0.15"
+                      />
+                      <stop offset="100%" stopColor="#EB0028" stopOpacity="0" />
+                    </linearGradient>
 
-                <polygon
-                  points="350,0 650,0 1150,520 -150,520"
-                  fill="url(#spotGrad)"
-                  className="[filter:blur(14px)] sm:[filter:blur(20px)] md:[filter:blur(25px)]"
-                />
-              </svg>
+                    <clipPath id="spotClip">
+                      <polygon points="350,0 650,0 1150,520 -150,520" />
+                    </clipPath>
+
+                    <filter
+                      id="softEdges"
+                      x="-30%"
+                      y="-30%"
+                      width="160%"
+                      height="160%"
+                    >
+                      <feGaussianBlur
+                        stdDeviation={
+                          screenType === "mobile"
+                            ? 55
+                            : screenType === "tablet"
+                            ? 35
+                            : 18
+                        }
+                      />
+                    </filter>
+                  </defs>
+
+                  <polygon
+                    points="350,0 650,0 1150,520 -150,520"
+                    fill="url(#spotGrad)"
+                    style={{ filter: "blur(18px)" }}
+                    className="pointer-events-none"
+                  />
+                </svg>
+              </div>
             </div>
 
             {/* Background '26 */}
@@ -447,6 +493,26 @@ export default function Newspeakers() {
               </div>
             </div>
           </div>
+          {/* Grain Overlay — ABOVE spotlight */}
+          <div className="pointer-events-none absolute inset-0 z-10 flex justify-center overflow-x-hidden">
+            <div
+              className="relative w-[1500px] h-[500px] opacity-50 mix-blend-overlay"
+              style={{
+                maskImage:
+                  "polygon(350px 0px, 650px 0px, 1150px 520px, -150px 520px)",
+                WebkitMaskImage:
+                  "polygon(350px 0px, 650px 0px, 1150px 520px, -150px 520px)",
+              }}
+            >
+              <Image
+                src="/Texture.svg"
+                alt=""
+                fill
+                priority
+                className="absolute inset-0 w-full h-full object-cover scale-[1.8]"
+              />
+            </div>
+          </div>
 
           {/* Heading */}
           <div className="gap-10 flex flex-col">
@@ -454,7 +520,7 @@ export default function Newspeakers() {
               ref={voicesRef}
               className="absolute z-30 whitespace-nowrap text-5xl sm:text-5xl md:text-6xl lg:text-8xl font-semibold opacity-0 will-change-transform "
             >
-              Voices of <span className="text-[#e62b1e]">’26</span>
+              Voices of <span className="text-[#EB0028]">’26</span>
             </h1>
 
             <div className="relative z-10 pt-8 md:pt-10px lg:pt-17 mt-20">
@@ -527,8 +593,8 @@ export default function Newspeakers() {
                     if (el) cardRefs.current[i] = el;
                   }}
                   key={sp.name + i}
-                  className={`absolute top-[2%]  w-[240px]  sm:w-[280px]  md:w-[320px] lg:w-[320px] h-[280px] md:h-[350px] lg:h-[370px] bg-[#111] border
-                  ${isOpen ? "border-[#e62b1e] z-50" : "border-white z-10"}`}
+                  className={`absolute top-[2%]  w-[240px]  sm:w-[280px]  md:w-[300px] lg:w-[320px] h-[280px] md:h-[330px] lg:h-[370px] bg-[#111] border
+                  ${isOpen ? "border-[#EB0028] z-50" : "border-white z-10"}`}
                 >
                   {/* Image */}
                   <Image
@@ -540,10 +606,10 @@ export default function Newspeakers() {
                   />
 
                   {/* Bottom gradient */}
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/90 via-black/50 to-transparent"/>
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
 
                   {/* Name */}
-                  <p className="absolute bottom-4 left-4 text-[#e62b1e] font-medium">
+                  <p className="absolute bottom-4 left-4 text-[#EB0028] font-medium">
                     {sp.name}
                   </p>
 
