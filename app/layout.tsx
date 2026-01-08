@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Orbitron } from "next/font/google";
+import { Orbitron, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import localFont from "next/font/local";
 
@@ -19,6 +20,30 @@ const orbitron = Orbitron({
 export const metadata: Metadata = {
   title: "TEDx CUSAT 2026",
   description: "TEDxCUSAT 2026 Official Website",
+// Initialize Orbitron
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  variable: "--font-orbitron",
+  weight: ["400", "900"],
+});
+
+// // Initialize Inter
+// const inter = Inter({
+//   subsets: ["latin"],
+//   variable: "--font-inter",
+//   display: "swap",
+// });
+
+// Initialize Clash Display
+const clashDisplay = localFont({
+  src: "./fonts/ClashDisplay-Regular.woff2",
+  variable: "--font-clash",
+  weight: "400",
+});
+
+export const metadata: Metadata = {
+  title: "TEDxCUSAT 2025",
+  description: "TEDx event at CUSAT",
 };
 
 export default function RootLayout({
@@ -27,8 +52,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-<body className={`${orbitron.variable} ${clashDisplay.variable} bg-black`}>        
+    <html lang="en" suppressHydrationWarning={true}>
+      <body
+        className={`${orbitron.variable} ${clashDisplay.variable} antialiased`}
+      >
         {children}
       </body>
     </html>
