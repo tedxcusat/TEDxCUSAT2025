@@ -31,6 +31,20 @@ body {
   color: var(--foreground);
 }
 
+@keyframes speakers-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-speakers-marquee {
+  width: max-content;
+  animation: speakers-marquee 55s linear infinite;
+  will-change: transform;
+}
+
 .font-orbitron {
   font-family: var(--font-orbitron);
 }
