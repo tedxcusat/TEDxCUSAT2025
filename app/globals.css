@@ -39,15 +39,6 @@ body {
   font-family: var(--font-clash);
 }
 
-.font-orbitron {
-  font-family: var(--font-orbitron);
-}
-
-/* TEMP fallback for Clash Display */
-.font-clash {
-  font-family: var(--font-clash);
-}
-
 @keyframes marquee {
   0% {
     transform: translateX(0);

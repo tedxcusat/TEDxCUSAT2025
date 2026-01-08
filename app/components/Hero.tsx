@@ -223,7 +223,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
         />
 
         {/* Mobile Top Section: Title & Subtitle */}
-        <div className="relative z-10 flex flex-col items-center pt-28 w-full px-6">
+        <div className="relative z-10 flex flex-col items-center pt-28 w-full">
           <div className="mb-2 relative w-full h-auto flex justify-center select-none">
             <div ref={mobileSubtitleRef} style={{ willChange: 'clip-path' }}>
               <p className="text-[#7C7C7C] font-clash font-bold text-[10px] tracking-[0.5em] opacity-90 text-center w-full">

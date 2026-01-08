@@ -106,9 +106,6 @@ export default function CountdownTimer() {
             {/* VERTICAL DIVIDER (For Hrs, Min, Sec) */}
             {index < 3 && (
                 <div
-                // MODIFIED: 
-                // Changed mobile height from h-6 to h-14 to be longer than the text (32px).
-                // Kept lg:h-16 for desktop.
                 className={`
                     mx-2 sm:mx-6 lg:mx-8 xl:mx-12
                     h-14 sm:h-10 lg:h-16
