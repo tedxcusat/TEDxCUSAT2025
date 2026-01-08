@@ -16,52 +16,52 @@ type Speaker = {
 
 const speakers: Speaker[] = [
   {
-    name: "Olivia Lorem1",
-    title: "Actress",
+    name: "To Be Announced",
+    title: "Guest Speaker",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare orci diam, a dictum diam luctus vel.",
+      "Speaker details will be announced soon.",
     img: "/speakers/mystery.jpg",
   },
   {
-    name: "Michael Amet2",
-    title: "Entrepreneur",
+    name: "To Be Announced",
+    title: "Guest Speaker",
     description:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Speaker details will be announced soon.",
     img: "/speakers/mystery.jpg",
   },
   {
-    name: "Olivia Lorem3",
-    title: "Creative Director",
+    name: "To Be Announced",
+    title: "Guest Speaker",
     description:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Speaker details will be announced soon.",
     img: "/speakers/mystery.jpg",
   },
   {
-    name: "Olivia Lorem4",
-    title: "Creative Director",
+    name: "To Be Announced",
+    title: "Guest Speaker",
     description:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Speaker details will be announced soon.",
     img: "/speakers/mystery.jpg",
   },
   {
-    name: "Olivia Lorem5",
-    title: "Creative Director",
+    name: "To Be Announced",
+    title: "Guest Speaker",
     description:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Speaker details will be announced soon.",
     img: "/speakers/mystery.jpg",
   },
   {
-    name: "Olivia Lorem6",
-    title: "Creative Director",
+    name: "To Be Announced",
+    title: "Guest Speaker",
     description:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Speaker details will be announced soon.",
     img: "/speakers/mystery.jpg",
   },
   {
-    name: "Michael Amet7",
-    title: "Entrepreneur",
+    name: "To Be Announced",
+    title: "Guest Speaker",
     description:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Speaker details will be announced soon.",
     img: "/speakers/mystery.jpg",
   },
 ];
@@ -109,27 +109,24 @@ export default function Newspeakers() {
     tl.fromTo(
       spotlightRef.current,
       {
-        y: "-100%",
-        opacity: 0,
+        opacity: 1,
+        clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)",
       },
       {
-        y: 0,
+        clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
         opacity: 1,
-        duration: 3.5,
-        ease: "expo.out",
+        duration: 4,
+        ease: "power1.out",
       }
     ).to(
       bg26MaskRef.current,
       {
         clipPath: "inset(0 0 0% 0)",
-        duration: 2,
+        duration: 4,
         ease: "sine.out",
       },
       "<"
     );
-
-    // Hold
-    tl.to({}, { duration: 0.1 });
 
     // Stage 3 — Voices of '26
     tl.to(voicesRef.current, {
@@ -137,7 +134,7 @@ export default function Newspeakers() {
       duration: 2,
       scale: window.innerWidth < 640 ? 1 : 1.5,
       ease: "power3.out",
-    });
+    },"-=3");
 
     // Stage 4 — spotlight + bg fade out
     tl.to([spotlightRef.current, bg26Ref.current], {
@@ -422,6 +419,9 @@ export default function Newspeakers() {
             <div
               ref={spotlightRef}
               className="pointer-events-none absolute inset-0 flex justify-center opacity-0 "
+              style={{
+                clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)",
+              }}
             >
               <div className="relative w-[1500px] h-[500px]">
                 <svg
@@ -518,7 +518,7 @@ export default function Newspeakers() {
           <div className="gap-10 flex flex-col">
             <h1
               ref={voicesRef}
-              className="absolute z-30 whitespace-nowrap text-5xl sm:text-5xl md:text-6xl lg:text-8xl font-semibold opacity-0 will-change-transform "
+              className="absolute z-30 whitespace-nowrap text-5xl sm:text-5xl md:text-6xl lg:text-8xl font-semibold opacity-0 will-change-transform font-Orbitron"
             >
               Voices of <span className="text-[#EB0028]">’26</span>
             </h1>
@@ -529,7 +529,7 @@ export default function Newspeakers() {
                   ref={speakersHeaderRef}
                   className="flex items-center justify-between gap-6 opacity-0 mt-0 "
                 >
-                  <h2 className="uppercase opacity-60 text-sm sm:text-base md:text-lg lg:text-2xl font-bold">
+                  <h2 className="uppercase opacity-60 text-sm sm:text-base md:text-lg lg:text-2xl font-bold font-Orbitron">
                     Speakers.2026
                   </h2>
 
@@ -609,7 +609,7 @@ export default function Newspeakers() {
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
 
                   {/* Name */}
-                  <p className="absolute bottom-4 left-4 text-[#EB0028] font-medium">
+                  <p className="absolute bottom-4 left-4 text-[#EB0028] font-clash">
                     {sp.name}
                   </p>
 

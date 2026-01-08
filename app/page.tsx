@@ -1,5 +1,5 @@
 "use client";
-import Speakers from "@/components/Speakers/Speakers";
+import Speakers from "@/app/components/Speakers/Speakers";
 
 
 export default function Home() {
