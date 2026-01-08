@@ -10,12 +10,12 @@ const orbitron = Orbitron({
   weight: ["400", "900"],
 });
 
-// Initialize Inter
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
+// // Initialize Inter
+// const inter = Inter({
+//   subsets: ["latin"],
+//   variable: "--font-inter",
+//   display: "swap",
+// });
 
 // Initialize Clash Display
 const clashDisplay = localFont({
@@ -37,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body
-        className={`${inter.variable} ${orbitron.variable} ${clashDisplay.variable} antialiased`}
+        className={`${orbitron.variable} ${clashDisplay.variable} antialiased`}
       >
         {children}
       </body>

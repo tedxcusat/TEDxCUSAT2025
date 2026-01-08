@@ -159,34 +159,24 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
       <div className="hidden md:flex relative w-full h-full flex-col items-center justify-center">
         {/* Desktop Content Container */}
         <div className="relative z-10 flex-col items-center justify-center w-full max-w-7xl px-4 -translate-y-30">
-          <div className="mb-4 relative w-full h-auto flex justify-center select-none">
+          <div className="-mb-2 relative w-full h-auto flex justify-center select-none">
             <div ref={subtitleRef} style={{ willChange: 'clip-path' }}>
-              <Image
-                src="/hero-subtitle.svg"
-                alt="FROM CONCEPT TO IMPACT"
-                width={500}
-                height={50}
-                className="object-contain"
-                priority
-              />
+              <p className="text-[#7C7C7C] font-orbitron font-black text-xs tracking-[1.2em] opacity-90 text-center w-full">
+                FROM CONCEPT TO IMPACT
+              </p>
             </div>
           </div>
           <div className="mb-0 relative w-fit mx-auto flex justify-center select-none">
             <div ref={titleRef} style={{ willChange: 'clip-path' }}>
-              <Image
-                src="/hero-title.svg"
-                alt="GENESIS"
-                width={900}
-                height={200}
-                className="object-contain"
-                priority
-              />
+              <h1 className="font-orbitron font-black text-[9rem] leading-none text-transparent bg-clip-text bg-gradient-to-b from-white to-[#AEAFAD] text-center w-full">
+                GENESIS
+              </h1>
             </div>
           </div>
         </div>
 
         {/* Desktop Hero Image */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/4 z-20 w-auto h-[73vh] pointer-events-none select-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/4 z-20 w-auto h-[74vh] pointer-events-none select-none">
           <div ref={headRef} className="relative w-full h-full">
             <Image
               src="/hero-img.svg"
@@ -227,36 +217,31 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           alt=""
           width={663}
           height={567}
-          className="absolute translate-x-[-36vw] translate-y-[8vh] w-[160vw] max-w-none h-auto -rotate-6 mix-blend-screen z-0 pointer-events-none"
+          className="absolute translate-x-[-37vw] translate-y-[7vh] w-[160vw] max-w-none h-auto -rotate-6 mix-blend-screen z-0 pointer-events-none"
           priority
           ref={mobileGradientRef}
         />
 
         {/* Mobile Top Section: Title & Subtitle */}
         <div className="relative z-10 flex flex-col items-center pt-28 w-full px-6">
-          <div className="mb-4 relative w-full h-auto flex justify-center select-none">
+          <div className="mb-2 relative w-full h-auto flex justify-center select-none">
             <div ref={mobileSubtitleRef} style={{ willChange: 'clip-path' }}>
-              <p className="text-[#7C7C7C] font-clash font-bold text-[10px] tracking-[0.67em] opacity-90 text-center w-full">
+              <p className="text-[#7C7C7C] font-clash font-bold text-[10px] tracking-[0.5em] opacity-90 text-center w-full">
                 FROM CONCEPT TO IMPACT
               </p>
             </div>
           </div>
           <div className="relative w-full flex justify-center select-none -mt-2">
-            <div ref={mobileTitleRef} style={{ willChange: 'clip-path' }}>
-              <Image
-                src="/hero-title.svg"
-                alt="GENESIS"
-                width={500}
-                height={120}
-                className="object-contain w-[95vw]"
-                priority
-              />
+            <div ref={mobileTitleRef} style={{ willChange: 'clip-path' }} className="flex justify-center w-full">
+              <h1 className="font-orbitron font-black text-7xl leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-[#AEAFAD] text-center w-full">
+                GENESIS
+              </h1>
             </div>
           </div>
         </div>
 
         {/* Mobile Center: Head Image */}
-        <div className="relative z-20 flex items-center justify-center -ml-1.5 -mt-3.5 w-full pointer-events-none select-none">
+        <div className="relative z-20 flex items-center justify-center -ml-1.5 -mt-7 w-full pointer-events-none select-none">
           <div ref={mobileHeadRef} className="relative w-[85vw] h-auto">
             <Image
               src="/hero-img.svg"
@@ -290,7 +275,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           </div>
         </div>
       </div>
-    </section>
+    </section >
   );
 };
 

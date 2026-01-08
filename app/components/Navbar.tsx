@@ -129,13 +129,13 @@ const Navbar = ({ startAnimation, onComplete }: { startAnimation: boolean; onCom
       >
         {/* Logo */}
         {!isMenuOpen && (
-          <div className="flex-shrink-0 flex items-center cursor-default select-none -ml-2.5 -mt-1.5">
+          <div className="flex-shrink-0 flex items-center cursor-default select-none -ml-2 -mt-1">
             <Image
               src="/logo-white.png"
               alt="TEDxCUSAT Logo"
               width={180}
               height={40}
-              className="object-contain h-8 w-auto"
+              className="object-contain h-9 w-auto"
               priority
               unoptimized
             />
@@ -153,7 +153,7 @@ const Navbar = ({ startAnimation, onComplete }: { startAnimation: boolean; onCom
         </button>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden ml-8 md:flex items-center gap-12 mt-1">
+        <div className="hidden md:flex items-center gap-12 mt-1 mr-10">
           {navLinks.map((link) => (
             <Link
               key={link.name}
