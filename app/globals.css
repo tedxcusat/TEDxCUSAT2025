@@ -22,7 +22,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 /* src/app/globals.css */
@@ -120,6 +120,9 @@ nav {
 }
 
 .hero-content h1 {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 800; /* Make it extra bold like the logo */
+  letter-spacing: -2px; /* Tighten it up to look like the brand */
   font-size: clamp(40px, 8vw, 80px); /* Responsive font size */
   margin-bottom: 20px;
   line-height: 1;
@@ -258,7 +261,7 @@ nav {
 
   /* 3. Planet needs to be visible */
   .planet-glow {
-    max-width: 90%; /* Don't let it overflow */
+    max-width: 670%; /* Don't let it overflow */
     bottom: -20px;
   }
 
