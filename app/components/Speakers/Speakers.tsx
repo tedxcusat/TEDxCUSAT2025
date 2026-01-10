@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { Draggable } from "gsap/dist/Draggable";
 gsap.registerPlugin(Draggable);
 import SpeakersMarquee from "./SpeakersMarquee";
+import { ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 
 type Speaker = {
   name: string;
@@ -66,8 +67,12 @@ const speakers: Speaker[] = [
   },
 ];
 
-export default function Newspeakers() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+export default function Newspeakers({
+  startAnimation = false,
+}: {
+  startAnimation?: boolean;
+}) {
+  const [openIndices, setOpenIndices] = useState<number[]>([]);
   const cardRefs = useRef<HTMLDivElement[]>([]);
   const spotlightRef = useRef<HTMLDivElement>(null);
   const bg26Ref = useRef<HTMLDivElement>(null);
@@ -77,7 +82,7 @@ export default function Newspeakers() {
   const lineRef = useRef<HTMLDivElement | null>(null);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
-  const renderMobileRef = useRef<() => void>(() => {});
+  const renderMobileRef = useRef<() => void>(() => { });
   const startIndex = useRef(0);
   const isManual = useRef(false);
   const isAnimating = useRef(false);
@@ -96,12 +101,18 @@ export default function Newspeakers() {
 
     gsap.set(voicesRef.current, {
       position: "absolute",
-      top: "calc(50% + 40px)",
+      top: "30%",
       left: "50%",
       xPercent: -50,
-      yPercent: -50,
-      opacity: 0,
+      yPercent: -30,
+      scale: window.innerWidth < 640 ? 1 : 1.5,
+      opacity: 1,
+      clipPath: "polygon(50% 0, 50% 0, 50% 100%, 50% 100%)",
     });
+  }, []);
+
+  useEffect(() => {
+    if (!startAnimation) return;
 
     const tl = gsap.timeline();
 
@@ -109,32 +120,29 @@ export default function Newspeakers() {
     tl.fromTo(
       spotlightRef.current,
       {
-        opacity: 1,
         clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)",
       },
       {
         clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
-        opacity: 1,
-        duration: 4,
+        duration: 3,
         ease: "power1.out",
       }
     ).to(
       bg26MaskRef.current,
       {
         clipPath: "inset(0 0 0% 0)",
-        duration: 4,
-        ease: "sine.out",
+        duration: 3,
+        ease: "power3.out",
       },
       "<"
     );
 
     // Stage 3 — Voices of '26
     tl.to(voicesRef.current, {
-      opacity: 1,
-      duration: 2,
-      scale: window.innerWidth < 640 ? 1 : 1.5,
+      clipPath: "polygon(0% 0, 100% 0, 100% 100%, 0% 100%)",
+      duration: 1,
       ease: "power3.out",
-    },"-=3");
+    });
 
     // Stage 4 — spotlight + bg fade out
     tl.to([spotlightRef.current, bg26Ref.current], {
@@ -174,7 +182,7 @@ export default function Newspeakers() {
       opacity: 1,
       duration: 0.4,
     });
-  }, []);
+  }, [startAnimation]);
 
   const getScreenType = () => {
     const w = window.innerWidth;
@@ -188,7 +196,6 @@ export default function Newspeakers() {
 
     const containerWidth =
       cardsContainerRef.current?.offsetWidth || window.innerWidth;
-
     const total = speakers.length;
     const center = 2;
     let lastTween: gsap.core.Tween | null = null;
@@ -196,40 +203,27 @@ export default function Newspeakers() {
       lastTween = gsap.to(card, vars);
     };
 
-    // ---------- TABLET ----------
-    if (screen === "tablet") {
-      const CARD_WIDTH = Math.min(containerWidth * 0.45, 360);
-      const GAP = 60;
-      const BASE_Y = 10;
-      const VISIBLE_RANGE = 2;
-
-      cardRefs.current.forEach((card, i) => {
-        if (!card) return;
-
-        let offset = i - center - startIndex.current;
-        offset = ((offset % total) + total) % total;
-        if (offset > total / 2) offset -= total;
-
-        animate(card, {
-          x: offset * (CARD_WIDTH + GAP),
-          y: BASE_Y + Math.abs(offset) * 28 + (offset === 0 ? 18 : 0),
-          rotation: offset * 3,
-          opacity: Math.abs(offset) > VISIBLE_RANGE ? 0 : 1,
-          immediateRender: false,
-          duration: isManual.current ? 0.7 : 3.2,
-          ease: "linear",
-          overwrite: "auto",
-        });
-      });
-
-      return lastTween;
-    }
-
-    // ---------- DESKTOP ----------
-    const CARD_WIDTH = Math.min(containerWidth * 0.42, 380);
-    const GAP = 40;
-    const BASE_Y = 20;
-    const VISIBLE_RANGE = 2;
+    // Configuration based on screen type
+    const isTablet = screen === "tablet";
+    const config = isTablet
+      ? {
+        width: Math.min(containerWidth * 0.45, 240),
+        gap: 20,
+        baseY: 10,
+        visibleRange: 2,
+        yOffsetBase: 28,
+        yOffsetCenter: 18,
+        duration: 3.2,
+      }
+      : {
+        width: Math.min(containerWidth * 0.42, 260),
+        gap: 40,
+        baseY: 20,
+        visibleRange: 2,
+        yOffsetBase: 40,
+        yOffsetCenter: 25,
+        duration: 6,
+      };
 
     cardRefs.current.forEach((card, i) => {
       if (!card) return;
@@ -238,19 +232,25 @@ export default function Newspeakers() {
       offset = ((offset % total) + total) % total;
       if (offset > total / 2) offset -= total;
 
+      // Conditional rotation: 6 for first card, 4 for others
+      const rotFactor = Math.abs(offset) <= 1 ? 5.5 : 4.8;
+      const rotation = offset * rotFactor;
+
       animate(card, {
-        x: offset * (CARD_WIDTH + GAP),
-        y: BASE_Y + Math.abs(offset) * 40 + (offset === 0 ? 25 : 0),
-        rotation: offset * 4,
-        opacity: Math.abs(offset) > VISIBLE_RANGE ? 0 : 1,
+        x: offset * (config.width + config.gap),
+        y: config.baseY + Math.abs(offset) * config.yOffsetBase + (offset === 0 ? config.yOffsetCenter : 0),
+        rotation: rotation,
+        opacity: Math.abs(offset) > config.visibleRange ? 0 : 1,
         immediateRender: false,
-        duration: isManual.current ? 0.7 : 6,
+        duration: isManual.current ? 0.7 : config.duration,
         ease: "linear",
         overwrite: "auto",
       });
     });
+
     return lastTween;
   };
+
   useEffect(() => {
     const update = () => {
       setScreenType(getScreenType());
@@ -279,8 +279,6 @@ export default function Newspeakers() {
     const TOTAL = STEP * cards.length;
 
     const render = () => {
-      if (openIndex !== null) return;
-
       cards.forEach((card, i) => {
         const x = (((i * STEP + mobileOffset.current) % TOTAL) + TOTAL) % TOTAL;
         gsap.set(card, { x: x - TOTAL / 2 });
@@ -345,7 +343,7 @@ export default function Newspeakers() {
         renderMobileRef.current();
       },
       onComplete() {
-        if (openIndex === null) {
+        if (openIndices.length === 0) {
           mobileAuto.current?.resume();
         }
       },
@@ -354,11 +352,11 @@ export default function Newspeakers() {
 
   useEffect(() => {
     if (window.innerWidth < 640) {
-      openIndex !== null
+      openIndices.length > 0
         ? mobileAuto.current?.pause()
         : mobileAuto.current?.resume();
     }
-  }, [openIndex]);
+  }, [openIndices]);
 
   const handleNext = () => {
     if (isAnimating.current) return;
@@ -390,7 +388,7 @@ export default function Newspeakers() {
   useEffect(() => {
     let auto: gsap.core.Timeline | null = null;
 
-    if (openIndex === null && window.innerWidth >= 640) {
+    if (openIndices.length === 0 && window.innerWidth >= 640) {
       auto = gsap.timeline({ repeat: -1 });
 
       auto.to(
@@ -405,30 +403,30 @@ export default function Newspeakers() {
     return () => {
       auto?.kill();
     };
-  }, [openIndex]);
+  }, [openIndices]);
 
   return (
     <section
       id="speakers"
-      className="relative bg-black text-white isolate min-h-screen flex flex-col"
+      className="relative bg-black text-white isolate md:min-h-screen flex flex-col pt-10"
     >
-      <div className="flex-1">
+      <div className="md:flex-1">
         <div className="relative overflow-x-visible overflow-y-hidden">
           {/* Spotlight */}
-          <div className="absolute inset-0 -z-10  overflow-hidden">
+          <div className="absolute inset-0 -z-10 overflow-hidden">
             <div
               ref={spotlightRef}
-              className="pointer-events-none absolute inset-0 flex justify-center opacity-0 "
+              className="pointer-events-none absolute inset-0 flex justify-center"
               style={{
                 clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)",
               }}
             >
-              <div className="relative w-[1500px] h-[500px]">
+              <div className="relative w-[45rem] h-[15rem]">
                 <svg
                   width="1500"
                   height="500"
                   viewBox="0 0 1000 500"
-                  className="absolute left-1/2 -translate-x-1/2 origin-top scale-[0.6] sm:scale-[0.85] md:scale-100"
+                  className="absolute left-1/2 -translate-x-1/2 origin-top scale-[0.3] sm:scale-[0.45] md:scale-50"
                 >
                   <defs>
                     <linearGradient id="spotGrad" x1="0" y1="0" x2="0" y2="1">
@@ -446,7 +444,7 @@ export default function Newspeakers() {
                     </linearGradient>
 
                     <clipPath id="spotClip">
-                      <polygon points="350,0 650,0 1150,520 -150,520" />
+                      <polygon points="200,0 800,0 1150,520 -150,520" />
                     </clipPath>
 
                     <filter
@@ -461,15 +459,15 @@ export default function Newspeakers() {
                           screenType === "mobile"
                             ? 55
                             : screenType === "tablet"
-                            ? 35
-                            : 18
+                              ? 35
+                              : 18
                         }
                       />
                     </filter>
                   </defs>
 
                   <polygon
-                    points="350,0 650,0 1150,520 -150,520"
+                    points="200,0 800,0 1150,520 -150,520"
                     fill="url(#spotGrad)"
                     style={{ filter: "blur(18px)" }}
                     className="pointer-events-none"
@@ -485,7 +483,7 @@ export default function Newspeakers() {
             >
               <div
                 ref={bg26MaskRef}
-                className="absolute top-10 left-1/2 -translate-x-1/2 flex whitespace-nowrap gap-16 text-[5rem] sm:text-[5rem] md:text-[12rem] lg:text-[15rem] font-bold text-white/5 tracking-widest overflow-hidden"
+                className="absolute top-12 lg:top-8 flex whitespace-nowrap sm:gap-8 lg:gap-12 text-5xl sm:text-7xl md:text-9xl lg:text-9xl font-orbitron font-black text-white/5 tracking-widest overflow-hidden"
               >
                 {Array.from({ length: 10 }).map((_, i) => (
                   <span key={i}>’26</span>
@@ -496,12 +494,12 @@ export default function Newspeakers() {
           {/* Grain Overlay — ABOVE spotlight */}
           <div className="pointer-events-none absolute inset-0 z-10 flex justify-center overflow-x-hidden">
             <div
-              className="relative w-[1500px] h-[500px] opacity-50 mix-blend-overlay"
+              className="relative w-[45rem] h-[15rem] opacity-50 mix-blend-overlay"
               style={{
                 maskImage:
-                  "polygon(350px 0px, 650px 0px, 1150px 520px, -150px 520px)",
+                  "polygon(200px 0px, 800px 0px, 1150px 520px, -150px 520px)",
                 WebkitMaskImage:
-                  "polygon(350px 0px, 650px 0px, 1150px 520px, -150px 520px)",
+                  "polygon(200px 0px, 800px 0px, 1150px 520px, -150px 520px)",
               }}
             >
               <Image
@@ -515,61 +513,51 @@ export default function Newspeakers() {
           </div>
 
           {/* Heading */}
-          <div className="gap-10 flex flex-col">
+          <div className="flex flex-col">
             <h1
               ref={voicesRef}
-              className="absolute z-30 whitespace-nowrap text-5xl sm:text-5xl md:text-6xl lg:text-8xl font-semibold opacity-0 will-change-transform font-Orbitron"
+              className="absolute z-30 whitespace-nowrap text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold opacity-0 will-change-transform font-orbitron"
             >
               Voices of <span className="text-[#EB0028]">’26</span>
             </h1>
 
-            <div className="relative z-10 pt-8 md:pt-10px lg:pt-17 mt-20">
-              <div className="flex flex-col gap-5  md:gap-10 lg:gap-8 px-[5%] ">
+            <div className="relative z-10 mt-28 lg:mt-32">
+              <div className="flex flex-col gap-4 md:gap-2 lg:gap-2 px-[5%] ">
                 <div
                   ref={speakersHeaderRef}
                   className="flex items-center justify-between gap-6 opacity-0 mt-0 "
                 >
-                  <h2 className="uppercase opacity-60 text-sm sm:text-base md:text-lg lg:text-2xl font-bold font-Orbitron">
+                  <h2 className="uppercase text-sm sm:text-base md:text-lg font-[600] font-clash">
                     Speakers.2026
                   </h2>
 
-                  <div className="flex gap-10">
+                  <div className="flex gap-4">
                     <button
                       onClick={() => {
-                        setOpenIndex(null);
+                        // setOpenIndices([]); // Don't close on nav
                         if (window.innerWidth < 640) {
                           moveMobile(1);
                         } else {
                           handlePrev();
                         }
                       }}
+                      className="border bg-[#EB0028] border-[#EB0028] p-1"
                     >
-                      <Image
-                        src="/left arrow.png"
-                        alt="Prev"
-                        width={40}
-                        height={25}
-                        className="w-6 sm:w-7 md:w-8 lg:w-10 h-auto"
-                      />
+                      <ChevronLeft className="w-5 sm:w-4 md:w-5 lg:w-6 h-auto" />
                     </button>
 
                     <button
                       onClick={() => {
-                        setOpenIndex(null);
+                        // setOpenIndices([]); // Don't close on nav
                         if (window.innerWidth < 640) {
                           moveMobile(-1);
                         } else {
                           handleNext();
                         }
                       }}
+                      className="border bg-[#EB0028] border-[#EB0028] p-1"
                     >
-                      <Image
-                        src="/right arrow.png"
-                        alt="Next"
-                        width={40}
-                        height={25}
-                        className="w-6 sm:w-7 md:w-8 lg:w-10 h-auto"
-                      />
+                      <ChevronRight className="w-5 sm:w-4 md:w-5 lg:w-6 h-auto" />
                     </button>
                   </div>
                 </div>
@@ -582,10 +570,10 @@ export default function Newspeakers() {
           {/* Cards */}
           <div
             ref={cardsContainerRef}
-            className="relative flex items-center justify-center h-[330px] md:h-[500px] overflow-hidden opacity-0 mt-5 "
+            className="relative flex items-center justify-center h-[25rem] md:h-[31.25rem] overflow-hidden opacity-0 mt-5 "
           >
             {speakers.map((sp, i) => {
-              const isOpen = openIndex === i;
+              const isOpen = openIndices.includes(i);
 
               return (
                 <div
@@ -593,8 +581,8 @@ export default function Newspeakers() {
                     if (el) cardRefs.current[i] = el;
                   }}
                   key={sp.name + i}
-                  className={`absolute top-[2%]  w-[240px]  sm:w-[280px]  md:w-[300px] lg:w-[320px] h-[280px] md:h-[330px] lg:h-[370px] bg-[#111] border
-                  ${isOpen ? "border-[#EB0028] z-50" : "border-white z-10"}`}
+                  className={`absolute top-[2%] w-[16rem] sm:w-[15rem] md:w-[14rem] lg:w-[16rem] h-[24rem] md:h-[18rem] lg:h-[20rem] bg-[#111] will-change-transform ring-1 overflow-hidden
+                  ${isOpen ? "ring-[#EB0028] z-50" : "ring-white z-10"}`}
                 >
                   {/* Image */}
                   <Image
@@ -602,70 +590,63 @@ export default function Newspeakers() {
                     alt={sp.name}
                     width={260}
                     height={360}
-                    className="w-full h-full object-cover"
+                    className={`w-full h-full object-cover transition-all duration-500 ${isOpen ? "grayscale-0" : "grayscale"}`}
                   />
 
                   {/* Bottom gradient */}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
 
                   {/* Name */}
-                  <p className="absolute bottom-4 left-4 text-[#EB0028] font-clash">
+                  <p className="absolute bottom-1 left-4 font-clash font-[600] text-xl text-[#EB0028]">
                     {sp.name}
                   </p>
 
                   {/* Toggle Arrow */}
                   {!isOpen && (
                     <button
-                      onClick={() => setOpenIndex(i)}
-                      className="absolute bottom-0 right-4   transition-transform cursor-pointer"
+                      onClick={() => setOpenIndices((prev) => [...prev, i])}
+                      className="absolute bottom-0 right-4 border bg-white transition-transform cursor-pointer"
                       aria-label="Open speaker details"
                     >
-                      <Image
-                        src="/up arrow.png"
-                        alt="Open"
-                        width={28}
-                        height={25}
-                      />
+                      <ChevronUp color="#EB0028" className="w-9 h-9" />
                     </button>
                   )}
 
                   {/* Details Overlay */}
-                  {isOpen && (
-                    <div className="absolute inset-0 bg-black bg-opacity-95 p-4 flex flex-col pt-8">
-                      {/* Close Arrow*/}
-                      <button
-                        onClick={() => setOpenIndex(null)}
-                        className="absolute top-0 right-4 z-10 cursor-pointer rotate-90"
-                        aria-label="Close speaker details"
-                      >
-                        <Image
-                          src="/right arrow.png"
-                          alt="Prev"
-                          width={28}
-                          height={25}
-                        />
-                      </button>
+                  <div
+                    className={`absolute inset-0 bg-black bg-opacity-95 p-4 flex flex-col pt-8 transform transition-transform duration-500 ease-in-out ${isOpen ? "translate-y-0" : "translate-y-full pointer-events-none"
+                      }`}
+                  >
+                    {/* Close Arrow*/}
+                    <button
+                      onClick={() =>
+                        setOpenIndices((prev) => prev.filter((idx) => idx !== i))
+                      }
+                      className="absolute top-0 right-4 z-10 bg-[#EB0028] cursor-pointer rotate-90"
+                      aria-label="Close speaker details"
+                    >
+                      <ChevronRight className="w-9 h-9" />
+                    </button>
 
-                      <p className="text-[#e62b1e] font-semibold text-lg">
-                        {sp.name}
-                      </p>
-                      <p className="uppercase text-sm opacity-70 mb-3">
-                        {sp.title}
-                      </p>
-                      <p className="text-sm leading-relaxed opacity-90">
-                        {sp.description}
-                      </p>
-                    </div>
-                  )}
+                    <p className="text-[#e62b1e] font-clash font-[600] text-xl -mt-5">
+                      {sp.name}
+                    </p>
+                    <p className="text-[0.95rem] font-clash font-[500] opacity-50 mb-3">
+                      {sp.title}
+                    </p>
+                    <p className="text-sm font-clash font-[400] leading-relaxed opacity-90">
+                      {sp.description}
+                    </p>
+                  </div>
                 </div>
               );
             })}
           </div>
         </div>
-      </div>
-      <div ref={marqueeRef} className="relative opacity-0">
+      </div >
+      <div ref={marqueeRef} className="relative opacity-0 mt-10">
         <SpeakersMarquee />
       </div>
-    </section>
+    </section >
   );
 }

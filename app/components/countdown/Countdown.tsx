@@ -46,19 +46,19 @@ export default function Countdown({ startAnimation = false }: { startAnimation?:
           TOP CONTENT WRAPPER
           Contains Heading, Hands, and Timer
       ========================================= */}
-      <div className="pt-24 sm:pt-16 lg:pt-24 flex flex-col items-center w-full max-w-[1440px] mx-auto">
+      <div className="pt-32 sm:pt-32 lg:pt-24 flex flex-col gap-10 items-center w-full max-w-[90rem] mx-auto">
 
         {/* ------------------------------------------------
             1. HEADING SECTION ("FINAL COUNTDOWN")
             Animates: Fade In + Drop Down
         ------------------------------------------------ */}
         <h2
-          className={`relative flex flex-col lg:block items-center mb-6 lg:mb-10 px-4 text-center font-orbitron font-black tracking-[8%] whitespace-nowrap transform transition-all duration-1000 ease-out ${isInView ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"
+          className={`relative flex flex-col lg:block items-center mb-6 text-center font-orbitron font-black tracking-[8%] whitespace-nowrap transform transition-all duration-1000 ease-out ${isInView ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"
             }`}
         >
           {/* Mobile Background Gradient & Texture (Hidden on Desktop) */}
           <div
-            className={`absolute bottom-full translate-y-20 inset-x-0 h-[300px] w-full lg:hidden pointer-events-none transition-opacity duration-1000 ${isInView ? "opacity-100" : "opacity-0"
+            className={`absolute bottom-full translate-y-20 inset-x-0 h-[18.75rem] w-full lg:hidden pointer-events-none transition-opacity duration-1000 ${isInView ? "opacity-100" : "opacity-0"
               }`}
             style={{ zIndex: -1 }}
           >
@@ -68,7 +68,7 @@ export default function Countdown({ startAnimation = false }: { startAnimation?:
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
               style={{
-                filter: 'blur(20px)',
+                filter: 'blur(1.25rem)',
                 transform: 'scale(1.1)'
               }}
             />
@@ -82,10 +82,10 @@ export default function Countdown({ startAnimation = false }: { startAnimation?:
           </div>
 
           {/* Text Content */}
-          <span className="text-white text-[40px] sm:text-[48px] md:text-[64px] lg:text-[92px] lg:mr-6 z-10">
+          <span className="text-white text-[2.5rem] sm:text-[3rem] md:text-[4rem] lg:text-[5.75rem] lg:mr-6 z-10">
             FINAL
           </span>
-          <span className="text-[#EB0028] text-[40px] sm:text-[48px] md:text-[64px] lg:text-[92px] z-10">
+          <span className="text-[#EB0028] text-[2.5rem] sm:text-[3rem] md:text-[4rem] lg:text-[5.75rem] z-10">
             COUNTDOWN
           </span>
         </h2>
@@ -95,11 +95,11 @@ export default function Countdown({ startAnimation = false }: { startAnimation?:
             Layout: [Left Hand] - [Timer] - [Right Hand]
             Hidden on mobile, visible on lg screens
         ------------------------------------------------ */}
-        <div className="hidden -mt-16 lg:flex w-full items-center justify-center gap-1 min-h-[200px]">
+        <div className="hidden -mt-16 lg:flex w-full items-center justify-center gap-1 min-h-[12.5rem]">
 
           {/* LEFT HAND IMAGE */}
           <div
-            className={`w-[180px] xl:w-[260px] flex-shrink-0 flex justify-center z-10 transform transition-all duration-1000 delay-500 ease-out ${isInView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-20"
+            className={`w-[11.25rem] xl:w-[16.25rem] flex-shrink-0 flex justify-center z-10 transform transition-all duration-1000 delay-500 ease-out ${isInView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-20"
               }`}
           >
             <img
@@ -121,7 +121,7 @@ export default function Countdown({ startAnimation = false }: { startAnimation?:
 
           {/* RIGHT HAND IMAGE */}
           <div
-            className={`w-[180px] xl:w-[260px] flex-shrink-0 flex justify-center z-10 transform transition-all duration-1000 delay-500 ease-out ${isInView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-20"
+            className={`w-[11.25rem] xl:w-[16.25rem] flex-shrink-0 flex justify-center z-10 transform transition-all duration-1000 delay-500 ease-out ${isInView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-20"
               }`}
           >
             <img

@@ -51,74 +51,81 @@ export default function CountdownTimer() {
 
   return (
     <div className="flex flex-wrap lg:flex-nowrap items-center justify-center w-full py-4 sm:py-6">
-      
+
       {Object.entries(timeLeft).map(([label, value], index) => {
         const isDays = index === 0;
 
         return (
-            <div 
-                key={label} 
-                className={`
+          <div
+            key={label}
+            className={`
                     flex items-center 
                     ${isDays ? "w-full flex-col justify-center mb-4 lg:flex-row lg:w-auto lg:justify-start lg:mb-0" : ""}
                 `}
-            >
-            
+          >
+
             {/* UNIT GROUP (Number + Letter) */}
-            <div className="flex items-end gap-[2px] sm:gap-2">
-                
-                {/* NUMBER */}
-                <span
+            <div className="flex items-baseline justify-center -pl-2 lg:pr-4">
+
+              {/* NUMBER */}
+              <span
                 className="font-orbitron font-bold text-[#EB0028]
                         text-[32px] sm:text-[clamp(14px,3vw,82px)] 
                         tabular-nums text-center leading-none"
                 style={{ width: "2.3ch" }}
-                >
+              >
                 {value.toString().padStart(2, "0")}
-                </span>
+              </span>
 
-                {/* LETTER (D, H, M, S) */}
-                <span
+              {/* LETTER (D, H, M, S) */}
+              <span
                 className="font-orbitron font-bold
                         text-[32px] sm:text-[clamp(14px,3vw,82px)] leading-none"
                 style={{
-                    WebkitTextStroke: "1px #EB0028",
-                    color: "transparent",
+                  WebkitTextStroke: "1px #EB0028",
+                  color: "transparent",
                 }}
-                >
-                {label.charAt(0).toUpperCase()}
-                </span>
+              >
+                {isDays ? (
+                  <>
+                    <span className="lg:hidden">DAYS</span>
+                    <span className="hidden lg:inline">D</span>
+                  </>
+                ) : (
+                  label.charAt(0).toUpperCase()
+                )}
+              </span>
             </div>
 
             {/* Horizontal Line for 'Days' Row (Mobile Only) */}
             {isDays && (
-                 <div
-                 className="lg:hidden mt-3 mb-1"
-                 style={{
-                   width: "100%",
-                   height: "1px",
-                   backgroundColor: "#ffffff",
-                   opacity: 0.6,
-                 }}
-               />
+              <div
+                className="lg:hidden mt-3 mb-1"
+                style={{
+                  width: "100%",
+                  height: "1px",
+                  backgroundColor: "#ffffff",
+                  opacity: 0.6,
+                }}
+              />
             )}
 
             {/* VERTICAL DIVIDER (For Hrs, Min, Sec) */}
             {index < 3 && (
-                <div
+              <div
                 className={`
                     mx-2 sm:mx-6 lg:mx-8 xl:mx-12
                     h-14 sm:h-10 lg:h-16
                     ${isDays ? "hidden lg:block" : "block"} 
                 `}
                 style={{
-                    width: "1px",
-                    backgroundColor: "#ffffff",
-                    opacity: 0.6,
+                  width: "1px",
+                  backgroundColor: "#ffffff",
+                  opacity: 0.6,
                 }}
-                />
+              />
             )}
-            </div>
+          </div>
         );
       })}
     </div>

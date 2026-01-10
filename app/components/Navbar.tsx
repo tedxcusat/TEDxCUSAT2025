@@ -3,9 +3,12 @@
 import { useRef, useEffect, useState } from "react";
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { X } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const navLinks = [
   { name: "HOME", href: "/" },
@@ -29,6 +32,8 @@ const Navbar = ({ startAnimation, onComplete }: { startAnimation: boolean; onCom
   const line2Ref = useRef<HTMLSpanElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuItemsRef = useRef<HTMLDivElement>(null);
+  const bookBtnRef = useRef<HTMLButtonElement>(null);
+  const bookContainerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -59,6 +64,36 @@ const Navbar = ({ startAnimation, onComplete }: { startAnimation: boolean; onCom
       tlRef.current.play();
     }
   }, [startAnimation]);
+
+  // Book Now Button Scroll Trigger
+  useGSAP(() => {
+    // Initial state: hidden
+    gsap.set(bookContainerRef.current, { width: 0, opacity: 0, marginLeft: 0 });
+
+    ScrollTrigger.create({
+      trigger: document.body,
+      start: "100vh top", // Start when 100vh (Hero) is scrolled out
+      end: "bottom bottom",
+      onEnter: () => {
+        gsap.to(bookContainerRef.current, {
+          width: "auto",
+          opacity: 1,
+          marginLeft: "2rem", // Create space
+          duration: 0.5,
+          ease: "power3.out"
+        });
+      },
+      onLeaveBack: () => {
+        gsap.to(bookContainerRef.current, {
+          width: 0,
+          opacity: 0,
+          marginLeft: 0,
+          duration: 0.5,
+          ease: "power3.in"
+        });
+      }
+    });
+  }, []);
 
   // Mobile Menu Animation
   useEffect(() => {
@@ -124,12 +159,12 @@ const Navbar = ({ startAnimation, onComplete }: { startAnimation: boolean; onCom
   return (
     <>
       <nav
-        className="w-full h-[70px] flex items-center justify-between px-6 md:px-16 z-[120] fixed top-0 left-0 bg-black opacity-70 pointer-events-auto"
+        className="w-full h-[70px] flex items-center justify-between px-6 md:px-24 md:pr-12 z-[120] fixed top-0 left-0 bg-black opacity-70 pointer-events-auto"
         ref={navRef}
       >
         {/* Logo */}
         {!isMenuOpen && (
-          <div className="flex-shrink-0 flex items-center cursor-default select-none -ml-2 -mt-1">
+          <div className="flex-shrink-0 flex items-center cursor-default select-none -mt-1">
             <Image
               src="/logo-white.png"
               alt="TEDxCUSAT Logo"
@@ -153,16 +188,28 @@ const Navbar = ({ startAnimation, onComplete }: { startAnimation: boolean; onCom
         </button>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center gap-12 mt-1 mr-10">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="font-clash font-normal text-[14px] leading-[100%] tracking-[-0.02em] text-white hover:text-[#EB0028] transition-colors cursor-pointer"
+        <div className="hidden md:flex items-center mt-1 mr-10">
+          <div className="flex items-center gap-12">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="font-clash font-normal text-[14px] leading-[100%] tracking-[-0.02em] text-white hover:text-[#EB0028] transition-colors cursor-pointer"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+
+          {/* Book Now Button (appears on scroll) */}
+          <div ref={bookContainerRef} className="overflow-hidden">
+            <button
+              ref={bookBtnRef}
+              className="relative bg-[#EB0028] hover:bg-red-900 text-white font-clash font-normal text-[14px] leading-[100%] tracking-[-0.02em] py-4 px-8 transition-colors duration-300 z-[100] cursor-pointer whitespace-nowrap"
             >
-              {link.name}
-            </Link>
-          ))}
+              BOOK NOW
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -196,7 +243,7 @@ const Navbar = ({ startAnimation, onComplete }: { startAnimation: boolean; onCom
 
           {/* Bottom Section */}
           <div className="mobile-nav-item">
-            <p className="text-gray-400 text-sm font-bold font-clash pb-1">Join the experience!</p>
+            <p className="text-gray-400 text-sm font-clash pb-1">Join the experience!</p>
             <button className="w-full bg-[#EB0028] text-white font-clash font-bold py-6 text-3xl tracking-wider hover:bg-[#c00020] transition-colors uppercase">
               Book Now
             </button>

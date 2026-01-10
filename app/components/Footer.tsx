@@ -15,13 +15,13 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
 
   return (
     // Attached ref here to monitor visibility
-    <footer ref={footerRef} className="bg-black text-white overflow-hidden">
+    <footer ref={footerRef} className="bg-black text-white lg:pt-10">
       {/* MAIN FOOTER CONTENT */}
-      <div className="relative mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-16 lg:py-24">
+      <div className="relative mx-auto w-full max-w-screen px-6 lg:px-16 lg:pt-24 lg:pb-12 lg:mt-0 -mt-24">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-0">
 
           {/* LEFT COLUMN */}
-          <div className="relative w-full overflow-hidden lg:pr-16">
+          <div className="relative w-full lg:pr-16" style={{ clipPath: "polygon(0% -300px, 100% -300px, 100% 100%, 0% 100%)" }}>
 
             {/* Heading & Subheading */}
             {/* ANIMATION: Appears first (Fade In) */}
@@ -45,7 +45,7 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
               alt=""
               className={`
                 absolute
-                right-[-253px]
+                right-[-225px]
                 top-[-225px]
                 origin-top-right
                 hidden xl:block pointer-events-none
@@ -153,7 +153,7 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
             </div>
 
             {/* Map */}
-            <div className="mt-8 h-[200px] md:h-[260px] w-full border border-white/30 overflow-hidden">
+            <div className="my-8 h-[200px] md:h-[260px] w-full border border-white/30 overflow-hidden">
               <iframe
                 title="Seminar Complex, CUSAT"
                 src="https://www.google.com/maps?q=Seminar+Complex+CUSAT&output=embed"
@@ -172,7 +172,7 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
         className={`border-t border-white/40 transform transition-opacity duration-1000 delay-1200 ease-out ${isInView ? "opacity-100" : "opacity-0"
           }`}
       >
-        <div className="mx-auto flex w-full max-w-[1440px] flex-row items-center justify-between gap-2 md:gap-0 px-4 py-4 lg:px-16">
+        <div className="mx-auto flex w-full max-w-[1440px] flex-row items-center justify-between md:gap-0 px-4 py-4 lg:px-12">
 
           {/* LEFT — LOGO */}
           <img
@@ -182,12 +182,12 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
           />
 
           {/* CENTER */}
-          <span className="font-clash text-[10px] md:text-[16px] text-white/80 text-center leading-tight">
+          <span className="font-clash text-[10px] -ml-3 md:text-[16px] lg:-ml-8 text-white/80 text-center leading-tight">
             ©TEDxCUSAT’26
           </span>
 
           {/* RIGHT */}
-          <div className="flex flex-col items-center gap-1 md:gap-3">
+          <div className="flex flex-col items-center gap-0.5">
             <span className="font-clash text-[8px] md:text-[14px] text-white/70 whitespace-nowrap">
               FOLLOW US ON.
             </span>
@@ -203,7 +203,7 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
                 <img
                   src="/facebook.svg"
                   alt="Facebook"
-                  className="h-3 w-3 md:h-5 md:w-5 hover:opacity-80 transition"
+                  className="mb-0.5 h-3 w-3 md:h-5 md:w-5 hover:opacity-80 transition"
                 />
               </a>
 
