@@ -31,6 +31,267 @@ body {
   color: var(--foreground);
 }
 
+/* src/app/globals.css */
+
+:root {
+  --ted-red: #E62B1E;
+  --bg-black: #050505;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  
+  /* 2. Add the texture image */
+  /* Note: In Next.js CSS, the path starts with /images/ */
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), /* 80% black overlay */
+    url('/images/bg-texture.png');
+  
+  /* 3. Make sure it covers the whole screen */
+  background-size: cover; /* Or 'repeat' if it's a small tile pattern */
+  background-position: center;
+  background-attachment: fixed; /* Keeps texture still while you scroll */
+  
+  /* OPTIONAL: Blend it so it doesn't look too grey/bright */
+  /* This mixes the black color with your image */
+  background-blend-mode: overlay; 
+
+  color: white;
+  font-family: 'Arial', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Navbar */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+  position: absolute; /* Sits on top of everything */
+  width: 100%;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.logo span {
+  color: var(--ted-red);
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.btn-book {
+  background-color: var(--ted-red);
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-content {
+  z-index: 50; /* Ensures text is above background but below hands if needed */
+  margin-top: -50px;
+}
+
+.hero-content h1 {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 800; /* Make it extra bold like the logo */
+  letter-spacing: -2px; /* Tighten it up to look like the brand */
+  font-size: clamp(40px, 8vw, 80px); /* Responsive font size */
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.red-text {
+  color: var(--ted-red);
+  font-weight: bold;
+}
+
+.hero-content p {
+  max-width: 600px;
+  line-height: 1.6;
+  color: #ccc;
+  margin: 0 auto;
+}
+
+/* Gallery Animation */
+.scrolling-gallery {
+  width: 100%;
+  margin-bottom: 50px;
+  transition: transform 0.2s ease-out; /* Smooth tilt */
+}
+
+/* src/app/globals.css */
+
+.gallery-track {
+  display: flex;
+  
+  /* 1. Ensure this gap matches the padding below */
+  gap: 20px; 
+  
+  /* 2. ADD THIS LINE */
+  /* This adds the missing "gap" at the end of the list so 50% is exact */
+  padding-right: 20px; 
+  
+  width: max-content;
+  animation: scroll-left 40s linear infinite;
+}
+
+.float-img {
+  width: 230px;
+  height: auto;
+  opacity: 0.8;
+  border-radius: 8px;
+  filter: grayscale(100%); /* Cool effect: B&W photos until hovered */
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.3s ease;
+}
+
+.float-img:hover {
+  filter: grayscale(0%);
+}
+
+
+
+/* Mobile Tweak: Ensure the extra height doesn't overlap the text */
+@media (max-width: 768px) {
+  .scrolling-gallery {
+    margin-bottom: 60px; /* Add more space below gallery for the deep curve */
+  }
+}
+
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* The Hands */
+.hand-left, .hand-right {
+  position: absolute;
+  bottom: -450px; /* Start hidden below screen */
+  width: 25vw;
+  max-width: 400px;
+  transition: transform 0.1s ease-out; /* Snappy movement */
+  z-index: 20;
+  pointer-events: none; /* Lets you click text behind the hands */
+}
+
+.hand-left { left: 0; }
+.hand-right { right: 0; }
+
+/* Inside src/app/globals.css */
+
+.planet-glow {
+  position: absolute;
+  bottom: 0; /* Keeps it grounded at the bottom */
+  left: 50%;
+  transform: translateX(-50%); 
+  
+  width: 100%;       
+  max-width: 800px; /* Adjust this: Planets usually look better if they aren't too stretched */
+  height: auto;      
+  
+  z-index: 5; /* Behind hands (20), on top of bg (0) */
+  pointer-events: none; 
+  opacity: 0.3; 
+}
+
+/* src/app/globals.css */
+
+/* ... existing code ... */
+
+/* MOBILE STYLES */
+@media (max-width: 768px) {
+  
+  /* 1. Make the text manageable */
+  .hero-content h1 {
+    font-size: 12vw; /* Big text, but fits screen width */
+    margin-top: 20px;
+  }
+  
+  .hero-content p {
+    font-size: 14px;
+    padding: 0 20px; /* Prevent text touching edges */
+  }
+
+  /* 2. Hands need to be bigger on mobile */
+  /* On desktop they are 25vw, but that's too small for a phone */
+  /* Inside @media (max-width: 768px) */
+
+.hand-left, .hand-right {
+  /* 1. Make them big enough to see */
+  width: 50vw;  
+  
+  /* 2. Pull them UP. Change from -150px to 0 or even -20px */
+  bottom: -150px; 
+  
+  /* 3. Force them to sit on top of everything else */
+  z-index: 50; 
+  
+  /* 4. Ensure opacity isn't hidden */
+  opacity: 1; 
+
+  transition: transform 3.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+  /* 3. Planet needs to be visible */
+  .planet-glow {
+    max-width: 670%; /* Don't let it overflow */
+    bottom: -20px;
+  }
+
+  /* 4. Adjust the Gallery Arc */
+  .scrolling-gallery {
+     /* Ensure this is clean (no negative margins or top adjustments) */
+     margin-bottom: 20px; 
+     position: static; 
+  }
+
+  /* 2. Push the Text Down */
+  .hero-content {
+    /* Desktop was -50px. We change it to a positive number to push it down. */
+    margin-top: 60px; 
+  }
+  
+  /* Optional: If you want even more space specifically above the big "TEDxCUSAT" */
+  .hero-content h1 {
+    margin-top: 20px; /* Keep or increase this if needed */
+  }
+  
+  .float-img {
+    width: 180px; /* Smaller images for mobile */
+  }
+}
+}
+
 @keyframes speakers-marquee {
   from {
     transform: translateX(0);
