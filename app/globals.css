@@ -3,6 +3,13 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  scrollbar-width: none;
+  --font-orbitron: 'Orbitron', sans-serif;
+  --font-clash: 'Clash Display', sans-serif;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 @theme inline {
@@ -22,7 +29,6 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Poppins', sans-serif;
 }
 
 /* src/app/globals.css */
@@ -35,9 +41,6 @@ body {
 body {
   margin: 0;
   padding: 0;
-  
-  /* 1. Set the dark background color */
-  background-color: #050505; 
   
   /* 2. Add the texture image */
   /* Note: In Next.js CSS, the path starts with /images/ */
@@ -287,3 +290,43 @@ nav {
     width: 180px; /* Smaller images for mobile */
   }
 }
+}
+
+@keyframes speakers-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-speakers-marquee {
+  width: max-content;
+  animation: speakers-marquee 55s linear infinite;
+  will-change: transform;
+}
+
+.font-orbitron {
+  font-family: var(--font-orbitron);
+}
+
+.font-clash {
+  font-family: var(--font-clash);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  width: max-content;
+  animation: marquee 55s linear infinite;
+  will-change: transform;
+}
+
+
