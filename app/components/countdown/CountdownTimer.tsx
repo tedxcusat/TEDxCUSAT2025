@@ -50,7 +50,7 @@ export default function CountdownTimer() {
   if (!mounted || !timeLeft) return null;
 
   return (
-    <div className="flex flex-wrap lg:flex-nowrap items-center justify-center w-full py-4 sm:py-6">
+    <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-0.5 w-full py-4 mx-0 sm:py-6">
 
       {Object.entries(timeLeft).map(([label, value], index) => {
         const isDays = index === 0;
@@ -65,7 +65,7 @@ export default function CountdownTimer() {
           >
 
             {/* UNIT GROUP (Number + Letter) */}
-            <div className="flex items-baseline justify-center -pl-2 lg:pr-4">
+            <div className="flex items-baseline justify-center lg:pr-4">
 
               {/* NUMBER */}
               <span
@@ -114,7 +114,7 @@ export default function CountdownTimer() {
             {index < 3 && (
               <div
                 className={`
-                    mx-2 sm:mx-6 lg:mx-8 xl:mx-12
+                    mx-1 sm:mx-6 lg:mx-8 xl:mx-12
                     h-14 sm:h-10 lg:h-16
                     ${isDays ? "hidden lg:block" : "block"} 
                 `}

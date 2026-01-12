@@ -11,32 +11,41 @@ import Footer from './components/Footer';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import About from './components/about';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
+  const aboutRef = useRef<HTMLDivElement>(null);
   const speakersRef = useRef<HTMLDivElement>(null);
   const countdownRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
 
+
   const [loaderFinished, setLoaderFinished] = useState(false);
   const [heroFinished, setHeroFinished] = useState(false);
+  const [aboutInView, setAboutInView] = useState(false);
   const [speakersInView, setSpeakersInView] = useState(false);
   const [countdownInView, setCountdownInView] = useState(false);
   const [footerInView, setFooterInView] = useState(false);
   const [navbarFinished, setNavbarFinished] = useState(false);
 
   useEffect(() => {
-    if (!navbarFinished) {
+    if (!heroFinished && !loaderFinished) {
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!heroFinished) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
       // Refresh ScrollTrigger after unlocking overflow to ensure calculations are correct
       ScrollTrigger.refresh();
     }
-  }, [navbarFinished]);
+  }, [heroFinished]);
 
   useEffect(() => {
     window.history.scrollRestoration = 'manual';
@@ -45,15 +54,18 @@ export default function Home() {
 
   useGSAP(() => {
     if (navbarFinished && !loaderFinished) {
-      // Logic if needed between navbar finish and loader? 
-      // Actually existing code waited for loaderFinished to start Hero animation.
-      // And Hero onComplete -> setHeroFinished.
     }
   }, [navbarFinished, loaderFinished]);
 
   useGSAP(() => {
     if (loaderFinished) {
       // Triggers for components
+      ScrollTrigger.create({
+        trigger: aboutRef.current,
+        start: "top 60%",
+        onEnter: () => setAboutInView(true),
+      });
+
       ScrollTrigger.create({
         trigger: speakersRef.current,
         start: "top 60%",
@@ -77,10 +89,14 @@ export default function Home() {
   return (
     <main ref={containerRef}>
       <Loader onComplete={() => setLoaderFinished(true)} />
-      <Navbar startAnimation={heroFinished} onComplete={() => setNavbarFinished(true)} />
+      <Navbar />
 
       <section ref={heroRef} className="panel min-h-screen w-full relative snap-start">
         <Hero startAnimation={loaderFinished} onComplete={() => setHeroFinished(true)} />
+      </section>
+
+      <section ref={aboutRef} className="panel min-h-screen w-full relative bg-black snap-start">
+        <About startAnimation={aboutInView} />
       </section>
 
       <section ref={countdownRef} className="panel min-h-screen w-full relative bg-black snap-start">

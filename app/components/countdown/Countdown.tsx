@@ -142,7 +142,7 @@ export default function Countdown({ startAnimation = false }: { startAnimation?:
           className={`flex justify-center lg:hidden px-4 w-full transform transition-all duration-1000 delay-300 ease-out ${isInView ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"
             }`}
         >
-          <div className="w-fit border border-white flex justify-center px-6 sm:px-4 py-6">
+          <div className="w-fit border border-white flex justify-center px-2 sm:px-4 py-2">
             <CountdownTimer />
           </div>
         </div>
@@ -153,7 +153,7 @@ export default function Countdown({ startAnimation = false }: { startAnimation?:
           Scrolling text at the bottom
       ========================================= */}
       <div
-        className={`mt-24 lg:mt-auto w-full transform transition-all duration-1000 delay-1000 ease-out ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"
+        className={`my-32 lg:mt-auto w-full transform transition-all duration-1000 delay-1000 ease-out ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"
           }`}
       >
         <Marquee />

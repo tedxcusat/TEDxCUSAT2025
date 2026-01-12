@@ -64,17 +64,17 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
                   }`}
               >
                 <p className="font-clash text-2xl md:text-[26px] tracking-[-2%] text-[#EB0028]">
-                  IVINE JOJU
+                  DEVA NANDAN
                 </p>
 
                 <p className="mt-0.5 font-clash text-[12px] text-white/70">
-                  Organizer – TEDxCUSAT’26
+                  Organizer – TEDxCUSAT’25
                 </p>
 
                 <div className="mt-1 h-px w-full bg-white/30" />
 
                 <a
-                  href="tel:+919895545390"
+                  href="tel:+919188227875"
                   className="mt-3 flex items-center gap-3 font-clash text-[16px] text-white hover:opacity-80 transition"
                 >
                   <img
@@ -82,7 +82,7 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
                     alt="Call"
                     className="h-4 w-4"
                   />
-                  <span>+91 98955 45390</span>
+                  <span>+91 91882 27875</span>
                 </a>
               </div>
 
@@ -93,16 +93,16 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
                   }`}
               >
                 <p className="font-clash text-2xl md:text-[26px] tracking-[-2%] text-[#EB0028]">
-                  IVINE JOJU
+                  ADITHYAN PRAMOD
                 </p>
 
                 <p className="mt-0.5 font-clash text-[12px] text-white/70">
-                  Organizer – TEDxCUSAT’26
+                  Organizer – TEDxCUSAT’25
                 </p>
 
                 <div className="mt-1 h-px w-full bg-white/30" />
                 <a
-                  href="tel:+919895545390"
+                  href="tel:+918304988035"
                   className="mt-3 flex items-center gap-3 font-clash text-[16px] text-white hover:opacity-80 transition"
                 >
                   <img
@@ -110,7 +110,7 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
                     alt="Call"
                     className="h-4 w-4"
                   />
-                  <span>+91 98955 45390</span>
+                  <span>+91 83049 88035</span>
                 </a>
               </div>
             </div>
@@ -183,7 +183,7 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
 
           {/* CENTER */}
           <span className="font-clash text-[10px] -ml-3 md:text-[16px] lg:-ml-8 text-white/80 text-center leading-tight">
-            ©TEDxCUSAT’26
+            ©TEDxCUSAT’25
           </span>
 
           {/* RIGHT */}

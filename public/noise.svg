@@ -1,7 +1,5 @@
 <svg width="1440" height="1024" viewBox="0 0 1440 1024" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g style="mix-blend-mode:overlay">
 <rect x="-237" y="-102" width="1920" height="1200" fill="url(#pattern0_335_104)"/>
-</g>
 <defs>
 <pattern id="pattern0_335_104" patternContentUnits="objectBoundingBox" width="0.0697917" height="0.111667">
 <use xlink:href="#image0_335_104" transform="scale(0.000317235 0.000507576)"/>

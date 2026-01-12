@@ -78,7 +78,7 @@ export default function Marquee() {
                   className="flex items-center gap-6 pr-6 cursor-pointer"
                   onMouseEnter={() => setActiveImg(IMG_1)}
                 >
-                  <span className="font-semibold">TEDXCUSAT’26</span>
+                  <span><span className="text-[#EB0028] font-bold">TED</span><span className="text-[#EB0028] font-bold text-[0.8em] relative -top-[0.3em]">x</span>CUSAT</span>
                   <span className="text-[#EB0028]">&lt;</span>
                   <span>Ideas in Motion</span>
                 </span>
@@ -107,7 +107,7 @@ export default function Marquee() {
                   className="flex items-center gap-6 pr-6 cursor-pointer"
                   onMouseEnter={() => setActiveImg(IMG_1)}
                 >
-                  <span className="font-semibold">TEDXCUSAT’26</span>
+                  <span><span className="text-[#EB0028] font-bold">TED</span><span className="text-[#EB0028] font-bold text-[0.8em] relative -top-[0.3em]">x</span>CUSAT</span>
                   <span className="text-[#EB0028]">&lt;</span>
                   <span>Ideas in Motion</span>
                 </span>
@@ -118,7 +118,7 @@ export default function Marquee() {
                   onMouseEnter={() => setActiveImg(IMG_2)}
                 >
                   <span className="text-[#EB0028]">&lt;</span>
-                  <span>Step Into It</span>
+                  <span>6th Edition</span>
                   <span className="text-[#EB0028]">&lt;</span>
                 </span>
               </span>

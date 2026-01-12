@@ -2,17 +2,19 @@
 
 export default function Marquee() {
   return (
-    <div className="relative w-full bg-black border-y border-white py-3 sm:py-6">
+    <div className="relative w-full bg-black border-y border-white py-6">
       {/* SCROLLING TRACK CONTAINER */}
       <div className="overflow-hidden w-full">
         {/* ANIMATED TRACK */}
-        <div className="animate-speakers-marquee flex whitespace-nowrap font-clash font-normal text-[14px] sm:text-[18px] lg:text-[22px] leading-none text-white">
+        <div className="animate-speakers-marquee flex whitespace-nowrap font-clash font-normal text-[18px] sm:text-[18px] lg:text-[22px] leading-none text-white">
 
           {/* TRACK 1 */}
           <div className="flex items-center">
             {Array.from({ length: 6 }).map((_, i) => (
               <span key={i} className="flex items-center gap-6 pr-6">
-                <span >TEDXCUSAT’26</span>
+                <span><span className="text-[#EB0028] font-bold">TED</span><span className="text-[#EB0028] font-bold text-[0.8em] relative -top-[0.3em]">x</span>CUSAT</span>
+                <span className="text-[#EB0028]">&lt;</span>
+                <span>6th Edition</span>
                 <span className="text-[#EB0028]">&lt;</span>
                 <span>SPEAKERS  •  STORIES  •  IMPACT</span>
                 <span className="text-[#EB0028]">&lt;</span>
@@ -24,7 +26,9 @@ export default function Marquee() {
           <div className="flex items-center ml-6">
             {Array.from({ length: 6 }).map((_, i) => (
               <span key={`dup-${i}`} className="flex items-center gap-6 pr-6">
-                <span className="font-semibold">TEDXCUSAT’26</span>
+                <span><span className="text-[#EB0028] font-bold">TED</span><span className="text-[#EB0028] font-bold text-[0.8em] relative -top-[0.3em]">x</span>CUSAT</span>
+                <span className="text-[#EB0028]">&lt;</span>
+                <span>6th Edition</span>
                 <span className="text-[#EB0028]">&lt;</span>
                 <span>SPEAKERS  •  STORIES  •  IMPACT</span>
                 <span className="text-[#EB0028]">&lt;</span>

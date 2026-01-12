@@ -24,7 +24,7 @@ const mobileItems = [
   { id: "4", name: "TEAM", href: "/team" },
 ];
 
-const Navbar = ({ startAnimation, onComplete }: { startAnimation: boolean; onComplete?: () => void }) => {
+const Navbar = () => {
   const navRef = useRef<HTMLDivElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,35 +35,7 @@ const Navbar = ({ startAnimation, onComplete }: { startAnimation: boolean; onCom
   const bookBtnRef = useRef<HTMLButtonElement>(null);
   const bookContainerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    const tl = gsap.timeline({
-      paused: true,
-      onComplete: () => {
-        if (onComplete) onComplete();
-      }
-    });
 
-    tl.fromTo(navRef.current,
-      {
-        clipPath: "inset(0 0 100% 0)",
-        opacity: 0,
-      },
-      {
-        clipPath: "inset(0 0 0% 0)",
-        opacity: 1,
-        duration: 1.5,
-        ease: "power3.out"
-      }
-    );
-
-    tlRef.current = tl;
-  }, { scope: navRef });
-
-  useEffect(() => {
-    if (startAnimation && tlRef.current) {
-      tlRef.current.play();
-    }
-  }, [startAnimation]);
 
   // Book Now Button Scroll Trigger
   useGSAP(() => {
@@ -159,7 +131,8 @@ const Navbar = ({ startAnimation, onComplete }: { startAnimation: boolean; onCom
   return (
     <>
       <nav
-        className="w-full h-[70px] flex items-center justify-between px-6 md:px-24 md:pr-12 z-[120] fixed top-0 left-0 bg-black opacity-70 pointer-events-auto"
+        id="navbar"
+        className="w-full h-[70px] flex items-center justify-between px-6 md:px-24 md:pr-12 z-[120] fixed top-0 left-0 bg-black opacity-0 pointer-events-auto"
         ref={navRef}
       >
         {/* Logo */}

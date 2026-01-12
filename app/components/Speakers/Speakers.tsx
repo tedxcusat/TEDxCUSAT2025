@@ -75,8 +75,8 @@ export default function Newspeakers({
   const [openIndices, setOpenIndices] = useState<number[]>([]);
   const cardRefs = useRef<HTMLDivElement[]>([]);
   const spotlightRef = useRef<HTMLDivElement>(null);
-  const bg26Ref = useRef<HTMLDivElement>(null);
-  const bg26MaskRef = useRef<HTMLDivElement>(null);
+  const bg25Ref = useRef<HTMLDivElement>(null);
+  const bg25MaskRef = useRef<HTMLDivElement>(null);
   const voicesRef = useRef<HTMLHeadingElement>(null);
   const speakersHeaderRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement | null>(null);
@@ -95,7 +95,7 @@ export default function Newspeakers({
   );
 
   useEffect(() => {
-    gsap.set(bg26MaskRef.current, {
+    gsap.set(bg25MaskRef.current, {
       clipPath: "inset(0 0 100% 0)",
     });
 
@@ -116,7 +116,7 @@ export default function Newspeakers({
 
     const tl = gsap.timeline();
 
-    // Stage 2 — spotlight + bg '26
+    // Stage 2 — spotlight + bg '25
     tl.fromTo(
       spotlightRef.current,
       {
@@ -124,30 +124,30 @@ export default function Newspeakers({
       },
       {
         clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
-        duration: 3,
+        duration: 1,
         ease: "power1.out",
       }
     ).to(
-      bg26MaskRef.current,
+      bg25MaskRef.current,
       {
         clipPath: "inset(0 0 0% 0)",
-        duration: 3,
+        duration: 1,
         ease: "power3.out",
       },
       "<"
     );
 
-    // Stage 3 — Voices of '26
+    // Stage 3 — Voices of '25
     tl.to(voicesRef.current, {
       clipPath: "polygon(0% 0, 100% 0, 100% 100%, 0% 100%)",
-      duration: 1,
+      duration: 0.8,
       ease: "power3.out",
     });
 
     // Stage 4 — spotlight + bg fade out
-    tl.to([spotlightRef.current, bg26Ref.current], {
+    tl.to([spotlightRef.current, bg25Ref.current], {
       opacity: 0,
-      duration: 0.8,
+      duration: 0.5,
       ease: "power2.in",
     });
 
@@ -156,7 +156,7 @@ export default function Newspeakers({
       top: "5%",
       yPercent: 0,
       scale: 0.8,
-      duration: 0.8,
+      duration: 1,
       ease: "power3.inOut",
     });
 
@@ -180,7 +180,7 @@ export default function Newspeakers({
     // Stage 7 — Cards
     tl.to([cardsContainerRef.current, marqueeRef.current], {
       opacity: 1,
-      duration: 0.4,
+      duration: 0.5,
     });
   }, [startAnimation]);
 
@@ -476,17 +476,17 @@ export default function Newspeakers({
               </div>
             </div>
 
-            {/* Background '26 */}
+            {/* Background '25 */}
             <div
-              ref={bg26Ref}
+              ref={bg25Ref}
               className="pointer-events-none absolute inset-x-0 top-0 bottom-0 flex justify-center"
             >
               <div
-                ref={bg26MaskRef}
+                ref={bg25MaskRef}
                 className="absolute top-12 lg:top-8 flex whitespace-nowrap sm:gap-8 lg:gap-12 text-5xl sm:text-7xl md:text-9xl lg:text-9xl font-orbitron font-black text-white/5 tracking-widest overflow-hidden"
               >
                 {Array.from({ length: 10 }).map((_, i) => (
-                  <span key={i}>’26</span>
+                  <span key={i}>’25</span>
                 ))}
               </div>
             </div>
@@ -518,7 +518,7 @@ export default function Newspeakers({
               ref={voicesRef}
               className="absolute z-30 whitespace-nowrap text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold opacity-0 will-change-transform font-orbitron"
             >
-              Voices of <span className="text-[#EB0028]">’26</span>
+              Voices of <span className="text-[#EB0028]">’25</span>
             </h1>
 
             <div className="relative z-10 mt-28 lg:mt-32">
@@ -528,7 +528,7 @@ export default function Newspeakers({
                   className="flex items-center justify-between gap-6 opacity-0 mt-0 "
                 >
                   <h2 className="uppercase text-sm sm:text-base md:text-lg font-[600] font-clash">
-                    Speakers.2026
+                    Speakers.2025
                   </h2>
 
                   <div className="flex gap-4">
@@ -597,7 +597,7 @@ export default function Newspeakers({
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
 
                   {/* Name */}
-                  <p className="absolute bottom-1 left-4 font-clash font-[600] text-xl text-[#EB0028]">
+                  <p className="absolute bottom-1 left-4 font-clash font-[400] text-md text-[#EB0028]">
                     {sp.name}
                   </p>
 
@@ -605,7 +605,7 @@ export default function Newspeakers({
                   {!isOpen && (
                     <button
                       onClick={() => setOpenIndices((prev) => [...prev, i])}
-                      className="absolute bottom-0 right-4 border bg-white transition-transform cursor-pointer"
+                      className="absolute bottom-0 right-4 bg-white transition-transform cursor-pointer"
                       aria-label="Open speaker details"
                     >
                       <ChevronUp color="#EB0028" className="w-9 h-9" />

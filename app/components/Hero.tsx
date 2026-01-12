@@ -46,7 +46,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
       { clipPath: "inset(0 0 100% 0)" },
       {
         clipPath: "inset(0 0 0% 0)",
-        duration: 2,
+        duration: 1.5,
         ease: "power3.out"
       }
     )
@@ -54,7 +54,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
         { clipPath: "inset(0 0 100% 0)" },
         {
           clipPath: "inset(0 0 0% 0)",
-          duration: 2,
+          duration: 1.5,
           ease: "power3.out"
         },
         "<"
@@ -84,6 +84,19 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           duration: 1.5,
           ease: "power3.out"
         }
+      )
+      .fromTo(document.getElementById("navbar"),
+        {
+          clipPath: "inset(0 0 100% 0)",
+          opacity: 0,
+        },
+        {
+          clipPath: "inset(0 0 0% 0)",
+          opacity: 1,
+          duration: 1.5,
+          ease: "power3.out"
+        },
+        "<"
       )
       .fromTo(infoTargets,
         {
