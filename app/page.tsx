@@ -107,7 +107,7 @@ export default function Home() {
         <Speakers startAnimation={speakersInView} />
       </section>
 
-      <section ref={footerRef} className="panel min-h-screen w-full relative bg-black snap-start">
+      <section id='contact' ref={footerRef} className="panel min-h-screen w-full relative bg-black snap-start">
         <Footer startAnimation={footerInView} />
       </section>
     </main>

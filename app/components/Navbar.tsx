@@ -6,27 +6,25 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
-import { X } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const navLinks = [
-  { name: "HOME", href: "/" },
-  { name: "ABOUT", href: "/about" },
-  { name: "SPEAKERS", href: "/speakers" },
-  { name: "STORIES", href: "/stories" },
+  { name: "ABOUT", href: "/#about" },
+  { name: "SPEAKERS", href: "/#speakers" },
+  { name: "JOURNEY", href: "/#journey" },
+  { name: "TEAM", href: "/team" },
 ];
 
 const mobileItems = [
-  { id: "1", name: "VENUE", href: "/venue" },
-  { id: "2", name: "SPEAKERS", href: "/speakers" },
-  { id: "3", name: "CONTACT", href: "/contact" },
+  { id: "1", name: "ABOUT", href: "/#about" },
+  { id: "2", name: "SPEAKERS", href: "/#speakers" },
+  { id: "3", name: "CONTACT", href: "/#contact" },
   { id: "4", name: "TEAM", href: "/team" },
 ];
 
 const Navbar = () => {
   const navRef = useRef<HTMLDivElement>(null);
-  const tlRef = useRef<gsap.core.Timeline | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const line1Ref = useRef<HTMLSpanElement>(null);
   const line2Ref = useRef<HTMLSpanElement>(null);
