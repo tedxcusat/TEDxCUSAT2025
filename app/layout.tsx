@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Orbitron, Inter } from "next/font/google";
+import { Orbitron } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -10,18 +10,12 @@ const orbitron = Orbitron({
   weight: ["400", "900"],
 });
 
-// // Initialize Inter
-// const inter = Inter({
-//   subsets: ["latin"],
-//   variable: "--font-inter",
-//   display: "swap",
-// });
 
 // Initialize Clash Display
 const clashDisplay = localFont({
-  src: "./fonts/ClashDisplay-Regular.woff2",
+  src: "./fonts/ClashDisplay-Variable.woff2",
   variable: "--font-clash",
-  weight: "400",
+  weight: "200 700",
 });
 
 export const metadata: Metadata = {
@@ -31,11 +25,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" suppressHydrationWarning={true}>
+    <html lang="en" suppressHydrationWarning={true} className="snap-y snap-proximity">
       <body
         className={`${orbitron.variable} ${clashDisplay.variable} antialiased`}
       >

@@ -39,7 +39,7 @@ const Loader = ({ onComplete }: { onComplete?: () => void }) => {
       }
     )
       .fromTo(subtextTargets, {
-        yPercent: -600,
+        yPercent: -200,
         duration: 1.5,
         ease: "power3.out",
         autoAlpha: 0,
@@ -67,7 +67,7 @@ const Loader = ({ onComplete }: { onComplete?: () => void }) => {
 
       {/* Desktop View */}
       <div className="hidden md:flex relative flex-col items-center w-[360px] max-w-full -mt-16">
-        <div className="flex justify-center mb-1.5 w-full overflow-hidden">
+        <div className="flex justify-center -mb-2 w-full overflow-hidden relative z-10">
           <div ref={logoRef} className="w-full opacity-0">
             <Image
               src="/logo-white.png"
@@ -80,7 +80,7 @@ const Loader = ({ onComplete }: { onComplete?: () => void }) => {
             />
           </div>
         </div>
-        <div className="flex justify-center w-full">
+        <div className="flex justify-center w-full relative z-0">
           <div ref={subtextRef} className="w-auto opacity-0">
             <Image
               src="/sub-text.svg"
@@ -96,7 +96,7 @@ const Loader = ({ onComplete }: { onComplete?: () => void }) => {
 
       {/* Mobile View */}
       <div className="md:hidden relative flex flex-col items-center w-[80vw] max-w-full -translate-y-[10vh]">
-        <div className="flex justify-center mb-1.5 w-full overflow-hidden">
+        <div className="flex justify-center mb-0.5 w-full overflow-hidden relative z-10">
           <div ref={mobileLogoRef} className="w-full opacity-0">
             <Image
               src="/logo-white.png"
@@ -109,7 +109,7 @@ const Loader = ({ onComplete }: { onComplete?: () => void }) => {
             />
           </div>
         </div>
-        <div className="flex justify-center w-full">
+        <div className="flex justify-center w-full relative z-0">
           <div ref={mobileSubtextRef} className="w-auto opacity-0">
             <Image
               src="/sub-text.svg"
