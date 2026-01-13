@@ -12,6 +12,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import About from './components/about';
+import EchoesHero from './components/EchoesHero';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,7 +22,9 @@ export default function Home() {
   const aboutRef = useRef<HTMLDivElement>(null);
   const speakersRef = useRef<HTMLDivElement>(null);
   const countdownRef = useRef<HTMLDivElement>(null);
+  const echoesHeroRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
+
 
 
   const [loaderFinished, setLoaderFinished] = useState(false);
@@ -31,6 +34,7 @@ export default function Home() {
   const [countdownInView, setCountdownInView] = useState(false);
   const [footerInView, setFooterInView] = useState(false);
   const [navbarFinished, setNavbarFinished] = useState(false);
+  const [echoesHeroInView, setEchoesHeroInView] = useState(false);
 
   useEffect(() => {
     if (!heroFinished && !loaderFinished) {
@@ -83,6 +87,12 @@ export default function Home() {
         start: "top 60%",
         onEnter: () => setFooterInView(true),
       });
+
+      ScrollTrigger.create({
+        trigger: echoesHeroRef.current,
+        start: "top 60%",
+        onEnter: () => setEchoesHeroInView(true),
+      });
     }
   }, [loaderFinished]);
 
@@ -105,6 +115,10 @@ export default function Home() {
 
       <section ref={speakersRef} className="panel min-h-[125vh] w-full relative bg-black snap-start">
         <Speakers startAnimation={speakersInView} />
+      </section>
+
+      <section ref={echoesHeroRef} className="panel min-h-[125vh] w-full relative bg-black snap-start">
+        <EchoesHero startAnimation={echoesHeroInView} />
       </section>
 
       <section ref={footerRef} className="panel min-h-screen w-full relative bg-black snap-start">
