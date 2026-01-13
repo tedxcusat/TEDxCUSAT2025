@@ -164,3 +164,69 @@ body {
   font-weight: 700; /* Bold */
   text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); /* Bright glow */
 }
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--tedx-red);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--tedx-red-dark);
+}
+
+/* Red glow container with rotation animation */
+.red-glow-container {
+  position: relative;
+  animation: tilt-glow 8s ease-in-out infinite;
+}
+
+@keyframes tilt-glow {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(3deg);
+  }
+
+  50% {
+    transform: rotate(0deg);
+  }
+
+  75% {
+    transform: rotate(-3deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+
+
+/* Grayscale filter for speaker images */
+.grayscale-img {
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.grayscale-img:hover {
+  filter: grayscale(50%);
+}
+
+/* Line clamp utility */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
