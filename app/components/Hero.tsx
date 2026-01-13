@@ -46,7 +46,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
       { clipPath: "inset(0 0 100% 0)" },
       {
         clipPath: "inset(0 0 0% 0)",
-        duration: 2,
+        duration: 1.5,
         ease: "power3.out"
       }
     )
@@ -54,7 +54,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
         { clipPath: "inset(0 0 100% 0)" },
         {
           clipPath: "inset(0 0 0% 0)",
-          duration: 2,
+          duration: 1.5,
           ease: "power3.out"
         },
         "<"
@@ -84,6 +84,19 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           duration: 1.5,
           ease: "power3.out"
         }
+      )
+      .fromTo(document.getElementById("navbar"),
+        {
+          clipPath: "inset(0 0 100% 0)",
+          opacity: 0,
+        },
+        {
+          clipPath: "inset(0 0 0% 0)",
+          opacity: 1,
+          duration: 1.5,
+          ease: "power3.out"
+        },
+        "<"
       )
       .fromTo(infoTargets,
         {
@@ -168,7 +181,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           </div>
           <div className="mb-0 relative w-fit mx-auto flex justify-center select-none">
             <div ref={titleRef} style={{ willChange: 'clip-path' }}>
-              <h1 className="font-orbitron font-black text-[9rem] leading-none text-transparent bg-clip-text bg-gradient-to-b from-white to-[#AEAFAD] text-center w-full">
+              <h1 className="font-orbitron font-black text-[clamp(5rem,11vw,9rem)] leading-none text-transparent bg-clip-text bg-gradient-to-b from-white to-[#AEAFAD] text-center w-full">
                 GENESIS
               </h1>
             </div>
@@ -176,17 +189,19 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
         </div>
 
         {/* Desktop Hero Image */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/4 z-20 w-auto h-[74vh] pointer-events-none select-none">
-          <div ref={headRef} className="relative w-full h-full">
-            <Image
-              src="/hero-img.svg"
-              alt="Hero Head"
-              width={600}
-              height={800}
-              className="w-full h-full object-contain"
-              priority
-            />
-            <div className="absolute bottom-0 left-0 w-full h-[20%] bg-gradient-to-t from-black to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none select-none">
+          <div className="relative w-auto h-[clamp(450px,65vh,800px)] mt-[36vh]">
+            <div ref={headRef} className="relative w-full h-full">
+              <Image
+                src="/hero-img.svg"
+                alt="Hero Head"
+                width={600}
+                height={800}
+                className="w-full h-full object-contain"
+                priority
+              />
+              <div className="absolute bottom-0 left-0 w-full h-[20%] bg-gradient-to-t from-black to-transparent z-10 pointer-events-none"></div>
+            </div>
           </div>
         </div>
 
@@ -241,7 +256,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
         </div>
 
         {/* Mobile Center: Head Image */}
-        <div className="relative z-20 flex items-center justify-center -ml-1.5 -mt-7 w-full pointer-events-none select-none">
+        <div className="relative z-20 flex items-center justify-center -ml-[0.375rem] -mt-[1.75rem] w-full pointer-events-none select-none">
           <div ref={mobileHeadRef} className="relative w-[85vw] h-auto">
             <Image
               src="/hero-img.svg"
