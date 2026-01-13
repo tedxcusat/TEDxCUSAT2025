@@ -79,16 +79,16 @@ export default function Journey() {
       <div 
         className={`absolute z-20 flex items-center justify-center transition-all duration-1000 ease-out cursor-pointer
           ${!eyeEntrance ? 'top-[100%] opacity-0' : ''}
-          ${eyeEntrance && !isExpanded ? 'top-[22%] opacity-100' : ''}
-          ${isExpanded ? 'top-[1%] scale-50' : 'scale-100'}
+          ${eyeEntrance && !isExpanded ? 'top-[22%] opacity-100 scale-100 origin-center' : ''}
+          {/* FIX: Added 'origin-top' so it shrinks upwards, and removed the broken comments */}
+          ${isExpanded ? 'top-[16%] scale-[0.35] origin-top' : ''}
         `}
         onClick={() => ringsEntrance && !isExpanded && setIsExpanded(true)}
       >
         <div className="relative w-[500px] h-[500px] flex items-center justify-center">
           
           {/* ================= OUTER RING (Dimmer) ================= */}
-          {/* The Container Spins Clockwise (35s) */}
-          <div className={`absolute inset-0 flex items-center justify-center ${isExpanded ? 'opacity-0' : 'animate-[spin_35s_linear_infinite]'}`}>
+          <div className={`absolute inset-0 flex items-center justify-center animate-[spin_35s_linear_infinite]`}>
             {flatDigits.map((digit, i) => {
               const angle = i * angleStep;
               const currentRadius = ringsEntrance ? 260 : 0;
@@ -100,13 +100,11 @@ export default function Journey() {
                     position: 'absolute',
                     left: '50%',
                     top: '50%',
-                    // This rotation handles the orientation facing the eye
                     transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-${currentRadius}px)`, 
                     transition: 'transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
                     transitionDelay: `${i * 30}ms`
                   }}
                 >
-                  {/* 👇 FIXED: Removed 'animate-spin' so the number stays locked to the ring */}
                   <span className="block text-white/40 font-mono text-sm">
                     {digit}
                   </span>
@@ -116,8 +114,7 @@ export default function Journey() {
           </div>
 
           {/* ================= INNER RING (Brighter) ================= */}
-          {/* The Container Spins Counter-Clockwise (Reverse) (30s) */}
-          <div className={`absolute inset-0 flex items-center justify-center ${isExpanded ? 'opacity-0' : 'animate-[spin_30s_linear_infinite_reverse]'}`}>
+          <div className={`absolute inset-0 flex items-center justify-center animate-[spin_30s_linear_infinite_reverse]`}>
             {flatDigits.map((digit, i) => {
               const angle = i * angleStep;
               const currentRadius = ringsEntrance ? 190 : 0;
@@ -134,7 +131,6 @@ export default function Journey() {
                     transitionDelay: `${i * 30}ms`
                   }}
                 >
-                  {/* 👇 FIXED: Removed 'animate-spin' so the number stays locked to the ring */}
                   <span className="block text-white font-bold font-mono text-base drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
                     {digit}
                   </span>
@@ -158,26 +154,42 @@ export default function Journey() {
       </div>
 
       {/* --- CONTENT SECTION --- */}
-      <div className={`w-full max-w-6xl px-6 mt-32 transition-all duration-1000 delay-300 ${isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20 pointer-events-none'}`}>
-        <div className="flex justify-between items-end border-b border-gray-800 pb-6 mb-12">
-          <h2 className="text-5xl font-bold uppercase">Our <span className="text-[#E62B1E]">Journey</span></h2>
-          <div className="flex gap-4">
-            <button onClick={handlePrev} className="w-12 h-12 border border-white/20 hover:bg-[#E62B1E] hover:border-[#E62B1E] transition-all flex items-center justify-center">←</button>
-            <button onClick={handleNext} className="w-12 h-12 border border-white/20 hover:bg-[#E62B1E] hover:border-[#E62B1E] transition-all flex items-center justify-center">→</button>
+      <div className={`w-full max-w-5xl px-6 mt-76 transition-all duration-1000 delay-300 ${isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20 pointer-events-none'}`}>
+        
+        {/* Header - Scaled Down */}
+        <div className="flex justify-between items-end border-b border-gray-800 pb-4 mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold uppercase">Our <span className="text-[#E62B1E]">Journey</span></h2>
+          <div className="flex gap-3">
+            <button 
+              onClick={handlePrev} 
+              className="w-10 h-10 bg-[#E62B1E] text-white hover:bg-white hover:text-[#E62B1E] transition-all flex items-center justify-center font-bold text-lg"
+            >
+              ←
+            </button>
+            <button 
+              onClick={handleNext} 
+              className="w-10 h-10 bg-[#E62B1E] text-white hover:bg-white hover:text-[#E62B1E] transition-all flex items-center justify-center font-bold text-lg"
+            >
+              →
+            </button>
           </div>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8">
+
+        {/* Content Grid - Scaled Down */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div className="space-y-4">
             <div>
-              <h3 className="text-[#E62B1E] text-4xl font-bold mb-2">{currentEvent.title}</h3>
-              <p className="text-6xl font-mono text-gray-700 opacity-50">{currentEvent.year}</p>
+              <h3 className="text-[#E62B1E] text-2xl font-bold mb-1">{currentEvent.title}</h3>
+              <p className="text-4xl font-mono text-gray-700 opacity-50">{currentEvent.year}</p>
             </div>
-            <p className="text-xl text-gray-300 leading-relaxed max-w-md">{currentEvent.description}</p>
+            <p className="text-base text-gray-300 leading-relaxed max-w-md">{currentEvent.description}</p>
           </div>
-          <div className="relative h-[400px] w-full bg-gray-900 rounded-xl overflow-hidden group border border-gray-800">
+          
+          {/* Image - Height reduced */}
+          <div className="relative h-[280px] w-full bg-gray-900 rounded-xl overflow-hidden group border border-gray-800">
              <img src={currentEvent.image} alt={currentEvent.title} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
-             <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent">
-                <span className="text-white/50 text-sm tracking-widest">EVENT ARCHIVE</span>
+             <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/90 to-transparent">
+                <span className="text-white/50 text-xs tracking-widest">EVENT ARCHIVE</span>
              </div>
           </div>
         </div>
