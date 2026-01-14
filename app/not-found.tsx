@@ -73,28 +73,11 @@ const NotFoundPage = () => {
         // 1. Target Attraction (The "Genesis" of the 404 form)
         let dx, dy;
 
-        if (this.isTextParticle) {
-          // Text particles try to form the number
-          dx = this.targetX - this.x;
-          dy = this.targetY - this.y;
-          this.vx += dx * 0.03; // Snap to shape
-          this.vy += dy * 0.03;
-        } else {
-          // Background particles swirl around center
-          const centerX = width / 2;
-          const centerY = height / 2;
-          dx = centerX - this.x;
-          dy = centerY - this.y;
-
-          // Orbital physics
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const force = 5 / (dist + 1);
-          const angle = Math.atan2(dy, dx);
-          const swirl = angle + Math.PI / 2; // Perpendicular
-
-          this.vx += Math.cos(angle) * force + Math.cos(swirl) * CONFIG.swirlStrength;
-          this.vy += Math.sin(angle) * force + Math.sin(swirl) * CONFIG.swirlStrength;
-        }
+        // Text particles try to form the number
+        dx = this.targetX - this.x;
+        dy = this.targetY - this.y;
+        this.vx += dx * 0.03; // Snap to shape
+        this.vy += dy * 0.03;
 
         // 2. Mouse Interaction (The "Hand of God")
         const mouseDx = mouse.x - this.x;
@@ -178,11 +161,6 @@ const NotFoundPage = () => {
             }
           }
         }
-      }
-
-      // 3. Create Ambient Nebula Particles
-      for (let i = 0; i < 400; i++) {
-        particles.push(new Particle(false));
       }
     };
 

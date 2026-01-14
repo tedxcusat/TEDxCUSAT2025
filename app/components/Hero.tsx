@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { motion } from "framer-motion";
 
 const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onComplete?: () => void }) => {
   const titleRef = useRef<HTMLDivElement>(null);
@@ -216,9 +217,13 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           </div>
           <div className="flex flex-col items-end gap-2 pointer-events-auto" ref={bookingRef}>
             <span className="text-sm font-light tracking-[-0.02em]" ref={ticketRef}>tickets here!</span>
-            <button className="relative bg-[#EB0028] hover:bg-red-900 text-white font-medium py-3 px-8 transition-colors duration-300 z-[100] cursor-pointer">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative bg-[#EB0028] hover:bg-red-900 text-white font-clash font-normal text-[14px] leading-[100%] tracking-[-0.02em] py-4 px-8 transition-colors duration-300 z-[100] cursor-pointer whitespace-nowrap"
+            >
               BOOK NOW
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
@@ -284,9 +289,13 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           {/* Book Button */}
           <div className="flex flex-col items-end gap-1 pointer-events-auto" ref={mobileBookingRef}>
             <span className="text-xs font-light tracking-[-0.02em]" ref={mobileTicketRef}>tickets here!</span>
-            <button className="relative bg-[#EB0028] hover:bg-red-900 text-white font-medium py-2.5 px-6 transition-colors duration-300 z-[100] cursor-pointer">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative bg-[#EB0028] hover:bg-red-900 text-white font-medium py-2.5 px-6 transition-colors duration-300 z-[100] cursor-pointer"
+            >
               BOOK NOW
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>

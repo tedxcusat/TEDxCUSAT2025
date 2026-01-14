@@ -99,13 +99,13 @@ export default function Home() {
   return (
     <main ref={containerRef}>
       <Loader onComplete={() => setLoaderFinished(true)} />
-      <Navbar />
+      <Navbar startAnimation={loaderFinished} />
 
       <section ref={heroRef} className="panel min-h-screen w-full relative snap-start">
         <Hero startAnimation={loaderFinished} onComplete={() => setHeroFinished(true)} />
       </section>
 
-      <section ref={aboutRef} className="panel min-h-screen w-full relative bg-black snap-start">
+      <section id="about" ref={aboutRef} className="panel min-h-screen w-full relative bg-black snap-start">
         <About startAnimation={aboutInView} />
       </section>
 
@@ -113,7 +113,7 @@ export default function Home() {
         <Countdown startAnimation={countdownInView} />
       </section>
 
-      <section ref={speakersRef} className="panel min-h-[125vh] w-full relative bg-black snap-start">
+      <section id="speakers" ref={speakersRef} className="panel min-h-screen w-full relative bg-black snap-start">
         <Speakers startAnimation={speakersInView} />
       </section>
 
@@ -121,7 +121,7 @@ export default function Home() {
         <EchoesHero startAnimation={echoesHeroInView} />
       </section>
 
-      <section ref={footerRef} className="panel min-h-screen w-full relative bg-black snap-start">
+      <section id="contact" ref={footerRef} className="panel min-h-screen w-full relative bg-black snap-start">
         <Footer startAnimation={footerInView} />
       </section>
     </main>
