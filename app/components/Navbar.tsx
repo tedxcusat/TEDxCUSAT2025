@@ -73,7 +73,7 @@ const Navbar = ({ startAnimation = true }: { startAnimation?: boolean }) => {
         initial={{ y: -100, opacity: 0 }}
         animate={startAnimation ? { y: 0, opacity: 1 } : { y: -100, opacity: 0 }}
         transition={{ duration: 1, ease: "easeOut", delay: 0.5 }} // Delay for loader
-        className="w-full h-[70px] flex items-center justify-between px-6 md:px-24 md:pr-12 z-[120] fixed top-0 left-0 bg-black pointer-events-auto"
+        className="w-full h-[70px] flex items-center justify-between px-6 md:px-10 z-[120] fixed top-0 left-0 bg-black pointer-events-auto"
       >
         {/* Logo */}
         <AnimatePresence>
@@ -89,7 +89,7 @@ const Navbar = ({ startAnimation = true }: { startAnimation?: boolean }) => {
                 alt="TEDxCUSAT Logo"
                 width={180}
                 height={40}
-                className="object-contain h-9 w-auto"
+                className="object-contain h-[24px] md:h-[40px]"
                 priority
                 unoptimized
               />
@@ -122,7 +122,7 @@ const Navbar = ({ startAnimation = true }: { startAnimation?: boolean }) => {
               <Link
                 key={link.name}
                 href={link.href}
-                className="font-clash font-normal text-[14px] leading-[100%] tracking-[-0.02em] text-white hover:text-[#EB0028] transition-colors cursor-pointer"
+                className="font-clash font-normal text-[14px] leading-[100%] tracking-[-0.02em] text-white hover:text-[#EB0028] transition-colors cursor-pointer py-4"
               >
                 {link.name}
               </Link>
@@ -136,13 +136,15 @@ const Navbar = ({ startAnimation = true }: { startAnimation?: boolean }) => {
             animate={showBookBtn ? { width: "auto", opacity: 1, marginLeft: "2rem" } : { width: 0, opacity: 0, marginLeft: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
           >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative bg-[#EB0028] hover:bg-[#B71C1C] text-white font-clash font-normal text-[14px] leading-[100%] tracking-[-0.02em] py-4 px-8 transition-colors duration-300 z-[100] cursor-pointer whitespace-nowrap"
-            >
-              BOOK NOW
-            </motion.button>
+            <Link href="/tickets">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative bg-[#EB0028] hover:bg-[#B71C1C] text-white font-clash font-normal text-[14px] leading-[100%] tracking-[-0.02em] py-4 px-8 transition-colors duration-300 z-[100] cursor-pointer whitespace-nowrap"
+              >
+                BOOK NOW
+              </motion.button>
+            </Link>
           </motion.div>
         </div>
       </motion.nav>
@@ -195,13 +197,15 @@ const Navbar = ({ startAnimation = true }: { startAnimation?: boolean }) => {
               {/* Bottom Section */}
               <motion.div variants={menuItemVariants} custom={5}>
                 <p className="text-gray-400 text-sm font-clash pb-1">Join the experience!</p>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full bg-[#EB0028] text-white font-clash font-bold py-6 text-3xl tracking-wider hover:bg-[#c00020] transition-colors uppercase"
-                >
-                  Book Now
-                </motion.button>
+                <Link href="/tickets" onClick={() => setIsMenuOpen(false)}>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-full bg-[#EB0028] text-white font-clash font-bold py-6 text-3xl tracking-wider hover:bg-[#c00020] transition-colors uppercase"
+                  >
+                    Book Now
+                  </motion.button>
+                </Link>
               </motion.div>
             </div>
 
