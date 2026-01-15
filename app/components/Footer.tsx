@@ -176,7 +176,7 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
 
           {/* LEFT — LOGO */}
           <img
-            src="/tedxcusat-logo.png"
+            src="/logo-white.png"
             alt="TEDxCUSAT"
             className="h-[24px] md:h-[40px]"
           />
