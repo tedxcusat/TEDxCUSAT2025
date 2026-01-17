@@ -89,6 +89,7 @@ export default function Journey() {
   const [[page, direction], setPage] = useState([0, 0]);
   const sectionRef = useRef<HTMLDivElement>(null);
   const eyeRef = useRef<HTMLDivElement>(null);
+  const mobileEyeRef = useRef<HTMLDivElement>(null); // NEW: Add this for Mobile
   const contentRef = useRef<HTMLDivElement>(null);
   const mobileContentRef = useRef<HTMLDivElement>(null);
 
@@ -115,24 +116,18 @@ export default function Journey() {
   };
 
   useEffect(() => {
-    if (!sectionRef.current || !eyeRef.current) return;
+    // Ensure we check for mobile refs as well
+    if (!sectionRef.current) return;
 
     const ctx = gsap.context(() => {
       ScrollTrigger.matchMedia({
-        // DESKTOP: Pinning & Complex Animation
+        
+        // --- DESKTOP ANIMATION (Unchanged) ---
         "(min-width: 768px)": function () {
-          // Setup initial state for desktop
-          gsap.set(eyeRef.current, {
-            y: 0,
-            scale: 1,
-            opacity: 1,
-            clearProps: "all"
-          });
-          gsap.set(contentRef.current, {
-            y: 80,
-            opacity: 0,
-            clearProps: "all"
-          });
+          if (!eyeRef.current || !contentRef.current) return;
+
+          gsap.set(eyeRef.current, { y: 0, scale: 1, opacity: 1, clearProps: "all" });
+          gsap.set(contentRef.current, { y: 80, opacity: 0, clearProps: "all" });
 
           const tl = gsap.timeline({
             scrollTrigger: {
@@ -145,60 +140,63 @@ export default function Journey() {
             },
           });
 
-          // Eye moves up + shrinks
-          tl.to(
-            eyeRef.current,
-            {
-              y: -50,
-              scale: 0.35,
-              transformOrigin: "top center",
-              duration: 1,
-              ease: "power2.inOut"
-            },
-
-          );
-
-          // Content reveal
-          tl.to(
-            contentRef.current,
-            { opacity: 1, y: 0, duration: 1, ease: "power2.out" },
-            "-=0.6"
-          );
-        },
-
-        // MOBILE: Simple Scroll Flow (No Pinning)
-        "(max-width: 767px)": function () {
-          // Reset props to avoid conflicts
-          gsap.set(eyeRef.current, { clearProps: "all" });
-          gsap.set(contentRef.current, { clearProps: "all" });
-
-          // Simple Parallax for Eye
-          gsap.to(eyeRef.current, {
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top top",
-              end: "center top",
-              scrub: 1,
-            },
-            scale: 0.8,
-            opacity: 0.8,
-            ease: "none",
+          tl.to(eyeRef.current, {
+            y: -50,
+            scale: 0.35,
+            transformOrigin: "top center",
+            duration: 1,
+            ease: "power2.inOut",
           });
 
-          // Fade in content
-          gsap.fromTo(
-            mobileContentRef.current,
-            { opacity: 0, y: 30 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.8,
-              scrollTrigger: {
-                trigger: mobileContentRef.current,
-                start: "top 85%",
-              },
-            }
-          );
+          tl.to(contentRef.current, { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.6");
+        },
+
+        // --- MOBILE ANIMATION (Fixed) ---
+        "(max-width: 767px)": function () {
+          if (!mobileEyeRef.current || !mobileContentRef.current) return;
+
+          // 1. Setup initial state for mobile
+          gsap.set(mobileEyeRef.current, { 
+            y: 0, 
+            scale: 1, 
+            opacity: 1, 
+            clearProps: "all" 
+          });
+          
+          gsap.set(mobileContentRef.current, { 
+            y: 50, // Start slightly lower
+            opacity: 0, 
+            clearProps: "all" 
+          });
+
+          // 2. Apply the SAME Pinning logic as desktop
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top top", // Start animating when section hits top
+              end: "+=100%",   // Shorter scroll distance for mobile feels better
+              scrub: true,
+              pin: true,       // Pin the section on mobile too
+              anticipatePin: 1,
+            },
+          });
+
+          // 3. Animate Mobile Eye (Move up and shrink)
+          tl.to(mobileEyeRef.current, {
+            y: -80,            // Adjust vertical move for mobile layout
+            scale: 0.5,        // Don't shrink as much as desktop
+            transformOrigin: "center center",
+            duration: 1,
+            ease: "power2.inOut",
+          });
+
+          // 4. Reveal Mobile Content
+          tl.to(mobileContentRef.current, { 
+            opacity: 1, 
+            y: -140, 
+            duration: 1, 
+            ease: "power2.out" 
+          }, "-=0.8"); // Overlap slightly
         }
       });
     }, sectionRef);
@@ -219,7 +217,7 @@ export default function Journey() {
       */}
       <div className="md:hidden flex flex-col items-center pt-20 pb-48 px-6 min-h-screen">
         {/* Mobile Eye */}
-        <div ref={eyeRef} className="relative w-[300px] h-[300px] shrink-0 flex items-center justify-center mb-10">
+        <div ref={mobileEyeRef} className="relative w-[300px] h-[300px] shrink-0 flex items-center justify-center mb-10">
           <div className="relative w-full h-full flex items-center justify-center">
             {/* Spinning Rings (Scaled Down) */}
             <div className="absolute inset-0 animate-[spin_35s_linear_infinite]">
