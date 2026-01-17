@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useRef, useEffect } from 'react';
+import Link from "next/link";
 import Image from 'next/image';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { motion } from "framer-motion";
 
 const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onComplete?: () => void }) => {
   const titleRef = useRef<HTMLDivElement>(null);
@@ -46,7 +48,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
       { clipPath: "inset(0 0 100% 0)" },
       {
         clipPath: "inset(0 0 0% 0)",
-        duration: 2,
+        duration: 1.5,
         ease: "power3.out"
       }
     )
@@ -54,7 +56,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
         { clipPath: "inset(0 0 100% 0)" },
         {
           clipPath: "inset(0 0 0% 0)",
-          duration: 2,
+          duration: 1.5,
           ease: "power3.out"
         },
         "<"
@@ -84,6 +86,19 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           duration: 1.5,
           ease: "power3.out"
         }
+      )
+      .fromTo(document.getElementById("navbar"),
+        {
+          clipPath: "inset(0 0 100% 0)",
+          opacity: 0,
+        },
+        {
+          clipPath: "inset(0 0 0% 0)",
+          opacity: 1,
+          duration: 1.5,
+          ease: "power3.out"
+        },
+        "<"
       )
       .fromTo(infoTargets,
         {
@@ -168,7 +183,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           </div>
           <div className="mb-0 relative w-fit mx-auto flex justify-center select-none">
             <div ref={titleRef} style={{ willChange: 'clip-path' }}>
-              <h1 className="font-orbitron font-black text-[9rem] leading-none text-transparent bg-clip-text bg-gradient-to-b from-white to-[#AEAFAD] text-center w-full">
+              <h1 className="font-orbitron font-black text-[clamp(5rem,11vw,9rem)] leading-none text-transparent bg-clip-text bg-gradient-to-b from-white to-[#AEAFAD] text-center w-full">
                 GENESIS
               </h1>
             </div>
@@ -176,17 +191,19 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
         </div>
 
         {/* Desktop Hero Image */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/4 z-20 w-auto h-[74vh] pointer-events-none select-none">
-          <div ref={headRef} className="relative w-full h-full">
-            <Image
-              src="/hero-img.svg"
-              alt="Hero Head"
-              width={600}
-              height={800}
-              className="w-full h-full object-contain"
-              priority
-            />
-            <div className="absolute bottom-0 left-0 w-full h-[20%] bg-gradient-to-t from-black to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none select-none">
+          <div className="relative w-auto h-[clamp(450px,65vh,800px)] mt-[36vh]">
+            <div ref={headRef} className="relative w-full h-full">
+              <Image
+                src="/hero-img.png"
+                alt="Hero Head"
+                width={600}
+                height={800}
+                className="w-full h-full object-contain"
+                priority
+              />
+              <div className="absolute bottom-0 left-0 w-full h-[20%] bg-gradient-to-t from-black to-transparent z-10 pointer-events-none"></div>
+            </div>
           </div>
         </div>
 
@@ -201,16 +218,22 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           </div>
           <div className="flex flex-col items-end gap-2 pointer-events-auto" ref={bookingRef}>
             <span className="text-sm font-light tracking-[-0.02em]" ref={ticketRef}>tickets here!</span>
-            <button className="relative bg-[#EB0028] hover:bg-red-900 text-white font-medium py-3 px-8 transition-colors duration-300 z-[100] cursor-pointer">
-              BOOK NOW
-            </button>
+            <Link href="/tickets">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative bg-[#EB0028] hover:bg-[#B71C1C] text-white font-clash font-normal text-[14px] leading-[100%] tracking-[-0.02em] py-4 px-8 transition-colors duration-300 z-[100] cursor-pointer whitespace-nowrap"
+              >
+                BOOK NOW
+              </motion.button>
+            </Link>
           </div>
         </div>
       </div>
 
 
       {/* ================= MOBILE LAYOUT ================= */}
-      <div className="md:hidden relative w-full h-full flex flex-col pb-12 -mt-8">
+      <div className="md:hidden relative w-full h-full flex flex-col pb-12 -mt-8 overflow-hidden">
         {/* Mobile Background Gradient (Behind Title) */}
         <Image
           src="/hero-grad.svg"
@@ -223,7 +246,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
         />
 
         {/* Mobile Top Section: Title & Subtitle */}
-        <div className="relative z-10 flex flex-col items-center pt-28 w-full px-6">
+        <div className="relative z-10 flex flex-col items-center pt-28 w-full">
           <div className="mb-2 relative w-full h-auto flex justify-center select-none">
             <div ref={mobileSubtitleRef} style={{ willChange: 'clip-path' }}>
               <p className="text-[#7C7C7C] font-clash font-bold text-[10px] tracking-[0.5em] opacity-90 text-center w-full">
@@ -241,7 +264,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
         </div>
 
         {/* Mobile Center: Head Image */}
-        <div className="relative z-20 flex items-center justify-center -ml-1.5 -mt-7 w-full pointer-events-none select-none">
+        <div className="relative z-20 flex items-center justify-center -ml-[0.375rem] -mt-[1.75rem] w-full pointer-events-none select-none">
           <div ref={mobileHeadRef} className="relative w-[85vw] h-auto">
             <Image
               src="/hero-img.svg"
@@ -269,9 +292,15 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           {/* Book Button */}
           <div className="flex flex-col items-end gap-1 pointer-events-auto" ref={mobileBookingRef}>
             <span className="text-xs font-light tracking-[-0.02em]" ref={mobileTicketRef}>tickets here!</span>
-            <button className="relative bg-[#EB0028] hover:bg-red-900 text-white font-medium py-2.5 px-6 transition-colors duration-300 z-[100] cursor-pointer">
-              BOOK NOW
-            </button>
+            <Link href="/tickets">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative bg-[#EB0028] hover:bg-red-900 text-white font-medium py-2.5 px-6 transition-colors duration-300 z-[100] cursor-pointer"
+              >
+                BOOK NOW
+              </motion.button>
+            </Link>
           </div>
         </div>
       </div>
