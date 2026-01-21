@@ -127,7 +127,7 @@ export default function Journey() {
         ref={eyeRef}
         className="absolute top-[15%] left-1/2 -translate-x-1/2 z-20 flex items-center justify-center opacity-100"
       >
-        <div className="relative w-[500px] h-[500px] flex items-center justify-center">
+        <div className="relative  w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] lg:w-[500px] lg:h-[500px] flex items-center justify-center">
           {/* ================= OUTER RING (Dimmer) ================= */}
           <div
             className={`absolute inset-0 flex items-center justify-center animate-[spin_35s_linear_infinite]`}

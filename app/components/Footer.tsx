@@ -137,8 +137,7 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
                 className="mt-1 h-5 w-5 flex-shrink-0"
               />
               <span>
-                Seminar Complex, CUSAT, University Road, South Kalamassery,
-                Kalamassery, Ernakulam, Kochi, Kerala 682022.
+                Athulya Hall, Athulya Rd, Infopark Campus, Infopark, Kakkanad, Kerala 682042
               </span>
             </div>
 
@@ -156,7 +155,7 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
             <div className="my-8 h-[200px] md:h-[260px] w-full border border-white/30 overflow-hidden">
               <iframe
                 title="Seminar Complex, CUSAT"
-                src="https://www.google.com/maps?q=Seminar+Complex+CUSAT&output=embed"
+                src="https://www.google.com/maps?q=2956+JM8,+Athulya+Rd,+Infopark+Campus,+Kakkanad,+Kerala+682042&output=embed"
                 className="h-full w-full"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
