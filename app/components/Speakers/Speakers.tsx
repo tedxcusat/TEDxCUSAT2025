@@ -488,7 +488,7 @@ export default function Newspeakers({
   return (
     <section
       id="speakers"
-      className="relative bg-black text-white isolate md:min-h-screen flex flex-col pt-10"
+      className="relative bg-black text-white isolate md:min-h-screen flex flex-col pt-10 overflow-hidden"
     >
       <div className="md:flex-1">
         <div className="relative overflow-x-visible overflow-y-hidden">

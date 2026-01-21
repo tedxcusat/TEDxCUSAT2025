@@ -296,7 +296,7 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
                 SPEAKERS . <span className="font-[500]">2024</span>
               </span>
             </h2>
-            <div className="flex gap-3 sm:gap-4 md:gap-5">
+            <div className="flex gap-3 sm:gap-4">
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}

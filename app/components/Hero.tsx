@@ -195,7 +195,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           <div className="relative w-auto h-[clamp(450px,65vh,800px)] mt-[36vh]">
             <div ref={headRef} className="relative w-full h-full">
               <Image
-                src="/hero-img.svg"
+                src="/hero-img.png"
                 alt="Hero Head"
                 width={600}
                 height={800}
@@ -233,7 +233,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
 
 
       {/* ================= MOBILE LAYOUT ================= */}
-      <div className="md:hidden relative w-full h-full flex flex-col pb-12 -mt-8">
+      <div className="md:hidden relative w-full h-full flex flex-col pb-12 -mt-8 overflow-hidden">
         {/* Mobile Background Gradient (Behind Title) */}
         <Image
           src="/hero-grad.svg"

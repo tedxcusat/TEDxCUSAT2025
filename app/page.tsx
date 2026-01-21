@@ -4,7 +4,6 @@ import { useRef, useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Loader from "./components/Loader";
 import Hero from "./components/Hero";
-import Placeholder from "./components/Placeholder";
 import Countdown from "./components/countdown/Countdown";
 import Speakers from "./components/Speakers/Speakers";
 import Footer from "./components/Footer";
@@ -130,6 +129,10 @@ export default function Home() {
         className="panel min-h-[125vh] w-full relative bg-black snap-start"
       >
         <EchoesHero startAnimation={echoesHeroInView} />
+      </section>
+
+      <section>
+        <Journey />
       </section>
 
       <section id="contact" ref={footerRef} className="panel min-h-screen w-full relative bg-black snap-start">

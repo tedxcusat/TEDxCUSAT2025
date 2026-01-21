@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent, Variants } from "framer-motion";
 
 const navLinks = [
+  { name: "MERCH", href: "/merch" },
   { name: "ABOUT", href: "/#about" },
   { name: "SPEAKERS", href: "/#speakers" },
   { name: "JOURNEY", href: "/#journey" },
@@ -14,10 +15,11 @@ const navLinks = [
 ];
 
 const mobileItems = [
-  { id: "1", name: "ABOUT", href: "/#about" },
-  { id: "2", name: "SPEAKERS", href: "/#speakers" },
-  { id: "3", name: "CONTACT", href: "/#contact" },
-  { id: "4", name: "TEAM", href: "/team" },
+  { id: "1", name: "MERCH", href: "/merch" },
+  { id: "2", name: "ABOUT", href: "/#about" },
+  { id: "3", name: "SPEAKERS", href: "/#speakers" },
+  { id: "4", name: "CONTACT", href: "/#contact" },
+  { id: "5", name: "TEAM", href: "/team" },
 ];
 
 const Navbar = ({ startAnimation = true }: { startAnimation?: boolean }) => {
@@ -82,14 +84,14 @@ const Navbar = ({ startAnimation = true }: { startAnimation?: boolean }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex-shrink-0 flex items-center cursor-default select-none -mt-1"
+              className="flex-shrink-0 flex items-center cursor-default select-none -ml-8 md:ml-0"
             >
               <Image
                 src="/logo-white.png"
                 alt="TEDxCUSAT Logo"
                 width={180}
                 height={40}
-                className="object-contain h-[24px] md:h-[40px]"
+                className="object-contain h-[32px] md:h-[40px]"
                 priority
                 unoptimized
               />
