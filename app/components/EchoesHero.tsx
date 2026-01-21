@@ -2,7 +2,13 @@
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, AnimatePresence, PanInfo } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+  PanInfo,
+} from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // Types
@@ -48,65 +54,67 @@ const slideVariants = {
 
 // Swipe threshold for drag gestures
 const swipeConfidenceThreshold = 10000;
-const swipePower = (offset: number, velocity: number): number => Math.abs(offset) * velocity;
+const swipePower = (offset: number, velocity: number): number =>
+  Math.abs(offset) * velocity;
 
 // Mock speaker data
 const speakers: Speaker[] = [
   {
     id: 1,
-    name: "Olivia Lorem",
-    title: "Actress",
+    name: "P. R. Poduval ",
+    title: "Professor, Author",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare orci diam, a dictum diam luctus vel. Ut rutrum nibh pretium, elementum eros nec, iaculis leo.",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop&crop=face",
+      "A seasoned academic and writer, he weaves psychology and lived insight into ideas that encourage reflective thinking, meaningful growth, and a balanced view of success.",
+    image: "/prevspeakers/poduval.png",
   },
   {
     id: 2,
-    name: "Michael Chen",
-    title: "Tech Entrepreneur",
+    name: "Hani Musthafa",
+    title: "Automobile Journalist",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare orci diam, a dictum diam luctus vel. Ut rutrum nibh pretium, elementum eros nec, iaculis leo.",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=400&fit=crop&crop=face",
+      "A keen automotive voice who reshaped car reviews into thoughtful narratives, grounded in engineering sense, cultural context, and an unforced, authentic curiosity.",
+    image: "/prevspeakers/hani.png",
   },
   {
     id: 3,
-    name: "Sarah Williams",
-    title: "Climate Activist",
+    name: "Dr. Venu Vasudevan IAS",
+    title: "retired IAS Officer",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare orci diam, a dictum diam luctus vel. Ut rutrum nibh pretium, elementum eros nec, iaculis leo.",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=400&fit=crop&crop=face",
+      "A doctor by training, who has served as a Senior Indian Administrative Services officer and the 48th Chief Secretary of Kerala, capturing hearts and bringing significant advancements in tourism, culture and public policy.",
+    image: "/prevspeakers/venu.png",
   },
   {
     id: 4,
-    name: "David Kumar",
-    title: "Neuroscientist",
+    name: "Arvind Venugopal",
+    title: "Playback Singer",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare orci diam, a dictum diam luctus vel. Ut rutrum nibh pretium, elementum eros nec, iaculis leo.",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=400&fit=crop&crop=face",
+      "A distinctive voice in Malayalam cinema, known for soulful songs that quietly linger, blending emotion, restraint, and narrative depth.",
+    image: "/prevspeakers/arvind.png",
   },
   {
     id: 5,
-    name: "Emma Rodriguez",
-    title: "AI Researcher",
+    name: "Siddhi Mahajankatti ",
+    title: "Actress",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare orci diam, a dictum diam luctus vel. Ut rutrum nibh pretium, elementum eros nec, iaculis leo.",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=400&fit=crop&crop=face",
+      "An actress, data scientist, and content creator known for her lead role in the Malayalam blockbuster 'Aanandam'. She's a BBA graduate, an IIM Ahmedabad scholar, and works as an Apprentice Leader at Mu Sigma. Her TEDx talk explores multitasking and her philosophy on keeping passions separate from professions. She's also into surfing, scuba diving, and F1 analytics.",
+    image: "/prevspeakers/sidhi.png",
   },
   {
     id: 6,
-    name: "James Park",
-    title: "Social Innovator",
+    name: "Anantharaman Ajay ",
+    title: "Video Creator",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare orci diam, a dictum diam luctus vel. Ut rutrum nibh pretium, elementum eros nec, iaculis leo.",
-    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&h=400&fit=crop&crop=face",
+      "Challenging how we think, Anantharaman Ajay, content creator, storyteller, and relentless skeptic - dissects cinema, science, and society to expose intellectual complacency and cultural amnesia.",
+    image: "/prevspeakers/anantharaman.png",
   },
   {
     id: 7,
-    name: "Olivia Lorem",
-    title: "Actress",
+
+    name: "Anima Nair",
+    title: "Director of NeuroGifted",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare orci diam, a dictum diam luctus vel. Ut rutrum nibh pretium, elementum eros nec, iaculis leo.",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop&crop=face",
+      "A bold neurodiversity advocate and storyteller, she directs NeuroGifted and leads Interweave Consulting’s Neurodiversity Vertical, creating real impact through empathy and expertise.",
+    image: "/prevspeakers/anima.png",
   },
 ];
 
@@ -202,7 +210,10 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
   }, []);
 
   const handleDragEnd = useCallback(
-    (_e: MouseEvent | TouchEvent | PointerEvent, { offset, velocity }: PanInfo) => {
+    (
+      _e: MouseEvent | TouchEvent | PointerEvent,
+      { offset, velocity }: PanInfo
+    ) => {
       const swipe = swipePower(offset.x, velocity.x);
       if (swipe < -swipeConfidenceThreshold) {
         paginate(1);
@@ -250,7 +261,10 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
           {/* Hero Text */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: startAnimation ? 1 : 0.8, opacity: startAnimation ? 1 : 0 }}
+            animate={{
+              scale: startAnimation ? 1 : 0.8,
+              opacity: startAnimation ? 1 : 0,
+            }}
             style={{ scale: textScale, y: textY }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="relative z-20 text-center px-4"
@@ -335,10 +349,11 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
               <button
                 key={index}
                 onClick={() => setPage([index, index > currentPage ? 1 : -1])}
-                className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${index === currentPage
-                  ? "bg-[#E62B1E] w-8 sm:w-10"
-                  : "bg-white/20 hover:bg-white/40 w-4 sm:w-6"
-                  }`}
+                className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
+                  index === currentPage
+                    ? "bg-[#E62B1E] w-8 sm:w-10"
+                    : "bg-white/20 hover:bg-white/40 w-4 sm:w-6"
+                }`}
                 aria-label={`Go to page ${index + 1}`}
               />
             ))}

@@ -209,6 +209,36 @@ export default function Journey() {
       ref={sectionRef}
       className="relative w-full min-h-screen bg-black text-white overflow-hidden"
     >
+      {/* --- THE EYE CONTAINER --- */}
+      <div
+        ref={eyeRef}
+        className="absolute top-[15%] left-1/2 -translate-x-1/2 z-20 flex items-center justify-center opacity-100"
+      >
+        <div className="relative  w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] lg:w-[500px] lg:h-[500px] flex items-center justify-center">
+          {/* ================= OUTER RING (Dimmer) ================= */}
+          <div
+            className={`absolute inset-0 flex items-center justify-center animate-[spin_35s_linear_infinite]`}
+          >
+            {flatDigits.map((digit, i) => {
+              const angle = i * angleStep;
+              const currentRadius = 260; // outer
+
+              return (
+                <div
+                  key={`outer-${i}`}
+                  style={{
+                    position: "absolute",
+                    left: "50%",
+                    top: "50%",
+                    transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-${currentRadius}px)`,
+                    transition:
+                      "transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                    transitionDelay: `${i * 30}ms`,
+                  }}
+                >
+                  <span className="block text-white/40 font-mono text-sm">
+                    {digit}
+                  </span>
       {/* 
         ========================================
         MOBILE LAYOUT (Flex Column)
