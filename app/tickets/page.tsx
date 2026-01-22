@@ -18,8 +18,7 @@ const tickets = [
     type: "Early Bird",
     price: "₹399",
     description: "Limited time offer for early bookings.",
-    highlight: true,
-    soldOut: true,
+    soldOut: false,
     disabled: true,
   },
   {
@@ -46,10 +45,10 @@ const tickets = [
 ];
 
 const sponsors = [
-  { name: "Sponsor 1", logo: "/file.svg" }, // Placeholder logos
-  { name: "Sponsor 2", logo: "/file.svg" },
-  { name: "Sponsor 3", logo: "/file.svg" },
-  { name: "Sponsor 4", logo: "/file.svg" },
+  { name: "Sponsor 1", logo: "/infopark.jpg" }, // Placeholder logos
+  { name: "Sponsor 2", logo: "" },
+  { name: "Sponsor 3", logo: "" },
+  { name: "Sponsor 4", logo: "" },
 ];
 
 const faqs = [
@@ -199,7 +198,7 @@ export default function TicketsPage() {
           {tickets.map((ticket, index) => (
             <motion.div
               key={index}
-              className={`ticket-card opacity-0 relative group p-8 border ${ticket.highlight ? 'border-[#EB0028] shadow-[0_0_30px_rgba(235,0,40,0.2)]' : 'border-white/20 hover:border-white/50'} bg-black/50 backdrop-blur-sm flex flex-col justify-between h-[450px] transition-all duration-300`}
+              className={`ticket-card opacity-0 relative group p-8 border border-white/20 hover:border-white/50 bg-black/50 backdrop-blur-sm flex flex-col justify-between h-[450px] transition-all duration-300`}
             >
               {/* Card Content */}
               <div>
@@ -254,13 +253,9 @@ export default function TicketsPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 items-center justify-items-center opacity-70">
             {sponsors.map((sponsor, index) => (
-              <div key={index} className="sponsor-logo w-full max-w-[150px] aspect-[3/2] flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500">
-                {/* 
-                  Using a placeholder or a generic icon if actual logos aren't available yet. 
-                  Modify src to point to actual sponsor logos.
-                */}
-                <div className="w-full h-full border border-white/10 flex items-center justify-center bg-white/5 p-4">
-                  <span className="font-clash text-sm text-gray-500">{sponsor.name}</span>
+              <div key={index} className="sponsor-logo w-full max-w-[150px] aspect-[3/2] flex items-center justify-center transition-all duration-500">
+                <div className="w-full h-full flex items-center justify-center">
+                  <SponsorLogo name={sponsor.name} logo={sponsor.logo} />
                 </div>
               </div>
             ))}
@@ -317,5 +312,30 @@ export default function TicketsPage() {
         <Footer startAnimation={footerInView} />
       </div>
     </main>
+  );
+}
+function SponsorLogo({ name, logo }: { name: string; logo: string }) {
+  const [failed, setFailed] = useState(false);
+
+  if (!failed && logo) {
+    return (
+      <Image
+        src={logo}
+        alt={name}
+        width={160}
+        height={100}
+        className="object-contain"
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+
+  // fallback with box styling
+  return (
+    <div className="w-full h-full border border-white/10 flex items-center justify-center bg-white/5 p-4">
+      <span className="font-clash text-sm text-gray-500">
+        {name}
+      </span>
+    </div>
   );
 }

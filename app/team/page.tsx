@@ -34,7 +34,7 @@ const coreTeam: CoreMember[] = [
   { name: "Asiya Fyroos", role: "Ambience Lead", image: "/team/Asiya.jpeg" },
   { name: "Shanif K V", role: "Ambience Lead", image: "/team/Shanif.jpeg" },
   { name: "Theja Lakshmi", role: "Media Lead", image: "/team/Theja.jpeg" },
-  { name: "Gopikrishnan S", role: "Media Lead", image: "/team/Gopi.webp" },
+  { name: "Gopikrishnan P R", role: "Media Lead", image: "/team/Gopi.webp" },
   {
     name: "Jenoo Liju",
     role: "Production Lead",
@@ -45,10 +45,10 @@ const coreTeam: CoreMember[] = [
     role: "Production Lead",
     image: "/team/Akshay.jpeg",
   },
-  { name: "Shazia Nanakkal", role: "Curation Lead", image: "/team/Shazia.jpeg" },
+  { name: "Shazia Nannakkal", role: "Curation Lead", image: "/team/Shazia.jpeg" },
   { name: "Anagha", role: "Curation Lead", image: "/team/Anagha.jpeg" },
   { name: "Arjun ", role: "Content Lead", image: "/team/Arjun.jpg" },
-  { name: "Daliya Noushad", role: "Outreach Lead", image: "/team/Daliya.jpeg" },
+  { name: "Dhaliya Noushad", role: "Outreach Lead", image: "/team/Daliya.jpeg" },
   { name: "Riya Fathima", role: "Outreach Lead", image: "/team/Riya.jpeg" },
   {
     name: "Durga Sumesh",

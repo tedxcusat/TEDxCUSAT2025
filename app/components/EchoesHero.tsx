@@ -64,7 +64,7 @@ const speakers: Speaker[] = [
     name: "P. R. Poduval ",
     title: "Professor, Author",
     description:
-      "A seasoned academic and writer, he weaves psychology and lived insight into ideas that encourage reflective thinking, meaningful growth, and a balanced view of success.",
+      "A seasoned academic and writer, blending psychology and lived insight to spark reflection, growth, and balanced perspectives on success.",
     image: "/prevspeakers/poduval.png",
   },
   {
@@ -72,7 +72,7 @@ const speakers: Speaker[] = [
     name: "Hani Musthafa",
     title: "Automobile Journalist",
     description:
-      "A keen automotive voice who reshaped car reviews into thoughtful narratives, grounded in engineering sense, cultural context, and an unforced, authentic curiosity.",
+      "A keen automotive voice reshaping car reviews into narratives, grounded in engineering sense, cultural context, and authentic curiosity always.",
     image: "/prevspeakers/hani.png",
   },
   {
@@ -80,7 +80,7 @@ const speakers: Speaker[] = [
     name: "Dr. Venu Vasudevan IAS",
     title: "retired IAS Officer",
     description:
-      "A doctor by training, who has served as a Senior Indian Administrative Services officer and the 48th Chief Secretary of Kerala, capturing hearts and bringing significant advancements in tourism, culture and public policy.",
+      "A doctor-turned administrator, former Chief Secretary of Kerala, driving progress in tourism, culture, and public policy with lasting impact.",
     image: "/prevspeakers/venu.png",
   },
   {
@@ -96,7 +96,7 @@ const speakers: Speaker[] = [
     name: "Siddhi Mahajankatti ",
     title: "Actress",
     description:
-      "An actress, data scientist, and content creator known for her lead role in the Malayalam blockbuster 'Aanandam'. She's a BBA graduate, an IIM Ahmedabad scholar, and works as an Apprentice Leader at Mu Sigma. Her TEDx talk explores multitasking and her philosophy on keeping passions separate from professions. She's also into surfing, scuba diving, and F1 analytics.",
+      "An actress, data scientist, and creator known for Aanandam, blending academics, analytics, TEDx insights, and adventure sports passions diverse.",
     image: "/prevspeakers/sidhi.png",
   },
   {
@@ -104,7 +104,7 @@ const speakers: Speaker[] = [
     name: "Anantharaman Ajay ",
     title: "Video Creator",
     description:
-      "Challenging how we think, Anantharaman Ajay, content creator, storyteller, and relentless skeptic - dissects cinema, science, and society to expose intellectual complacency and cultural amnesia.",
+      "Challenging thought, Anantharaman Ajay, creator, storyteller, dissects cinema, science, society to expose complacency and cultural amnesia.",
     image: "/prevspeakers/anantharaman.png",
   },
   {
@@ -113,7 +113,7 @@ const speakers: Speaker[] = [
     name: "Anima Nair",
     title: "Director of NeuroGifted",
     description:
-      "A bold neurodiversity advocate and storyteller, she directs NeuroGifted and leads Interweave Consulting’s Neurodiversity Vertical, creating real impact through empathy and expertise.",
+      "A bold neurodiversity advocate, leading NeuroGifted and Interweave’s Neurodiversity Vertical, driving inclusion and change.",
     image: "/prevspeakers/anima.png",
   },
 ];
