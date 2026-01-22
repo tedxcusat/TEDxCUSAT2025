@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence, PanInfo, Variants } from "framer-motion";
 import gsap from "gsap";
 import { Draggable } from "gsap/dist/Draggable";
 gsap.registerPlugin(Draggable);
@@ -67,6 +68,126 @@ const speakers: Speaker[] = [
   },
 ];
 
+// Helper to wrap page index
+const wrap = (min: number, max: number, v: number): number => {
+  const range = max - min;
+  return ((((v - min) % range) + range) % range) + min;
+};
+
+// Slide animation variants for horizontal carousel
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 300 : -300,
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] as const },
+  },
+  exit: (direction: number) => ({
+    x: direction < 0 ? 300 : -300,
+    opacity: 0,
+    transition: { duration: 0.3, ease: [0.55, 0.05, 0.55, 0.95] as const },
+  }),
+};
+
+const swipeConfidenceThreshold = 10000;
+const swipePower = (offset: number, velocity: number): number => Math.abs(offset) * velocity;
+
+const SpeakerFlipCard = ({
+  speaker,
+  className = "",
+}: {
+  speaker: Speaker;
+  className?: string;
+}) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleFlip = () => {
+    if (!isAnimating) {
+      setIsFlipped(!isFlipped);
+      setIsAnimating(true);
+    }
+  };
+
+  return (
+    <div
+      className={`cursor-pointer perspective-1000 group mx-auto ${className}`}
+      onClick={handleFlip}
+    >
+      <motion.div
+        initial={false}
+        animate={{ rotateY: isFlipped ? 180 : 0 }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+        onAnimationComplete={() => setIsAnimating(false)}
+        className="relative w-full h-full shadow-2xl"
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        {/* FRONT FACE */}
+        <div
+          className="absolute inset-0 backface-hidden flex flex-col gap-3 p-4 bg-black border border-white/20 border-t-4 border-t-[#E62B1E] overflow-hidden"
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          {/* Image Container */}
+          <div className="w-full relative flex-1 overflow-hidden">
+            <Image
+              src={speaker.img}
+              alt={speaker.name}
+              fill
+              className="object-cover grayscale"
+            />
+            <div className="absolute inset-0 bg-[#E62B1E] mix-blend-multiply opacity-0 transition-opacity duration-300" />
+          </div>
+
+          {/* Content */}
+          <div className="flex flex-col justify-end relative shrink-0 min-h-[60px]">
+            <div className="absolute top-0 right-0 w-8 h-[1px] bg-[#E62B1E]" />
+
+            <h3
+              className="text-[#E62B1E] font-medium text-lg tracking-[0.05em] leading-tight mb-1"
+              style={{ fontFamily: "'Clash Display', sans-serif" }}
+            >
+              {speaker.name}
+            </h3>
+            <p
+              className="text-white text-xs tracking-[0.08em] uppercase opacity-80"
+              style={{ fontFamily: "'Clash Display', sans-serif" }}
+            >
+              {speaker.title}
+            </p>
+          </div>
+        </div>
+
+        {/* BACK FACE */}
+        <div
+          className="absolute inset-0 backface-hidden flex flex-col justify-center items-center p-6 bg-black border border-white/20 border-t-4 border-t-[#E62B1E] overflow-hidden"
+          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+        >
+          <div className="absolute top-4 right-4 w-8 h-[1px] bg-[#E62B1E]" />
+
+          <h3
+            className="text-[#E62B1E] font-medium text-xl tracking-[0.05em] leading-tight mb-4 text-center"
+            style={{ fontFamily: "'Clash Display', sans-serif" }}
+          >
+            About
+          </h3>
+
+          <div className="w-full h-px bg-white/20 mb-4" />
+
+          <p
+            className="text-gray-400 text-xs leading-relaxed tracking-[0.04em] text-center overflow-y-auto max-h-full scrollbar-hide"
+            style={{ fontFamily: "'Clash Display', sans-serif" }}
+          >
+            {speaker.description}
+          </p>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 export default function Newspeakers({
   startAnimation = false,
 }: {
@@ -82,16 +203,31 @@ export default function Newspeakers({
   const lineRef = useRef<HTMLDivElement | null>(null);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
-  const renderMobileRef = useRef<() => void>(() => { });
   const startIndex = useRef(0);
   const isManual = useRef(false);
   const isAnimating = useRef(false);
-  const CARD = 260;
-  const GAP = 20;
-  const mobileOffset = useRef(0);
-  const mobileAuto = useRef<gsap.core.Tween | null>(null);
-  const [screenType, setScreenType] = useState<"mobile" | "tablet" | "desktop">(
-    "desktop"
+  const [screenType, setScreenType] = useState<"mobile" | "tablet" | "desktop">("desktop");
+  const [centerIndex, setCenterIndex] = useState(2);
+
+  // Mobile Carousel State
+  const [[page, direction], setPage] = useState<[number, number]>([0, 0]);
+
+  const speakerIndex = wrap(0, speakers.length, page);
+
+  const paginate = useCallback((newDirection: number) => {
+    setPage(([prevPage]) => [prevPage + newDirection, newDirection]);
+  }, []);
+
+  const handleDragEnd = useCallback(
+    (_e: MouseEvent | TouchEvent | PointerEvent, { offset, velocity }: PanInfo) => {
+      const swipe = swipePower(offset.x, velocity.x);
+      if (swipe < -swipeConfidenceThreshold) {
+        paginate(1);
+      } else if (swipe > swipeConfidenceThreshold) {
+        paginate(-1);
+      }
+    },
+    [paginate]
   );
 
   useEffect(() => {
@@ -194,6 +330,9 @@ export default function Newspeakers({
   const layoutCards = (): gsap.core.Tween | null => {
     const screen = getScreenType();
 
+    // Only layout for non-mobile
+    if (screen === 'mobile') return null;
+
     const containerWidth =
       cardsContainerRef.current?.offsetWidth || window.innerWidth;
     const total = speakers.length;
@@ -245,6 +384,7 @@ export default function Newspeakers({
         duration: isManual.current ? 0.7 : config.duration,
         ease: "linear",
         overwrite: "auto",
+        zIndex: Math.abs(offset) === 0 ? 50 : 10, // Ensure center card is on top
       });
     });
 
@@ -253,7 +393,9 @@ export default function Newspeakers({
 
   useEffect(() => {
     const update = () => {
-      setScreenType(getScreenType());
+      const type = getScreenType();
+      setScreenType(type);
+      if (type !== 'mobile') layoutCards();
     };
 
     update();
@@ -263,107 +405,20 @@ export default function Newspeakers({
   }, []);
 
   useEffect(() => {
-    if (window.innerWidth >= 640) {
+    if (screenType !== 'mobile') {
       layoutCards();
-      window.addEventListener("resize", layoutCards);
-      return () => window.removeEventListener("resize", layoutCards);
     }
-  }, []);
-
-  useEffect(() => {
-    if (!cardsContainerRef.current) return;
-    if (window.innerWidth >= 640) return;
-
-    const cards = cardRefs.current;
-    const STEP = CARD + GAP;
-    const TOTAL = STEP * cards.length;
-
-    const render = () => {
-      cards.forEach((card, i) => {
-        const x = (((i * STEP + mobileOffset.current) % TOTAL) + TOTAL) % TOTAL;
-        gsap.set(card, { x: x - TOTAL / 2 });
-      });
-    };
-    renderMobileRef.current = render;
-
-    render();
-
-    mobileAuto.current = gsap.to(
-      {},
-      {
-        repeat: -1,
-        ease: "none",
-        duration: 9999,
-        onUpdate() {
-          mobileOffset.current -= 0.25;
-          render();
-        },
-      }
-    );
-
-    const proxy = document.createElement("div");
-
-    Draggable.create(proxy, {
-      trigger: cardsContainerRef.current,
-      type: "x",
-      inertia: true,
-
-      onPress() {
-        mobileAuto.current?.pause();
-      },
-
-      onDrag() {
-        mobileOffset.current += this.deltaX;
-        render();
-      },
-
-      onRelease() {
-        mobileAuto.current?.resume();
-      },
-
-      onThrowUpdate() {
-        mobileOffset.current += this.deltaX;
-        render();
-      },
-    });
-
-    return () => {
-      mobileAuto.current?.kill();
-    };
-  }, []);
-
-  const moveMobile = (dir: number) => {
-    mobileAuto.current?.pause();
-
-    gsap.to(mobileOffset, {
-      current: mobileOffset.current + dir * (CARD + GAP),
-      duration: 0.6,
-      ease: "power2.out",
-      onUpdate() {
-        renderMobileRef.current();
-      },
-      onComplete() {
-        if (openIndices.length === 0) {
-          mobileAuto.current?.resume();
-        }
-      },
-    });
-  };
-
-  useEffect(() => {
-    if (window.innerWidth < 640) {
-      openIndices.length > 0
-        ? mobileAuto.current?.pause()
-        : mobileAuto.current?.resume();
-    }
-  }, [openIndices]);
+  }, [screenType]);
 
   const handleNext = () => {
     if (isAnimating.current) return;
     isAnimating.current = true;
     isManual.current = true;
     gsap.killTweensOf(cardRefs.current);
+
+    setCenterIndex((prev) => (prev + 1) % speakers.length);
     startIndex.current = (startIndex.current + 1) % speakers.length;
+
     const tween = layoutCards();
     tween?.eventCallback("onComplete", () => {
       isManual.current = false;
@@ -376,8 +431,10 @@ export default function Newspeakers({
     isAnimating.current = true;
     isManual.current = true;
     gsap.killTweensOf(cardRefs.current);
-    startIndex.current =
-      (startIndex.current - 1 + speakers.length) % speakers.length;
+
+    setCenterIndex((prev) => (prev - 1 + speakers.length) % speakers.length);
+    startIndex.current = (startIndex.current - 1 + speakers.length) % speakers.length;
+
     const tween = layoutCards();
     tween?.eventCallback("onComplete", () => {
       isManual.current = false;
@@ -385,10 +442,33 @@ export default function Newspeakers({
     });
   };
 
+  const handleDesktopDotClick = (index: number) => {
+    if (isAnimating.current || index === centerIndex) return;
+    isAnimating.current = true;
+    isManual.current = true;
+    gsap.killTweensOf(cardRefs.current);
+
+    setCenterIndex(index);
+
+    // Calculate required startIndex to center the clicked index
+    // i - center - startIndex = 0 => startIndex = i - center
+    // We used center = 2 in layoutCards
+    let newStart = index - 2;
+    newStart = (newStart % speakers.length + speakers.length) % speakers.length;
+    startIndex.current = newStart;
+
+    const tween = layoutCards();
+    tween?.eventCallback("onComplete", () => {
+      isManual.current = false;
+      isAnimating.current = false;
+    });
+  };
+
+  // Auto scroll for desktop/tablet only
   useEffect(() => {
     let auto: gsap.core.Timeline | null = null;
 
-    if (openIndices.length === 0 && window.innerWidth >= 640) {
+    if (openIndices.length === 0 && screenType !== 'mobile') {
       auto = gsap.timeline({ repeat: -1 });
 
       auto.to(
@@ -403,12 +483,12 @@ export default function Newspeakers({
     return () => {
       auto?.kill();
     };
-  }, [openIndices]);
+  }, [openIndices, screenType]);
 
   return (
     <section
       id="speakers"
-      className="relative bg-black text-white isolate md:min-h-screen flex flex-col pt-10"
+      className="relative bg-black text-white isolate md:min-h-screen flex flex-col pt-10 overflow-hidden"
     >
       <div className="md:flex-1">
         <div className="relative overflow-x-visible overflow-y-hidden">
@@ -531,34 +611,39 @@ export default function Newspeakers({
                     Speakers.2025
                   </h2>
 
+                  {/* Header Controls (Nav Buttons) */}
                   <div className="flex gap-4">
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={() => {
-                        // setOpenIndices([]); // Don't close on nav
-                        if (window.innerWidth < 640) {
-                          moveMobile(1);
+                        if (screenType === 'mobile') {
+                          paginate(-1);
                         } else {
                           handlePrev();
                         }
                       }}
-                      className="border bg-[#EB0028] border-[#EB0028] p-1"
+                      className="w-9 h-9 sm:w-10 sm:h-10 bg-[#EB0028] flex items-center justify-center hover:bg-[#B71C1C] transition-colors duration-300 rounded-sm"
+                      aria-label="Previous speakers"
                     >
-                      <ChevronLeft className="w-5 sm:w-4 md:w-5 lg:w-6 h-auto" />
-                    </button>
+                      <ChevronLeft className="w-3.5 h-3.5 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
+                    </motion.button>
 
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={() => {
-                        // setOpenIndices([]); // Don't close on nav
-                        if (window.innerWidth < 640) {
-                          moveMobile(-1);
+                        if (screenType === 'mobile') {
+                          paginate(1);
                         } else {
                           handleNext();
                         }
                       }}
-                      className="border bg-[#EB0028] border-[#EB0028] p-1"
+                      className="w-9 h-9 sm:w-10 sm:h-10 bg-[#EB0028] flex items-center justify-center hover:bg-[#B71C1C] transition-colors duration-300 rounded-sm"
+                      aria-label="Next speakers"
                     >
-                      <ChevronRight className="w-5 sm:w-4 md:w-5 lg:w-6 h-auto" />
-                    </button>
+                      <ChevronRight className="w-3.5 h-3.5 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
+                    </motion.button>
                   </div>
                 </div>
 
@@ -567,84 +652,92 @@ export default function Newspeakers({
             </div>
           </div>
 
-          {/* Cards */}
+          {/* Cards Area */}
           <div
             ref={cardsContainerRef}
-            className="relative flex items-center justify-center h-[25rem] md:h-[31.25rem] overflow-hidden opacity-0 mt-5 "
+            className={`relative flex items-center justify-center overflow-hidden opacity-0 mt-12 md:mt-5 transition-all duration-300
+              ${screenType === 'mobile' ? 'h-[440px]' : 'h-[25rem] md:h-[31.25rem]'}
+            `}
           >
-            {speakers.map((sp, i) => {
-              const isOpen = openIndices.includes(i);
-
-              return (
-                <div
-                  ref={(el) => {
-                    if (el) cardRefs.current[i] = el;
-                  }}
-                  key={sp.name + i}
-                  className={`absolute top-[2%] w-[16rem] sm:w-[15rem] md:w-[14rem] lg:w-[16rem] h-[24rem] md:h-[18rem] lg:h-[20rem] bg-[#111] will-change-transform ring-1 overflow-hidden
-                  ${isOpen ? "ring-[#EB0028] z-50" : "ring-white z-10"}`}
-                >
-                  {/* Image */}
-                  <Image
-                    src={sp.img}
-                    alt={sp.name}
-                    width={260}
-                    height={360}
-                    className={`w-full h-full object-cover transition-all duration-500 ${isOpen ? "grayscale-0" : "grayscale"}`}
-                  />
-
-                  {/* Bottom gradient */}
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-
-                  {/* Name */}
-                  <p className="absolute bottom-1 left-4 font-clash font-[400] text-md text-[#EB0028]">
-                    {sp.name}
-                  </p>
-
-                  {/* Toggle Arrow */}
-                  {!isOpen && (
-                    <button
-                      onClick={() => setOpenIndices((prev) => [...prev, i])}
-                      className="absolute bottom-0 right-4 bg-white transition-transform cursor-pointer"
-                      aria-label="Open speaker details"
+            {screenType === 'mobile' ? (
+              // MOBILE VIEW: Framer Motion Carousel
+              <div className="w-full h-full flex flex-col items-center justify-center px-4">
+                <div className="relative w-full flex-1 flex items-center justify-center">
+                  <AnimatePresence initial={false} custom={direction} mode="wait">
+                    <motion.div
+                      key={page}
+                      custom={direction}
+                      variants={slideVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      drag="x"
+                      dragConstraints={{ left: 0, right: 0 }}
+                      dragElastic={0.2}
+                      onDragEnd={handleDragEnd}
+                      className="absolute w-full flex justify-center cursor-grab active:cursor-grabbing"
                     >
-                      <ChevronUp color="#EB0028" className="w-9 h-9" />
-                    </button>
-                  )}
+                      <SpeakerFlipCard speaker={speakers[speakerIndex]} className="w-full h-[400px] max-w-[240px]" />
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
 
-                  {/* Details Overlay */}
-                  <div
-                    className={`absolute inset-0 bg-black bg-opacity-95 p-4 flex flex-col pt-8 transform transition-transform duration-500 ease-in-out ${isOpen ? "translate-y-0" : "translate-y-full pointer-events-none"
-                      }`}
-                  >
-                    {/* Close Arrow*/}
+                {/* Pagination Dots */}
+                <div className="flex justify-center pt-4 gap-2 flex-shrink-0 z-10">
+                  {speakers.map((_, index) => (
                     <button
-                      onClick={() =>
-                        setOpenIndices((prev) => prev.filter((idx) => idx !== i))
-                      }
-                      className="absolute top-0 right-4 z-10 bg-[#EB0028] cursor-pointer rotate-90"
-                      aria-label="Close speaker details"
-                    >
-                      <ChevronRight className="w-9 h-9" />
-                    </button>
+                      key={index}
+                      onClick={() => setPage([index, index > speakerIndex ? 1 : -1])}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${index === speakerIndex
+                        ? "bg-[#E62B1E] w-8"
+                        : "bg-white/20 hover:bg-white/40 w-4"
+                        }`}
+                      aria-label={`Go to speaker ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              // DESKTOP/TABLET VIEW: GSAP 3D Carousel
+              <>
+                {speakers.map((sp, i) => {
+                  const isOpen = openIndices.includes(i);
 
-                    <p className="text-[#e62b1e] font-clash font-[600] text-xl -mt-5">
-                      {sp.name}
-                    </p>
-                    <p className="text-[0.95rem] font-clash font-[500] opacity-50 mb-3">
-                      {sp.title}
-                    </p>
-                    <p className="text-sm font-clash font-[400] leading-relaxed opacity-90">
-                      {sp.description}
-                    </p>
+                  return (
+                    <div
+                      ref={(el) => {
+                        if (el) cardRefs.current[i] = el;
+                      }}
+                      key={sp.name + i}
+                      className={`absolute top-[2%] w-[16rem] sm:w-[15rem] md:w-[14rem] lg:w-[16rem] h-[28rem] md:h-[22rem] lg:h-[24rem] shadow-2xl overflow-visible will-change-transform z-10 perspective-1000`}
+                    >
+                      <SpeakerFlipCard speaker={sp} className="h-full" />
+                    </div>
+                  );
+                })}
+
+                {/* Desktop Pagination Dots */}
+                <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-4 z-50 transition-opacity duration-500 opacity-100">
+                  <div className="flex gap-2">
+                    {speakers.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleDesktopDotClick(index)}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${index === centerIndex
+                          ? "bg-[#E62B1E] w-8"
+                          : "bg-white/20 hover:bg-white/40 w-4"
+                          }`}
+                        aria-label={`Go to speaker ${index + 1}`}
+                      />
+                    ))}
                   </div>
                 </div>
-              );
-            })}
+              </>
+            )}
           </div>
         </div>
       </div >
-      <div ref={marqueeRef} className="relative opacity-0 mt-10">
+      <div ref={marqueeRef} className="relative opacity-0 mt-8 md:mt-10">
         <SpeakersMarquee />
       </div>
     </section >

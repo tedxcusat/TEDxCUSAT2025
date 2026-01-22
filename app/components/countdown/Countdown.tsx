@@ -40,7 +40,7 @@ export default function Countdown({ startAnimation = false }: { startAnimation?:
   return (
     <section
       ref={sectionRef}
-      className="relative w-full bg-black flex flex-col overflow-hidden lg:min-h-screen lg:pb-2"
+      className="relative w-full bg-black flex flex-col overflow-hidden min-h-screen lg:pb-2"
     >
       {/* =========================================
           TOP CONTENT WRAPPER
@@ -153,7 +153,7 @@ export default function Countdown({ startAnimation = false }: { startAnimation?:
           Scrolling text at the bottom
       ========================================= */}
       <div
-        className={`my-32 lg:mt-auto w-full transform transition-all duration-1000 delay-1000 ease-out ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"
+        className={`mt-auto w-full transform transition-all duration-1000 delay-1000 ease-out ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"
           }`}
       >
         <Marquee />

@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useRef, useEffect } from 'react';
+import Link from "next/link";
 import Image from 'next/image';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { motion } from "framer-motion";
 
 const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onComplete?: () => void }) => {
   const titleRef = useRef<HTMLDivElement>(null);
@@ -193,7 +195,7 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           <div className="relative w-auto h-[clamp(450px,65vh,800px)] mt-[36vh]">
             <div ref={headRef} className="relative w-full h-full">
               <Image
-                src="/hero-img.svg"
+                src="/hero-img.png"
                 alt="Hero Head"
                 width={600}
                 height={800}
@@ -216,16 +218,22 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           </div>
           <div className="flex flex-col items-end gap-2 pointer-events-auto" ref={bookingRef}>
             <span className="text-sm font-light tracking-[-0.02em]" ref={ticketRef}>tickets here!</span>
-            <button className="relative bg-[#EB0028] hover:bg-red-900 text-white font-medium py-3 px-8 transition-colors duration-300 z-[100] cursor-pointer">
-              BOOK NOW
-            </button>
+            <Link href="/tickets">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative bg-[#EB0028] hover:bg-[#B71C1C] text-white font-clash font-normal text-[14px] leading-[100%] tracking-[-0.02em] py-4 px-8 transition-colors duration-300 z-[100] cursor-pointer whitespace-nowrap"
+              >
+                BOOK NOW
+              </motion.button>
+            </Link>
           </div>
         </div>
       </div>
 
 
       {/* ================= MOBILE LAYOUT ================= */}
-      <div className="md:hidden relative w-full h-full flex flex-col pb-12 -mt-8">
+      <div className="md:hidden relative w-full h-full flex flex-col pb-12 -mt-8 overflow-hidden">
         {/* Mobile Background Gradient (Behind Title) */}
         <Image
           src="/hero-grad.svg"
@@ -284,9 +292,15 @@ const Hero = ({ startAnimation, onComplete }: { startAnimation: boolean; onCompl
           {/* Book Button */}
           <div className="flex flex-col items-end gap-1 pointer-events-auto" ref={mobileBookingRef}>
             <span className="text-xs font-light tracking-[-0.02em]" ref={mobileTicketRef}>tickets here!</span>
-            <button className="relative bg-[#EB0028] hover:bg-red-900 text-white font-medium py-2.5 px-6 transition-colors duration-300 z-[100] cursor-pointer">
-              BOOK NOW
-            </button>
+            <Link href="/tickets">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative bg-[#EB0028] hover:bg-red-900 text-white font-medium py-2.5 px-6 transition-colors duration-300 z-[100] cursor-pointer"
+              >
+                BOOK NOW
+              </motion.button>
+            </Link>
           </div>
         </div>
       </div>

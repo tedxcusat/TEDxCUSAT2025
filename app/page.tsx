@@ -1,18 +1,19 @@
-'use client';
+"use client";
 
-import { useRef, useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import Loader from './components/Loader';
-import Hero from './components/Hero';
-import Placeholder from './components/Placeholder';
-import Countdown from './components/countdown/Countdown';
-import Speakers from './components/Speakers/Speakers';
-import Footer from './components/Footer';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import About from './components/about';
-import EchoesHero from './components/EchoesHero';
+import { useRef, useState, useEffect } from "react";
+import Navbar from "./components/Navbar";
+import Loader from "./components/Loader";
+import Hero from "./components/Hero";
+import Countdown from "./components/countdown/Countdown";
+import Speakers from "./components/Speakers/Speakers";
+import Footer from "./components/Footer";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import About from "./components/about";
+import EchoesHero from "./components/EchoesHero";
+import Journey from "./components/journey";
+import MerchToast from "./components/merch/Toast";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,8 +26,6 @@ export default function Home() {
   const echoesHeroRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
 
-
-
   const [loaderFinished, setLoaderFinished] = useState(false);
   const [heroFinished, setHeroFinished] = useState(false);
   const [aboutInView, setAboutInView] = useState(false);
@@ -35,6 +34,7 @@ export default function Home() {
   const [footerInView, setFooterInView] = useState(false);
   const [navbarFinished, setNavbarFinished] = useState(false);
   const [echoesHeroInView, setEchoesHeroInView] = useState(false);
+  const [showMerchToast, setShowMerchToast] = useState(false);
 
   useEffect(() => {
     if (!heroFinished && !loaderFinished) {
@@ -43,16 +43,16 @@ export default function Home() {
 
   useEffect(() => {
     if (!heroFinished) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
       // Refresh ScrollTrigger after unlocking overflow to ensure calculations are correct
       ScrollTrigger.refresh();
     }
   }, [heroFinished]);
 
   useEffect(() => {
-    window.history.scrollRestoration = 'manual';
+    window.history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
   }, []);
 
@@ -99,31 +99,56 @@ export default function Home() {
   return (
     <main ref={containerRef}>
       <Loader onComplete={() => setLoaderFinished(true)} />
-      <Navbar />
+      <Navbar startAnimation={loaderFinished} />
 
-      <section ref={heroRef} className="panel min-h-screen w-full relative snap-start">
-        <Hero startAnimation={loaderFinished} onComplete={() => setHeroFinished(true)} />
+      <section
+        ref={heroRef}
+        className="panel min-h-screen w-full relative snap-start"
+      >
+        <Hero
+          startAnimation={loaderFinished}
+          onComplete={() => {
+            setHeroFinished(true);
+            setShowMerchToast(true);
+          }}
+        />
       </section>
 
-      <section ref={aboutRef} className="panel min-h-screen w-full relative bg-black snap-start">
+      <section id="about" ref={aboutRef} className="panel min-h-screen w-full relative bg-black snap-start">
         <About startAnimation={aboutInView} />
       </section>
 
-      <section ref={countdownRef} className="panel min-h-screen w-full relative bg-black snap-start">
+      <section
+        ref={countdownRef}
+        className="panel min-h-screen w-full relative bg-black snap-start"
+      >
         <Countdown startAnimation={countdownInView} />
       </section>
 
-      <section ref={speakersRef} className="panel min-h-[125vh] w-full relative bg-black snap-start">
+      <section id="speakers" ref={speakersRef} className="panel min-h-screen w-full relative bg-black snap-start">
         <Speakers startAnimation={speakersInView} />
       </section>
 
-      <section ref={echoesHeroRef} className="panel min-h-[125vh] w-full relative bg-black snap-start">
+      <section
+        ref={echoesHeroRef}
+        className="panel min-h-[125vh] w-full relative bg-black snap-start"
+      >
         <EchoesHero startAnimation={echoesHeroInView} />
       </section>
 
-      <section ref={footerRef} className="panel min-h-screen w-full relative bg-black snap-start">
+      <section id="journey" className="panel min-h-screen w-full relative bg-black snap-start">
+        <Journey />
+      </section>
+
+      <section id="contact" ref={footerRef} className="panel min-h-screen w-full relative bg-black snap-start">
         <Footer startAnimation={footerInView} />
       </section>
+
+      {/* Merch Toast Notification */}
+      <MerchToast
+        show={showMerchToast}
+        onClose={() => setShowMerchToast(false)}
+      />
     </main>
   );
 }
