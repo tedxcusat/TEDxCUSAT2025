@@ -16,7 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
 const tickets = [
   {
     type: "Early Bird",
-    price: "₹399",
+    price: "₹699",
     description: "Limited time offer for early bookings.",
     soldOut: false,
     disabled: true,
@@ -29,19 +29,37 @@ const tickets = [
     disabled: true,
   },
   {
-    type: "Alumni",
-    price: "₹699",
+    type: "Cusatian",
+    price: "₹799",
+    description: "Access for current students with valid ID.",
+    highlight: false,
+    soldOut: false,
+    disabled: true,
+  },
+  {
+    type: "Cusat Alumni",
+    price: "₹899",
     description: "Special rate for CUSAT alumni.",
+    highlight: false,
+    soldOut: false,
+    disabled: true,
+  },
+  {
+    type: "Non-Cusatian",
+    price: "₹999",
+    description: "Access for students outside CUSAT.",
+    highlight: false,
     soldOut: false,
     disabled: true,
   },
   {
     type: "Professional",
-    price: "₹899",
+    price: "₹1099",
     description: "General access for professionals and guests.",
+    highlight: false,
     soldOut: false,
     disabled: true,
-  },
+  }
 ];
 
 const sponsors = [
@@ -194,7 +212,7 @@ export default function TicketsPage() {
         </div>
 
         {/* Ticket Cards Grid */}
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-32">
+        <div ref={cardsRef} className="flex flex-wrap justify-center gap-8 mb-32">
           {tickets.map((ticket, index) => (
             <motion.div
               key={index}
@@ -205,11 +223,11 @@ export default function TicketsPage() {
                 <h3 className="font-orbitron font-bold text-2xl tracking-wider mb-2 text-white">
                   {ticket.type}
                 </h3>
-                <div className="h-0.5 w-12 bg-[#EB0028] mb-6"></div>
+                <div className="h-0.5 w-15 bg-[#EB0028] mb-6"></div>
                 <p className="font-clash text-5xl font-semibold mb-4 text-white">
                   {ticket.price}
                 </p>
-                <p className="font-clash text-gray-400 leading-relaxed">
+                <p className="font-clash text-gray-400 leading-relaxed text-lg">
                   {ticket.description}
                 </p>
               </div>
