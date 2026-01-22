@@ -30,11 +30,11 @@ const coreTeam: CoreMember[] = [
     image: "/team/Sheena.jpeg",
   },
   { name: "Abdul Rayif", role: "Tech Lead", image: "/team/Rayif.jpeg" },
-  { name: "Athira", role: "Ambience Lead", image: "/team/placeholder.jpg" },
-  { name: "Asiya Fyroos", role: "Ambience Lead", image: "/team/placeholder.jpg" },
-  { name: "Shanif K V", role: "Ambience Lead", image: "/team/placeholder.jpg" },
+  { name: "Athira", role: "Ambience Lead", image: "/team/Athira.jpeg" },
+  { name: "Asiya Fyroos", role: "Ambience Lead", image: "/team/Asiya.jpeg" },
+  { name: "Shanif K V", role: "Ambience Lead", image: "/team/Shanif.jpeg" },
   { name: "Theja Lakshmi", role: "Media Lead", image: "/team/Theja.jpeg" },
-  { name: "Gopikrishnan S", role: "Media Lead", image: "/team/placeholder.jpg" },
+  { name: "Gopikrishnan S", role: "Media Lead", image: "/team/Gopi.webp" },
   {
     name: "Jenoo Liju",
     role: "Production Lead",
@@ -49,24 +49,24 @@ const coreTeam: CoreMember[] = [
   { name: "Anagha", role: "Curation Lead", image: "/team/Anagha.jpeg" },
   { name: "Arjun ", role: "Content Lead", image: "/team/Arjun.jpg" },
   { name: "Daliya Noushad", role: "Outreach Lead", image: "/team/Daliya.jpeg" },
-  { name: "Riya Fathima", role: "Outreach Lead", image: "/team/placeholder.jpg" },
+  { name: "Riya Fathima", role: "Outreach Lead", image: "/team/Riya.jpeg" },
   {
     name: "Durga Sumesh",
     role: "Sponsorship Lead",
-    image: "/team/placeholder.jpg",
+    image: "/team/Durga.jpeg",
   },
   {
     name: "Sanjeev Shankar",
     role: "Sponsorship Lead",
-    image: "/team/placeholder.jpg",
+    image: "/team/Sanjeev.jpg",
   },
-  { name: "Kevin Jose Edacheril", role: "Treasurer", image: "/team/placeholder.jpg" },
+  { name: "Kevin Jose Edacheril", role: "Treasurer", image: "/team/Kevin.jpeg" },
 ];
 
 const techTeam: TechMember[] = [
   {
     name: "Abdul Rayif",
-    image: "/team/rayray.jpeg",
+    image: "/team/Rayif.jpeg",
     github: "https://github.com/Abdulrayifvp",
     linkedin: "https://www.linkedin.com/in/rayifvp",
   },
@@ -85,7 +85,7 @@ const techTeam: TechMember[] = [
   {
     name: "Akarsh Balachandran",
     image: "/team/Akarsh.jpeg",
-    github: "https://github.com/",
+    github: "https://github.com/akrsh47",
     linkedin: "https://www.linkedin.com/in/akarshbalachandran",
   },
   {
@@ -111,6 +111,12 @@ const techTeam: TechMember[] = [
     image: "/team/Adithya.jpeg",
     github: "https://github.com/apm2004",
     linkedin: "https://www.linkedin.com/in/adithya-p-menon",
+  },
+  {
+    name: "Akshay Sunil",
+    image: "/team/Java.jpg",
+    github: "https://github.com/Akshay6405",
+    linkedin: "https://www.linkedin.com/in/akshay-sunil-b541b825a",
   },
 ];
 
