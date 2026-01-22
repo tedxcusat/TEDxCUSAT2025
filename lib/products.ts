@@ -22,7 +22,7 @@ export const products: Product[] = [
     ],
     sizes: ["S", "M", "L", "XL", "XXL"],
     inStock: true,
-    disabled: true,
+    disabled: false,
   },
   {
     id: "hoodie-genesis",
@@ -36,7 +36,7 @@ export const products: Product[] = [
     ],
     sizes: ["S", "M", "L", "XL", "XXL"],
     inStock: true,
-    disabled: true,
+    disabled: false,
   },
 ];
 
