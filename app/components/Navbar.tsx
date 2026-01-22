@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent, Variants } from "framer-motion";
 
 const navLinks = [
+  { name: "STORE", href: "/merch" },
   { name: "ABOUT", href: "/#about" },
   { name: "SPEAKERS", href: "/#speakers" },
   { name: "JOURNEY", href: "/#journey" },
@@ -14,10 +15,11 @@ const navLinks = [
 ];
 
 const mobileItems = [
-  { id: "1", name: "ABOUT", href: "/#about" },
-  { id: "2", name: "SPEAKERS", href: "/#speakers" },
-  { id: "3", name: "CONTACT", href: "/#contact" },
-  { id: "4", name: "TEAM", href: "/team" },
+  { id: "1", name: "STORE", href: "/merch" },
+  { id: "2", name: "ABOUT", href: "/#about" },
+  { id: "3", name: "SPEAKERS", href: "/#speakers" },
+  { id: "4", name: "CONTACT", href: "/#contact" },
+  { id: "5", name: "TEAM", href: "/team" },
 ];
 
 const Navbar = ({ startAnimation = true }: { startAnimation?: boolean }) => {
