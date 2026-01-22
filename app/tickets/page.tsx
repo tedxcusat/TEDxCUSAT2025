@@ -20,24 +20,28 @@ const tickets = [
     description: "Limited time offer for early bookings.",
     highlight: true,
     soldOut: true,
+    disabled: true,
   },
   {
     type: "Student",
     price: "₹499",
     description: "Access for current students with valid ID.",
     soldOut: false,
+    disabled: true,
   },
   {
     type: "Alumni",
     price: "₹699",
     description: "Special rate for CUSAT alumni.",
     soldOut: false,
+    disabled: true,
   },
   {
     type: "Professional",
     price: "₹899",
     description: "General access for professionals and guests.",
     soldOut: false,
+    disabled: true,
   },
 ];
 
@@ -96,18 +100,14 @@ export default function TicketsPage() {
         y: 0,
         opacity: 1,
         clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
-        duration: 1.2,
+        duration: 0.8,
         ease: "power4.out"
       }
     ).fromTo(
       subtitleRef.current,
       { y: 20, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
-      "-=0.6"
-    );
-
-    // Cards Reveal - Simultaneous 3D Reveal
-    gsap.fromTo(
+    ).fromTo(
       ".ticket-card",
       {
         y: 80,
@@ -127,7 +127,7 @@ export default function TicketsPage() {
           trigger: cardsRef.current,
           start: "top 85%",
         },
-      }
+      },
     );
 
     // Sponsors Reveal - Simultaneous Fade Up
@@ -199,7 +199,7 @@ export default function TicketsPage() {
           {tickets.map((ticket, index) => (
             <motion.div
               key={index}
-              className={`ticket-card relative group p-8 border ${ticket.highlight ? 'border-[#EB0028] shadow-[0_0_30px_rgba(235,0,40,0.2)]' : 'border-white/20 hover:border-white/50'} bg-black/50 backdrop-blur-sm flex flex-col justify-between h-[450px] transition-all duration-300`}
+              className={`ticket-card opacity-0 relative group p-8 border ${ticket.highlight ? 'border-[#EB0028] shadow-[0_0_30px_rgba(235,0,40,0.2)]' : 'border-white/20 hover:border-white/50'} bg-black/50 backdrop-blur-sm flex flex-col justify-between h-[450px] transition-all duration-300`}
             >
               {/* Card Content */}
               <div>
@@ -217,15 +217,15 @@ export default function TicketsPage() {
 
               {/* Book Button */}
               <button
-                disabled={ticket.soldOut}
+                disabled={ticket.soldOut || ticket.disabled}
                 className={`w-full py-4 mt-8 bg-transparent border font-clash font-medium tracking-wide transition-colors duration-300 uppercase
-                  ${ticket.soldOut
+                  ${ticket.soldOut || ticket.disabled
                     ? 'border-white/20 text-white/40 cursor-not-allowed'
                     : 'border-[#EB0028] text-white hover:bg-[#EB0028]'
                   }
                 `}
               >
-                {ticket.soldOut ? 'Unavailable' : 'Book Now'}
+                {ticket.soldOut ? 'Sold Out' : ticket.disabled ? 'Coming Soon' : 'Book Now'}
               </button>
 
               {/* Decorative Corners */}

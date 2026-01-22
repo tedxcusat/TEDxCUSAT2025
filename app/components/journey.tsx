@@ -48,31 +48,38 @@ interface JourneyEvent {
 const journeyEvents: JourneyEvent[] = [
   {
     year: "2019",
-    title: "THE BEGINNING",
-    description:
-      "The inception of TEDxCUSAT, sparking the first flame of ideas worth spreading in our community.",
-    image: "/images/event-2019.png",
-  },
-  {
-    year: "2020",
     title: "UN-QUINTESSENTIAL",
     description:
-      "Celebrated imperfection and shared humanity, featuring prominent speakers like Dr. M.R. Rajagopal and S. Somnath.",
-    image: "/images/event-2020.png",
+      "The inaugural TEDxCUSAT celebrated imperfection and shared humanity, featuring prominent speakers like Dr. M.R. Rajagopal and S. Somnath. Highlighted in The Times of India, the event laid a strong foundation for TEDxCUSAT's mission to push boundaries and inspire transformative ideas, fostering innovation and meaningful connections.",
+    image: "/images/event1.webp",
+  },
+  {
+    year: "2021",
+    title: "PAUSE. RESET. RESTART.",
+    description:
+      "In a moment of reflection and rejuvenation after the challenges of the COVID-19 pandemic, TEDxCUSAT brought together diverse voices to share visions for a better future. The event provided a platform for introspection, inspiring attendees to rebuild with renewed ambition, hope, and resilience, marking a new beginning.",
+    image: "/images/event2.webp",
   },
   {
     year: "2022",
-    title: "DIVERGENCE",
+    title: "TRANSCENDENCE: Beyond All Bounds",
     description:
-      "Explored the power of divergent thinking, bringing together artists and scientists to challenge the status quo.",
-    image: "/images/event-2022.png",
+      '"TRANSCENDENCE: Beyond All Bounds" explored stories of surpassing limits and venturing into uncharted territories. The event encouraged the audience to aspire for greatness and embrace extraordinary possibilities through powerful narratives, inspiring them to break barriers and reach new heights.',
+    image: "/images/event3.webp",
+  },
+  {
+    year: "2023",
+    title: "DIVERGENCE: Reframing Radical",
+    description:
+      "The event explored fresh perspectives on life, innovation, and change. Thought leaders who challenge traditional norms and inspire transformative thinking took the stage, motivating attendees to adopt new viewpoints and embrace change as a catalyst for progress. The event encouraged a shift in mindset, empowering participants to see radicalism as a force for positive transformation.",
+    image: "/images/event4.png",
   },
   {
     year: "2024",
-    title: "RESILIENCE",
+    title: "Kaleidoscope: Alchemy of Voices",
     description:
-      "A testament to the human spirit's ability to bounce back, showcasing stories of overcoming adversity.",
-    image: "/images/event-2024.png",
+      "The 5th edition of TEDx CUSAT was a remarkable event built around the theme Kaleidoscope: Alchemy of Voices. It brought together diverse perspectives that blended into an inspiring experience. Every speaker delivered their ideas beautifully, keeping the audience engaged throughout, while the connection between speakers and listeners created a shared atmosphere of insight and enjoyment.",
+    image: "/images/photo6.jpeg",
   },
 ];
 
@@ -121,7 +128,7 @@ export default function Journey() {
 
     const ctx = gsap.context(() => {
       ScrollTrigger.matchMedia({
-        
+
         // --- DESKTOP ANIMATION (Unchanged) ---
         "(min-width: 768px)": function () {
           if (!eyeRef.current || !contentRef.current) return;
@@ -156,17 +163,17 @@ export default function Journey() {
           if (!mobileEyeRef.current || !mobileContentRef.current) return;
 
           // 1. Setup initial state for mobile
-          gsap.set(mobileEyeRef.current, { 
-            y: 0, 
-            scale: 1, 
-            opacity: 1, 
-            clearProps: "all" 
+          gsap.set(mobileEyeRef.current, {
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            clearProps: "all"
           });
-          
-          gsap.set(mobileContentRef.current, { 
+
+          gsap.set(mobileContentRef.current, {
             y: 50, // Start slightly lower
-            opacity: 0, 
-            clearProps: "all" 
+            opacity: 0,
+            clearProps: "all"
           });
 
           // 2. Apply the SAME Pinning logic as desktop
@@ -191,11 +198,11 @@ export default function Journey() {
           });
 
           // 4. Reveal Mobile Content
-          tl.to(mobileContentRef.current, { 
-            opacity: 1, 
-            y: -140, 
-            duration: 1, 
-            ease: "power2.out" 
+          tl.to(mobileContentRef.current, {
+            opacity: 1,
+            y: -140,
+            duration: 1,
+            ease: "power2.out"
           }, "-=0.8"); // Overlap slightly
         }
       });
@@ -209,36 +216,6 @@ export default function Journey() {
       ref={sectionRef}
       className="relative w-full min-h-screen bg-black text-white overflow-hidden"
     >
-      {/* --- THE EYE CONTAINER --- */}
-      <div
-        ref={eyeRef}
-        className="absolute top-[15%] left-1/2 -translate-x-1/2 z-20 flex items-center justify-center opacity-100"
-      >
-        <div className="relative  w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] lg:w-[500px] lg:h-[500px] flex items-center justify-center">
-          {/* ================= OUTER RING (Dimmer) ================= */}
-          <div
-            className={`absolute inset-0 flex items-center justify-center animate-[spin_35s_linear_infinite]`}
-          >
-            {flatDigits.map((digit, i) => {
-              const angle = i * angleStep;
-              const currentRadius = 260; // outer
-
-              return (
-                <div
-                  key={`outer-${i}`}
-                  style={{
-                    position: "absolute",
-                    left: "50%",
-                    top: "50%",
-                    transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-${currentRadius}px)`,
-                    transition:
-                      "transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                    transitionDelay: `${i * 30}ms`,
-                  }}
-                >
-                  <span className="block text-white/40 font-mono text-sm">
-                    {digit}
-                  </span>
       {/* 
         ========================================
         MOBILE LAYOUT (Flex Column)
@@ -461,11 +438,11 @@ export default function Journey() {
                     <h3 className="text-[#E62B1E] text-3xl font-bold mb-1">
                       {currentEvent.title}
                     </h3>
-                    <p className="text-5xl font-mono text-gray-700 opacity-50">
+                    <p className="text-3xl font-mono text-gray-700 opacity-50">
                       {currentEvent.year}
                     </p>
                   </div>
-                  <p className="text-lg text-gray-300 leading-relaxed max-w-md">
+                  <p className="text-lg text-gray-400 leading-relaxed max-w-md">
                     {currentEvent.description}
                   </p>
                 </div>
