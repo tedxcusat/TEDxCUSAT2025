@@ -16,33 +16,44 @@ gsap.registerPlugin(ScrollTrigger);
 const tickets = [
   {
     type: "Early Bird",
-    price: "₹399",
+    price: "₹699",
     description: "Limited time offer for early bookings.",
-    highlight: true,
-    soldOut: true,
-    disabled: true,
-  },
-  {
-    type: "Student",
-    price: "₹499",
-    description: "Access for current students with valid ID.",
+    highlight: false,
     soldOut: false,
     disabled: true,
   },
   {
-    type: "Alumni",
-    price: "₹699",
+    type: "Cusatian",
+    price: "₹799",
+    description: "Access for current students with valid ID.",
+    highlight: false,
+    soldOut: false,
+    disabled: true,
+  },
+  {
+    type: "Cusat Alumni",
+    price: "₹899",
     description: "Special rate for CUSAT alumni.",
+    highlight: false,
+    soldOut: false,
+    disabled: true,
+  },
+  {
+    type: "Non-Cusatian",
+    price: "₹999",
+    description: "Access for students outside CUSAT.",
+    highlight: false,
     soldOut: false,
     disabled: true,
   },
   {
     type: "Professional",
-    price: "₹899",
+    price: "₹1099",
     description: "General access for professionals and guests.",
+    highlight: false,
     soldOut: false,
     disabled: true,
-  },
+  }
 ];
 
 const sponsors = [
@@ -195,22 +206,26 @@ export default function TicketsPage() {
         </div>
 
         {/* Ticket Cards Grid */}
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-32">
+        <div ref={cardsRef} className="flex flex-wrap justify-center gap-8 mb-32">
           {tickets.map((ticket, index) => (
             <motion.div
               key={index}
-              className={`ticket-card opacity-0 relative group p-8 border ${ticket.highlight ? 'border-[#EB0028] shadow-[0_0_30px_rgba(235,0,40,0.2)]' : 'border-white/20 hover:border-white/50'} bg-black/50 backdrop-blur-sm flex flex-col justify-between h-[450px] transition-all duration-300`}
+              className={`ticket-card opacity-0 relative group p-8 border ${
+                ticket.highlight 
+                  ? 'border-[#EB0028] shadow-[0_0_30px_rgba(235,0,40,0.2)]' 
+                  : 'border-white/20 hover:border-white/50'
+              } bg-black/50 backdrop-blur-sm flex flex-col justify-between h-[500px] transition-all duration-300 w-full md:w-[calc(50%-2rem)] lg:w-[calc(33.33%-2rem)] max-w-[350px]`}
             >
               {/* Card Content */}
               <div>
                 <h3 className="font-orbitron font-bold text-2xl tracking-wider mb-2 text-white">
                   {ticket.type}
                 </h3>
-                <div className="h-0.5 w-12 bg-[#EB0028] mb-6"></div>
+                <div className="h-0.5 w-15 bg-[#EB0028] mb-6"></div>
                 <p className="font-clash text-5xl font-semibold mb-4 text-white">
                   {ticket.price}
                 </p>
-                <p className="font-clash text-gray-400 leading-relaxed">
+                <p className="font-clash text-gray-400 leading-relaxed text-lg">
                   {ticket.description}
                 </p>
               </div>
