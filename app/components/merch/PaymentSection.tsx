@@ -3,7 +3,7 @@
 import { useState, FormEvent, ChangeEvent } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { ArrowLeft, Upload, RefreshCw } from "lucide-react";
+import { ArrowLeft, Upload } from "lucide-react";
 import { Product, qrCodes } from "@/lib/products";
 
 interface PaymentSectionProps {
@@ -14,7 +14,6 @@ interface PaymentSectionProps {
 }
 
 export default function PaymentSection({ product, size, onBack, onSuccess }: PaymentSectionProps) {
-  const [currentQRIndex, setCurrentQRIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [screenshot, setScreenshot] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>("");
@@ -38,10 +37,6 @@ export default function PaymentSection({ product, size, onBack, onSuccess }: Pay
       setScreenshot(file);
       setPreviewUrl(URL.createObjectURL(file));
     }
-  };
-
-  const switchQR = () => {
-    setCurrentQRIndex((prev) => (prev + 1) % qrCodes.length);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -252,11 +247,11 @@ export default function PaymentSection({ product, size, onBack, onSuccess }: Pay
               Scan & <span className="text-[#EB0028]">Pay</span>
             </h2>
 
-            <div className="border border-white/20 p-6 bg-black/30">
+            <div className="border border-white/20 p-12 bg-black/30">
               <div className="relative aspect-square w-full max-w-[300px] mx-auto mb-4 bg-white p-4">
                 <Image
-                  src={qrCodes[currentQRIndex].src}
-                  alt={qrCodes[currentQRIndex].label}
+                  src={qrCodes[0].src}
+                  alt={qrCodes[0].label}
                   fill
                   className="object-contain"
                   unoptimized
@@ -264,25 +259,11 @@ export default function PaymentSection({ product, size, onBack, onSuccess }: Pay
               </div>
 
               <p className="font-clash text-center text-gray-400 mb-4">
-                {qrCodes[currentQRIndex].label}
+                {qrCodes[0].label}
               </p>
 
-              <p className="font-clash text-center text-xl font-semibold text-[#EB0028] mb-4">
+              <p className="font-clash text-center text-xl font-semibold text-[#EB0028] ">
                 Amount: ₹{product.price}
-              </p>
-
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={switchQR}
-                className="w-full py-3 border border-white/20 hover:border-[#EB0028] text-white font-clash flex items-center justify-center gap-2 transition-colors"
-              >
-                <RefreshCw size={16} />
-                Switch QR Code
-              </motion.button>
-
-              <p className="font-clash text-center text-gray-500 text-sm mt-4">
-                If one QR doesn&apos;t work, try switching to another
               </p>
             </div>
           </div>
