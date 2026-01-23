@@ -24,7 +24,7 @@ type TechMember = {
 const coreTeam: CoreMember[] = [
   { name: "Deva Nandan S", role: "Organizer", image: "/team/Devan.jpeg" },
   { name: "Adithyan Pramod", role: "Organizer", image: "/team/Pramod.jpeg" },
-  { name: "Sheena K M",role: "Staff Coordinator",image: "/team/Sheena.jpeg" },
+  { name: "Sheena K M", role: "Staff Coordinator", image: "/team/Sheena.jpeg" },
   { name: "Kevin Jose Edacheril", role: "Treasurer", image: "/team/Kevin.jpeg" },
   { name: "Durga Sumesh", role: "Sponsorship Lead", image: "/team/Durga.jpeg" },
   { name: "Sanjeev Shankar", role: "Sponsorship Lead", image: "/team/Sanjeev.jpg" },
@@ -35,12 +35,12 @@ const coreTeam: CoreMember[] = [
   { name: "Jenoo Liju", role: "Production Lead", image: "/team/Jenoo.jpeg" },
   { name: "Akshay S", role: "Production Lead", image: "/team/Akshay.jpeg" },
   { name: "Theja Lakshmi", role: "Media Lead", image: "/team/Theja.jpeg" },
-  { name: "Gopikrishnan P R", role: "Media Lead", image: "/team/Gopi.webp" },
+  { name: "Gopikrishnan P R", role: "Media Lead", image: "/team/Gopi.png" },
   { name: "Abdul Rayif", role: "Tech Lead", image: "/team/Rayif.jpeg" },
   { name: "Arjun ", role: "Content Lead", image: "/team/Arjun.jpg" },
   { name: "Athira", role: "Ambience Lead", image: "/team/Athira.jpeg" },
   { name: "Asiya Fyroos", role: "Ambience Lead", image: "/team/Asiya.jpeg" },
-  { name: "Shanif K V", role: "Ambience Lead", image: "/team/Shanif.jpeg" }, 
+  { name: "Shanif K V", role: "Ambience Lead", image: "/team/Shanif.jpeg" },
 ];
 
 const techTeam: TechMember[] = [
@@ -220,7 +220,7 @@ export default function TeamPage() {
                         alt={member.name}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        unoptimized
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
@@ -260,7 +260,7 @@ export default function TeamPage() {
                         alt={member.name}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        unoptimized
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
