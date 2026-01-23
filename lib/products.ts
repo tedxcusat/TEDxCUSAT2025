@@ -41,6 +41,5 @@ export const products: Product[] = [
 ];
 
 export const qrCodes = [
-  { id: "qr1", src: "/merch/qr-1.png", label: "GPay QR 1" },
-  { id: "qr2", src: "/merch/qr-2.png", label: "GPay QR 2" },
+  { id: "qr1", src: "/merch/qr.jpg", label: "UPI ID : tedcusat@sbi" },
 ];
