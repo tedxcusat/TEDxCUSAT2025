@@ -58,8 +58,6 @@ const tickets = [
 const sponsors = [
   { name: "Sponsor 1", logo: "/infopark-logo.svg" }, // Placeholder logos
   { name: "Sponsor 2", logo: "/makemypass-logo.svg" },
-  { name: "Sponsor 3", logo: "" },
-  { name: "Sponsor 4", logo: "" },
 ];
 
 const faqs = [
@@ -77,7 +75,7 @@ const faqs = [
   },
   {
     question: "Who can I contact for ticket-related issues?",
-    answer: "For any ticket-related inquiries, message or call Dhanush - +91 97465 30193",
+    answer: "For any ticket-related inquiries, message or call Rayif - +91 97464 02973",
   },
   {
     question: "What do I need to bring to the event?",
@@ -131,7 +129,7 @@ export default function TicketsPage() {
         opacity: 1,
         scale: 1,
         rotateX: 0,
-        duration: 1,
+        duration: 0.5,
         ease: "power3.out",
         scrollTrigger: {
           trigger: cardsRef.current,
@@ -205,11 +203,11 @@ export default function TicketsPage() {
         </div>
 
         {/* Ticket Cards Grid */}
-        <div ref={cardsRef} className="flex flex-wrap justify-center gap-8 mb-32">
+        <div ref={cardsRef} className="flex flex-wrap justify-center gap-6 mb-32 max-w-5xl mx-auto">
           {tickets.map((ticket, index) => (
             <motion.div
               key={index}
-              className={`ticket-card opacity-0 relative group p-8 border border-white/20 hover:border-white/50 bg-black/50 backdrop-blur-sm flex flex-col justify-between h-[450px] transition-all duration-300`}
+              className={`ticket-card opacity-0 relative group p-8 border border-white/20 hover:border-white/50 bg-black/50 backdrop-blur-sm flex flex-col justify-between min-h-[380px] w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] transition-all duration-300`}
             >
               {/* Card Content */}
               <div>
@@ -262,8 +260,12 @@ export default function TicketsPage() {
             OUR <span className="text-[#EB0028]">PARTNERS</span>
           </h2>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 items-center justify-items-center opacity-70">
-            {sponsors.map((sponsor, index) => (
+          <div className={`grid gap-8 md:gap-16 items-center justify-items-center opacity-70 ${sponsors.filter(s => s.logo).length === 1 ? 'grid-cols-1' :
+            sponsors.filter(s => s.logo).length === 2 ? 'grid-cols-2' :
+              sponsors.filter(s => s.logo).length === 3 ? 'grid-cols-3' :
+                'grid-cols-2 md:grid-cols-4'
+            }`}>
+            {sponsors.filter(sponsor => sponsor.logo).map((sponsor, index) => (
               <div key={index} className="sponsor-logo w-full max-w-[150px] aspect-[3/2] flex items-center justify-center transition-all duration-500 overflow-visible">
                 <div className="w-full h-full flex items-center justify-center">
                   <SponsorLogo name={sponsor.name} logo={sponsor.logo} />
