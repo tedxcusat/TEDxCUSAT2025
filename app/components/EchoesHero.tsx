@@ -48,6 +48,9 @@ const slideVariants = {
   exit: (direction: number) => ({
     x: direction < 0 ? 800 : -800,
     opacity: 0,
+    position: "absolute",
+    top: 0,
+    width: "100%",
     transition: { duration: 0.3, ease: [0.55, 0.05, 0.55, 0.95] as const },
   }),
 };
@@ -64,7 +67,7 @@ const speakers: Speaker[] = [
     name: "P. R. Poduval ",
     title: "Professor, Author",
     description:
-      "A seasoned academic and writer, he weaves psychology and lived insight into ideas that encourage reflective thinking, meaningful growth, and a balanced view of success.",
+      "A seasoned academic and writer, blending psychology and lived insight to spark reflection, growth, and balanced perspectives on success.",
     image: "/prevspeakers/poduval.png",
   },
   {
@@ -72,7 +75,7 @@ const speakers: Speaker[] = [
     name: "Hani Musthafa",
     title: "Automobile Journalist",
     description:
-      "A keen automotive voice who reshaped car reviews into thoughtful narratives, grounded in engineering sense, cultural context, and an unforced, authentic curiosity.",
+      "A keen automotive voice reshaping car reviews into narratives, grounded in engineering sense, cultural context, and authentic curiosity always.",
     image: "/prevspeakers/hani.png",
   },
   {
@@ -80,7 +83,7 @@ const speakers: Speaker[] = [
     name: "Dr. Venu Vasudevan IAS",
     title: "retired IAS Officer",
     description:
-      "A doctor by training, who has served as a Senior Indian Administrative Services officer and the 48th Chief Secretary of Kerala, capturing hearts and bringing significant advancements in tourism, culture and public policy.",
+      "A doctor-turned administrator, former Chief Secretary of Kerala, driving progress in tourism, culture, and public policy with lasting impact.",
     image: "/prevspeakers/venu.png",
   },
   {
@@ -96,7 +99,7 @@ const speakers: Speaker[] = [
     name: "Siddhi Mahajankatti ",
     title: "Actress",
     description:
-      "An actress, data scientist, and content creator known for her lead role in the Malayalam blockbuster 'Aanandam'. She's a BBA graduate, an IIM Ahmedabad scholar, and works as an Apprentice Leader at Mu Sigma. Her TEDx talk explores multitasking and her philosophy on keeping passions separate from professions. She's also into surfing, scuba diving, and F1 analytics.",
+      "An actress, data scientist, and creator known for Aanandam, blending academics, analytics, TEDx insights, and adventure sports passions diverse.",
     image: "/prevspeakers/sidhi.png",
   },
   {
@@ -104,7 +107,7 @@ const speakers: Speaker[] = [
     name: "Anantharaman Ajay ",
     title: "Video Creator",
     description:
-      "Challenging how we think, Anantharaman Ajay, content creator, storyteller, and relentless skeptic - dissects cinema, science, and society to expose intellectual complacency and cultural amnesia.",
+      "Challenging thought, Anantharaman Ajay, creator, storyteller, dissects cinema, science, society to expose complacency and cultural amnesia.",
     image: "/prevspeakers/anantharaman.png",
   },
   {
@@ -113,7 +116,7 @@ const speakers: Speaker[] = [
     name: "Anima Nair",
     title: "Director of NeuroGifted",
     description:
-      "A bold neurodiversity advocate and storyteller, she directs NeuroGifted and leads Interweave Consulting’s Neurodiversity Vertical, creating real impact through empathy and expertise.",
+      "A bold neurodiversity advocate, leading NeuroGifted and Interweave’s Neurodiversity Vertical, driving inclusion and change.",
     image: "/prevspeakers/anima.png",
   },
 ];
@@ -121,9 +124,9 @@ const speakers: Speaker[] = [
 // Speaker Card Component
 const SpeakerCard: React.FC<SpeakerCardProps> = ({ speaker }) => {
   return (
-    <div className="flex gap-3 sm:gap-4 p-3 sm:p-4 bg-black border border-white/20 overflow-hidden group hover:border-[#E62B1E] transition-colors duration-300 min-h-[140px] sm:min-h-[160px]">
+    <div className="flex gap-2 sm:gap-4 p-2 sm:p-4 bg-black border border-white/20 overflow-hidden group hover:border-[#E62B1E] transition-colors duration-300 min-h-[200px] sm:min-h-[160px]">
       {/* Image */}
-      <div className="w-20 sm:w-28 md:w-32 lg:w-36 flex-shrink-0 relative aspect-[3/4]">
+      <div className="w-32 sm:w-28 md:w-32 lg:w-36 flex-shrink-0 relative aspect-[3/4]">
         <Image
           src={speaker.image}
           alt={speaker.name}
@@ -136,12 +139,12 @@ const SpeakerCard: React.FC<SpeakerCardProps> = ({ speaker }) => {
       </div>
 
       {/* Content */}
-      <div className="flex-1 py-1 sm:py-2 flex flex-col justify-center relative">
+      <div className="flex-1 py-1 sm:py-2 flex flex-col justify-start relative">
         {/* Decorative Corner Line */}
         <div className="absolute top-0 right-0 w-6 sm:w-8 h-[1px] bg-[#E62B1E]" />
 
         <h3
-          className="text-[#E62B1E] font-medium text-sm sm:text-base md:text-lg lg:text-xl tracking-[0.05em] leading-tight mb-1"
+          className="text-[#E62B1E] font-medium text-base sm:text-base md:text-lg lg:text-xl tracking-[0.05em] leading-tight mb-1"
           style={{ fontFamily: "'Clash Display', sans-serif" }}
         >
           {speaker.name}
@@ -152,9 +155,9 @@ const SpeakerCard: React.FC<SpeakerCardProps> = ({ speaker }) => {
         >
           {speaker.title}
         </p>
-        <div className="w-6 sm:w-8 h-[1px] bg-white/20 my-2 sm:my-3 group-hover:w-full group-hover:bg-[#E62B1E] transition-all duration-300" />
+        <div className="w-6 sm:w-8 h-[1px] bg-white/20 my-1.5 sm:my-3 group-hover:w-full group-hover:bg-[#E62B1E] transition-all duration-300" />
         <p
-          className="text-gray-400 text-xs sm:text-sm leading-relaxed tracking-[0.04em] line-clamp-3 w-[95%]"
+          className="text-gray-400 text-xs sm:text-sm leading-relaxed tracking-[0.04em] line-clamp-5 w-[95%]"
           style={{ fontFamily: "'Clash Display', sans-serif" }}
         >
           {speaker.description}
@@ -286,7 +289,7 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
       {/* Speakers Section */}
       <motion.div
         className="relative z-20 bg-black h-screen flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-16 py-safe"
-        style={{ opacity: speakersOpacity, y: speakersY }}
+        style={{ opacity: speakersOpacity }}
       >
         <section className="relative w-full max-w-6xl mx-auto flex flex-col items-stretch h-full justify-center max-h-[800px]">
           {/* Speakers Header */}
@@ -298,6 +301,7 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
             </h2>
             <div className="flex gap-3 sm:gap-4">
               <motion.button
+                type="button"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => paginate(-1)}
@@ -307,6 +311,7 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
                 <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </motion.button>
               <motion.button
+                type="button"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => paginate(1)}
@@ -319,8 +324,8 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
           </div>
 
           {/* Speakers Carousel */}
-          <div className="relative w-full">
-            <AnimatePresence initial={false} custom={direction} mode="wait">
+          <div className="relative w-full min-h-[650px] sm:min-h-[400px] overflow-hidden">
+            <AnimatePresence initial={false} custom={direction} mode="popLayout">
               <motion.div
                 key={page}
                 custom={direction}
@@ -349,11 +354,10 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
               <button
                 key={index}
                 onClick={() => setPage([index, index > currentPage ? 1 : -1])}
-                className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
-                  index === currentPage
-                    ? "bg-[#E62B1E] w-8 sm:w-10"
-                    : "bg-white/20 hover:bg-white/40 w-4 sm:w-6"
-                }`}
+                className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${index === currentPage
+                  ? "bg-[#E62B1E] w-8 sm:w-10"
+                  : "bg-white/20 hover:bg-white/40 w-4 sm:w-6"
+                  }`}
                 aria-label={`Go to page ${index + 1}`}
               />
             ))}

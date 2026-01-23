@@ -1,86 +1,106 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-import { saveOrder } from "@/lib/db";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+
+// 1. Initialize R2 Client
+const r2 = new S3Client({
+  region: "auto",
+  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || "",
+  },
+});
 
 export async function POST(request: NextRequest) {
-    try {
-        const formData = await request.formData();
+  try {
+    const formData = await request.formData();
 
-        // Extract form fields
-        const productId = formData.get("productId") as string;
-        const productName = formData.get("productName") as string;
-        const size = formData.get("size") as string;
-        const price = parseFloat(formData.get("price") as string);
-        const customerName = formData.get("customerName") as string;
-        const phone = formData.get("phone") as string;
-        const transactionId = formData.get("transactionId") as string;
-        const address = formData.get("address") as string;
-        const screenshot = formData.get("screenshot") as File;
+    // Extract all fields
+    const productId = formData.get("productId") as string;
+    const productName = formData.get("productName") as string;
+    const size = formData.get("size") as string;
+    const price = parseFloat(formData.get("price") as string);
+    const customerName = formData.get("customerName") as string;
+    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
+    const transactionId = formData.get("transactionId") as string;
+    const address = formData.get("address") as string;
+    const screenshot = formData.get("screenshot") as File;
 
-        // Validate required fields
-        if (!productId || !productName || !size || !price || !customerName || !phone || !transactionId || !address) {
-            return NextResponse.json(
-                { success: false, message: "All fields are required" },
-                { status: 400 }
-            );
-        }
-
-        if (!screenshot) {
-            return NextResponse.json(
-                { success: false, message: "Payment screenshot is required" },
-                { status: 400 }
-            );
-        }
-
-        // Save screenshot to public/uploads
-        const uploadsDir = path.join(process.cwd(), "public", "uploads");
-        await fs.mkdir(uploadsDir, { recursive: true });
-
-        const timestamp = Date.now();
-        const extension = screenshot.name.split(".").pop() || "png";
-        const filename = `${transactionId}-${timestamp}.${extension}`;
-        const filePath = path.join(uploadsDir, filename);
-
-        const bytes = await screenshot.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        await fs.writeFile(filePath, buffer);
-
-        const screenshotPath = `/uploads/${filename}`;
-
-        // Save order to database
-        const order = await saveOrder({
-            productId,
-            productName,
-            size,
-            price,
-            customerName,
-            phone,
-            transactionId,
-            address,
-            screenshotPath,
-        });
-
-        return NextResponse.json({
-            success: true,
-            message: "Order submitted successfully",
-            orderId: order.id,
-        });
-
-    } catch (error) {
-        console.error("Error processing order:", error);
-        return NextResponse.json(
-            { success: false, message: "Failed to process order" },
-            { status: 500 }
-        );
+    // Validate
+    if (!productId || !customerName || !email || !transactionId || !address || !screenshot) {
+      return NextResponse.json(
+        { success: false, message: "Missing required fields" },
+        { status: 400 }
+      );
     }
-}
 
-export async function GET() {
+    // --- STEP 1: Upload the Screenshot Image ---
+    const timestamp = Date.now();
+    // Sanitize transaction ID to be filename-safe
+    const sanitizedId = transactionId.replace(/[^a-z0-9]/gi, '_');
+    const imageExtension = screenshot.name.split(".").pop() || "png";
+    const imageFilename = `receipts/${sanitizedId}-${timestamp}.${imageExtension}`;
+
+    const imageBuffer = Buffer.from(await screenshot.arrayBuffer());
+
+    await r2.send(new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: imageFilename,
+      Body: imageBuffer,
+      ContentType: screenshot.type,
+    }));
+
+    // Generate the public URL for the image
+    const screenshotUrl = `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${imageFilename}`;
+
+    // --- STEP 2: Create & Upload the Order JSON ---
+    
+    // Construct the single object containing ALL details
+    const orderData = {
+      orderId: sanitizedId,
+      timestamp: new Date().toISOString(),
+      verified: false, // Default is false until admin verifies payment proof
+      status: "pending", //'pending' | 'accepted' | 'rejected'
+      customer: {
+        name: customerName,
+        email: email,
+        phone: phone,
+        address: address,
+      },
+      product: {
+        id: productId,
+        name: productName,
+        size: size,
+        price: price,
+      },
+      payment: {
+        transactionId: transactionId,
+        screenshotUrl: screenshotUrl,
+      },
+    };
+
+    // Upload this JSON object as a file to R2
+    const jsonFilename = `orders/${sanitizedId}.json`;
+
+    await r2.send(new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: jsonFilename,
+      Body: JSON.stringify(orderData, null, 2),
+      ContentType: "application/json",
+    }));
+
     return NextResponse.json({
-        message: "TEDxCUSAT Merch API",
-        endpoints: {
-            POST: "Submit a new order with form data",
-        },
+      success: true,
+      message: "Order processed and saved to R2",
+      orderId: sanitizedId,
     });
+
+  } catch (error) {
+    console.error("Error processing order:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to process order" },
+      { status: 500 }
+    );
+  }
 }

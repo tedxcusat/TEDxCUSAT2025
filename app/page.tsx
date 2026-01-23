@@ -13,6 +13,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import About from "./components/about";
 import EchoesHero from "./components/EchoesHero";
 import Journey from "./components/journey";
+import MerchToast from "./components/merch/Toast";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -33,6 +34,7 @@ export default function Home() {
   const [footerInView, setFooterInView] = useState(false);
   const [navbarFinished, setNavbarFinished] = useState(false);
   const [echoesHeroInView, setEchoesHeroInView] = useState(false);
+  const [showMerchToast, setShowMerchToast] = useState(false);
 
   useEffect(() => {
     if (!heroFinished && !loaderFinished) {
@@ -105,7 +107,10 @@ export default function Home() {
       >
         <Hero
           startAnimation={loaderFinished}
-          onComplete={() => setHeroFinished(true)}
+          onComplete={() => {
+            setHeroFinished(true);
+            setShowMerchToast(true);
+          }}
         />
       </section>
 
@@ -131,13 +136,19 @@ export default function Home() {
         <EchoesHero startAnimation={echoesHeroInView} />
       </section>
 
-      <section>
+      <section id="journey" className="panel min-h-screen w-full relative bg-black snap-start">
         <Journey />
       </section>
 
       <section id="contact" ref={footerRef} className="panel min-h-screen w-full relative bg-black snap-start">
         <Footer startAnimation={footerInView} />
       </section>
+
+      {/* Merch Toast Notification */}
+      <MerchToast
+        show={showMerchToast}
+        onClose={() => setShowMerchToast(false)}
+      />
     </main>
   );
 }

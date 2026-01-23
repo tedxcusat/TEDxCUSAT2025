@@ -14,7 +14,7 @@ type CoreMember = {
   image: string;
 };
 
-type WebMember = {
+type TechMember = {
   name: string;
   image: string;
   github?: string;
@@ -22,100 +22,86 @@ type WebMember = {
 };
 
 const coreTeam: CoreMember[] = [
-  { name: "Person 1", role: "Organizer", image: "/team/placeholder.jpg" },
-  { name: "Person 2", role: "Organizer", image: "/team/placeholder.jpg" },
-  {
-    name: "Person 3",
-    role: "Staff Coordinator",
-    image: "/team/placeholder.jpg",
-  },
-  { name: "Person 4", role: "Tech Lead", image: "/team/placeholder.jpg" },
-  { name: "Person 5", role: "Ambience Lead", image: "/team/placeholder.jpg" },
-  { name: "Person 6", role: "Ambience Lead", image: "/team/placeholder.jpg" },
-  { name: "Person 7", role: "Ambience Lead", image: "/team/placeholder.jpg" },
-  { name: "Person 8", role: "Media Lead", image: "/team/placeholder.jpg" },
-  { name: "Person 9", role: "Media Lead", image: "/team/placeholder.jpg" },
-  {
-    name: "Person 10",
-    role: "Production Lead",
-    image: "/team/placeholder.jpg",
-  },
-  {
-    name: "Person 11",
-    role: "Production Lead",
-    image: "/team/placeholder.jpg",
-  },
-  { name: "Person 12", role: "Curation Lead", image: "/team/placeholder.jpg" },
-  { name: "Person 13", role: "Curation Lead", image: "/team/placeholder.jpg" },
-  { name: "Person 14", role: "Content Lead", image: "/team/placeholder.jpg" },
-  { name: "Person 15", role: "Outreach Lead", image: "/team/placeholder.jpg" },
-  { name: "Person 16", role: "Outreach Lead", image: "/team/placeholder.jpg" },
-  {
-    name: "Person 17",
-    role: "Sponsorship Lead",
-    image: "/team/placeholder.jpg",
-  },
-  {
-    name: "Person 18",
-    role: "Sponsorship Lead",
-    image: "/team/placeholder.jpg",
-  },
-  { name: "Person 19", role: "Treasurer", image: "/team/placeholder.jpg" },
+  { name: "Deva Nandan S", role: "Organizer", image: "/team/Devan.jpeg" },
+  { name: "Adithyan Pramod", role: "Organizer", image: "/team/Pramod.jpeg" },
+  { name: "Sheena K M", role: "Staff Coordinator", image: "/team/Sheena.jpeg" },
+  { name: "Kevin Jose Edacheril", role: "Treasurer", image: "/team/Kevin.jpeg" },
+  { name: "Durga Sumesh", role: "Sponsorship Lead", image: "/team/Durga.jpeg" },
+  { name: "Sanjeev Shankar", role: "Sponsorship Lead", image: "/team/Sanjeev.jpg" },
+  { name: "Shazia Nannakkal", role: "Curation Lead", image: "/team/Shazia.jpeg" },
+  { name: "Anagha", role: "Curation Lead", image: "/team/Anagha.jpeg" },
+  { name: "Dhaliya Noushad", role: "Outreach Lead", image: "/team/Daliya.jpeg" },
+  { name: "Riya Fathima", role: "Outreach Lead", image: "/team/Riya.jpeg" },
+  { name: "Jenoo Liju", role: "Production Lead", image: "/team/Jenoo.jpeg" },
+  { name: "Akshay S", role: "Production Lead", image: "/team/Akshay.jpeg" },
+  { name: "Theja Lakshmi", role: "Media Lead", image: "/team/Theja.jpeg" },
+  { name: "Gopikrishnan P R", role: "Media Lead", image: "/team/Gopi.png" },
+  { name: "Abdul Rayif", role: "Tech Lead", image: "/team/Rayif.jpeg" },
+  { name: "Arjun ", role: "Content Lead", image: "/team/Arjun.jpg" },
+  { name: "Athira", role: "Ambience Lead", image: "/team/Athira.jpeg" },
+  { name: "Asiya Fyroos", role: "Ambience Lead", image: "/team/Asiya.jpeg" },
+  { name: "Shanif K V", role: "Ambience Lead", image: "/team/Shanif.jpeg" },
 ];
 
-const webTeam: WebMember[] = [
+const techTeam: TechMember[] = [
   {
-    name: "Person 1",
-    image: "/team/placeholder.jpg",
-    github: "https://github.com/",
-    linkedin: "https://linkedin.com/",
+    name: "Abdul Rayif",
+    image: "/team/Rayif.jpeg",
+    github: "https://github.com/Abdulrayifvp",
+    linkedin: "https://www.linkedin.com/in/rayifvp",
   },
   {
-    name: "Person 2",
-    image: "/team/placeholder.jpg",
-    github: "https://github.com/",
-    linkedin: "https://linkedin.com/",
+    name: "Arun Mathew Ajay",
+    image: "/team/ArunM.jpeg",
+    github: "https://github.com/BluJay04",
+    linkedin: "https://www.linkedin.com/in/arunmathewajay",
   },
   {
-    name: "Person 3",
-    image: "/team/placeholder.jpg",
-    github: "https://github.com/",
-    linkedin: "https://linkedin.com/",
+    name: "Shreya Nithin",
+    image: "/team/Shreya.jpeg",
+    github: "https://github.com/shreyanithin",
+    linkedin: "https://www.linkedin.com/in/shreya-nithin-874872277",
   },
   {
-    name: "Person 4",
-    image: "/team/placeholder.jpg",
-    github: "https://github.com/",
-    linkedin: "https://linkedin.com/",
+    name: "Akarsh Balachandran",
+    image: "/team/Akarsh.jpeg",
+    github: "https://github.com/akrsh47",
+    linkedin: "https://www.linkedin.com/in/akarshbalachandran",
   },
   {
-    name: "Person 5",
-    image: "/team/placeholder.jpg",
-    github: "https://github.com/",
-    linkedin: "https://linkedin.com/",
+    name: "Sebin Thomas",
+    image: "/team/Sebin.jpeg",
+    github: "https://github.com/Abyssalwolf",
+    linkedin: "https://www.linkedin.com/in/sebinthomas78",
   },
   {
-    name: "Person 6",
-    image: "/team/placeholder.jpg",
-    github: "https://github.com/",
-    linkedin: "https://linkedin.com/",
+    name: "Shiva Sajay",
+    image: "/team/Shiva.jpeg",
+    github: "https://github.com/shivaacodes",
+    linkedin: "https://www.linkedin.com/in/shiva-sajay-03a473288",
   },
   {
-    name: "Person 7",
-    image: "/team/placeholder.jpg",
-    github: "https://github.com/",
-    linkedin: "https://linkedin.com/",
+    name: "Josh Joseph",
+    image: "/team/Josh.jpeg",
+    github: "https://github.com/JoshJoseph1234",
+    linkedin: "https://www.linkedin.com/in/josh-joseph-b90a2829a",
   },
   {
-    name: "Person 8",
-    image: "/team/placeholder.jpg",
-    github: "https://github.com/",
-    linkedin: "https://linkedin.com/",
+    name: "Adithya Menon",
+    image: "/team/Adithya.jpeg",
+    github: "https://github.com/apm2004",
+    linkedin: "https://www.linkedin.com/in/adithya-p-menon",
+  },
+  {
+    name: "Akshay Sunil",
+    image: "/team/Java.jpg",
+    github: "https://github.com/Akshay6405",
+    linkedin: "https://www.linkedin.com/in/akshay-sunil-b541b825a",
   },
 ];
 
 export default function TeamPage() {
-  const [activeTeam, setActiveTeam] = useState<"core" | "web">("core");
+  const [activeTeam, setActiveTeam] = useState<"core" | "tech">("core");
   const router = useRouter();
 
   // Animation Variants
@@ -128,7 +114,6 @@ export default function TeamPage() {
 
   return (
     <main>
-      <Navbar />
       <section className="min-h-screen bg-black text-white px-[1.5rem] md:px-[3rem] py-[6rem]">
         <div className="max-w-7xl mx-auto">
           {/* Back Button */}
@@ -199,13 +184,13 @@ export default function TeamPage() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveTeam("web")}
-              className={`px-[1.5rem] py-[0.5rem] text-sm rounded-full transition ${activeTeam === "web"
+              onClick={() => setActiveTeam("tech")}
+              className={`px-[1.5rem] py-[0.5rem] text-sm rounded-full transition ${activeTeam === "tech"
                 ? "bg-[#EB0028] text-white"
                 : "text-white/70 hover:text-white"
                 }`}
             >
-              Web Team
+              Tech Team
             </motion.button>
           </motion.div>
 
@@ -227,7 +212,7 @@ export default function TeamPage() {
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true, margin: "-50px" }}
-                    className="h-[24rem] rounded-2xl border border-white/10 bg-white/[0.03] p-[1rem] flex flex-col hover:border-[#EB0028] transition group"
+                    className="rounded-2xl border border-white/10 bg-white/[0.03] p-[1rem] flex flex-col hover:border-[#EB0028] transition group"
                   >
                     <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-white/10">
                       <Image
@@ -235,6 +220,7 @@ export default function TeamPage() {
                         alt={member.name}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
@@ -252,14 +238,14 @@ export default function TeamPage() {
               </motion.div>
             ) : (
               <motion.div
-                key="web"
+                key="tech"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
                 className="mt-[3.5rem] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[3rem]"
               >
-                {webTeam.map((member, idx) => (
+                {techTeam.map((member, idx) => (
                   <motion.div
                     key={idx}
                     variants={itemVariants}
@@ -274,12 +260,13 @@ export default function TeamPage() {
                         alt={member.name}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
 
                     <div className="mt-[1rem]">
-                      <h3 className="text-base font-medium font-clash">
+                      <h3 className="text-base font-medium text-[#EB0028] font-clash">
                         {member.name}
                       </h3>
 

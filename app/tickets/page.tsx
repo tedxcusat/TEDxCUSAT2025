@@ -16,36 +16,48 @@ gsap.registerPlugin(ScrollTrigger);
 const tickets = [
   {
     type: "Early Bird",
-    price: "₹399",
-    description: "Limited time offer for early bookings.",
-    highlight: true,
-    soldOut: true,
-  },
-  {
-    type: "Student",
-    price: "₹499",
-    description: "Access for current students with valid ID.",
-    soldOut: false,
-  },
-  {
-    type: "Alumni",
     price: "₹699",
-    description: "Special rate for CUSAT alumni.",
+    description: "Limited time offer for early bookings.",
     soldOut: false,
+    disabled: true,
+  },
+  {
+    type: "Cusatian",
+    price: "₹799",
+    description: "Access for current students with valid ID.",
+    highlight: false,
+    soldOut: false,
+    disabled: true,
+  },
+  {
+    type: "Cusat Alumni",
+    price: "₹899",
+    description: "Special rate for CUSAT alumni.",
+    highlight: false,
+    soldOut: false,
+    disabled: true,
+  },
+  {
+    type: "Non-Cusatian",
+    price: "₹999",
+    description: "Access for students outside CUSAT.",
+    highlight: false,
+    soldOut: false,
+    disabled: true,
   },
   {
     type: "Professional",
-    price: "₹899",
+    price: "₹1099",
     description: "General access for professionals and guests.",
+    highlight: false,
     soldOut: false,
-  },
+    disabled: true,
+  }
 ];
 
 const sponsors = [
-  { name: "Sponsor 1", logo: "/file.svg" }, // Placeholder logos
-  { name: "Sponsor 2", logo: "/file.svg" },
-  { name: "Sponsor 3", logo: "/file.svg" },
-  { name: "Sponsor 4", logo: "/file.svg" },
+  { name: "Sponsor 1", logo: "/infopark-logo.svg" }, // Placeholder logos
+  { name: "Sponsor 2", logo: "/makemypass-logo.svg" },
 ];
 
 const faqs = [
@@ -63,7 +75,7 @@ const faqs = [
   },
   {
     question: "Who can I contact for ticket-related issues?",
-    answer: "For any ticket-related inquiries, message or call Dhanush - +91 97465 30193",
+    answer: "For any ticket-related inquiries, message or call Rayif - +91 97464 02973",
   },
   {
     question: "What do I need to bring to the event?",
@@ -96,18 +108,14 @@ export default function TicketsPage() {
         y: 0,
         opacity: 1,
         clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
-        duration: 1.2,
+        duration: 0.8,
         ease: "power4.out"
       }
     ).fromTo(
       subtitleRef.current,
       { y: 20, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
-      "-=0.6"
-    );
-
-    // Cards Reveal - Simultaneous 3D Reveal
-    gsap.fromTo(
+    ).fromTo(
       ".ticket-card",
       {
         y: 80,
@@ -121,13 +129,13 @@ export default function TicketsPage() {
         opacity: 1,
         scale: 1,
         rotateX: 0,
-        duration: 1,
+        duration: 0.5,
         ease: "power3.out",
         scrollTrigger: {
           trigger: cardsRef.current,
           start: "top 85%",
         },
-      }
+      },
     );
 
     // Sponsors Reveal - Simultaneous Fade Up
@@ -195,37 +203,37 @@ export default function TicketsPage() {
         </div>
 
         {/* Ticket Cards Grid */}
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-32">
+        <div ref={cardsRef} className="flex flex-wrap justify-center gap-6 mb-32 max-w-5xl mx-auto">
           {tickets.map((ticket, index) => (
             <motion.div
               key={index}
-              className={`ticket-card relative group p-8 border ${ticket.highlight ? 'border-[#EB0028] shadow-[0_0_30px_rgba(235,0,40,0.2)]' : 'border-white/20 hover:border-white/50'} bg-black/50 backdrop-blur-sm flex flex-col justify-between h-[450px] transition-all duration-300`}
+              className={`ticket-card opacity-0 relative group p-8 border border-white/20 hover:border-white/50 bg-black/50 backdrop-blur-sm flex flex-col justify-between min-h-[380px] w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] transition-all duration-300`}
             >
               {/* Card Content */}
               <div>
                 <h3 className="font-orbitron font-bold text-2xl tracking-wider mb-2 text-white">
                   {ticket.type}
                 </h3>
-                <div className="h-0.5 w-12 bg-[#EB0028] mb-6"></div>
+                <div className="h-0.5 w-15 bg-[#EB0028] mb-6"></div>
                 <p className="font-clash text-5xl font-semibold mb-4 text-white">
                   {ticket.price}
                 </p>
-                <p className="font-clash text-gray-400 leading-relaxed">
+                <p className="font-clash text-gray-400 leading-relaxed text-lg">
                   {ticket.description}
                 </p>
               </div>
 
               {/* Book Button */}
               <button
-                disabled={ticket.soldOut}
+                disabled={ticket.soldOut || ticket.disabled}
                 className={`w-full py-4 mt-8 bg-transparent border font-clash font-medium tracking-wide transition-colors duration-300 uppercase
-                  ${ticket.soldOut
+                  ${ticket.soldOut || ticket.disabled
                     ? 'border-white/20 text-white/40 cursor-not-allowed'
                     : 'border-[#EB0028] text-white hover:bg-[#EB0028]'
                   }
                 `}
               >
-                {ticket.soldOut ? 'Unavailable' : 'Book Now'}
+                {ticket.soldOut ? 'Sold Out' : ticket.disabled ? 'Coming Soon' : 'Book Now'}
               </button>
 
               {/* Decorative Corners */}
@@ -252,15 +260,15 @@ export default function TicketsPage() {
             OUR <span className="text-[#EB0028]">PARTNERS</span>
           </h2>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 items-center justify-items-center opacity-70">
-            {sponsors.map((sponsor, index) => (
-              <div key={index} className="sponsor-logo w-full max-w-[150px] aspect-[3/2] flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500">
-                {/* 
-                  Using a placeholder or a generic icon if actual logos aren't available yet. 
-                  Modify src to point to actual sponsor logos.
-                */}
-                <div className="w-full h-full border border-white/10 flex items-center justify-center bg-white/5 p-4">
-                  <span className="font-clash text-sm text-gray-500">{sponsor.name}</span>
+          <div className={`grid gap-8 md:gap-16 items-center justify-items-center opacity-70 ${sponsors.filter(s => s.logo).length === 1 ? 'grid-cols-1' :
+            sponsors.filter(s => s.logo).length === 2 ? 'grid-cols-2' :
+              sponsors.filter(s => s.logo).length === 3 ? 'grid-cols-3' :
+                'grid-cols-2 md:grid-cols-4'
+            }`}>
+            {sponsors.filter(sponsor => sponsor.logo).map((sponsor, index) => (
+              <div key={index} className="sponsor-logo w-full max-w-[150px] aspect-[3/2] flex items-center justify-center transition-all duration-500 overflow-visible">
+                <div className="w-full h-full flex items-center justify-center">
+                  <SponsorLogo name={sponsor.name} logo={sponsor.logo} />
                 </div>
               </div>
             ))}
@@ -317,5 +325,30 @@ export default function TicketsPage() {
         <Footer startAnimation={footerInView} />
       </div>
     </main>
+  );
+}
+function SponsorLogo({ name, logo }: { name: string; logo: string }) {
+  const [failed, setFailed] = useState(false);
+
+  if (!failed && logo) {
+    return (
+      <Image
+        src={logo}
+        alt={name}
+        width={200}
+        height={125}
+        className="object-contain w-[200px] h-[125px]"
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+
+  // fallback with box styling
+  return (
+    <div className="w-full h-full border border-white/10 flex items-center justify-center bg-white/5 p-4">
+      <span className="font-clash text-sm text-gray-500">
+        {name}
+      </span>
+    </div>
   );
 }
