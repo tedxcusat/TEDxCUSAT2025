@@ -79,7 +79,7 @@ const faqs = [
   },
   {
     question: "What do I need to bring to the event?",
-    answer: "Bring a digital or printed copy of your e-ticket and Cusat ID if you have a student ticket. (For first year students, ID pdf is also preferred).",
+    answer: "Bring a digital copy of your e-ticket and Student ID if you have a student ticket.",
   },
 ];
 
