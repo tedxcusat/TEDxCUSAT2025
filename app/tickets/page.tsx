@@ -20,6 +20,7 @@ const tickets = [
     description: "Limited time offer for early bookings.",
     soldOut: false,
     disabled: true,
+    link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=c8a47208-ac03-4724-8d2a-821f5afcdf79",
   },
   {
     type: "Cusatian",
@@ -28,6 +29,7 @@ const tickets = [
     highlight: false,
     soldOut: false,
     disabled: true,
+    link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=7ff49129-48bb-4354-92d5-0be2c21e947e"
   },
   {
     type: "Cusat Alumni",
@@ -36,6 +38,7 @@ const tickets = [
     highlight: false,
     soldOut: false,
     disabled: true,
+    link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=f05cd3ca-613c-47d8-be83-6752f236328d",
   },
   {
     type: "Non-Cusatian",
@@ -44,6 +47,7 @@ const tickets = [
     highlight: false,
     soldOut: false,
     disabled: true,
+    link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=d905ceb6-15e8-4bd5-a577-08da99e3df94",
   },
   {
     type: "Professional",
@@ -52,6 +56,7 @@ const tickets = [
     highlight: false,
     soldOut: false,
     disabled: true,
+    link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=600db8cf-6b62-460a-93b2-e0d357f75dac",
   }
 ];
 
@@ -79,7 +84,7 @@ const faqs = [
   },
   {
     question: "What do I need to bring to the event?",
-    answer: "Bring a digital or printed copy of your e-ticket and Cusat ID if you have a student ticket. (For first year students, ID pdf is also preferred).",
+    answer: "Bring a digital copy of your e-ticket and Student ID if you have student ticket.",
   },
 ];
 
@@ -225,6 +230,7 @@ export default function TicketsPage() {
 
               {/* Book Button */}
               <button
+                onClick={() => ticket.link && window.open(ticket.link, "_blank")}
                 disabled={ticket.soldOut || ticket.disabled}
                 className={`w-full py-4 mt-8 bg-transparent border font-clash font-medium tracking-wide transition-colors duration-300 uppercase
                   ${ticket.soldOut || ticket.disabled

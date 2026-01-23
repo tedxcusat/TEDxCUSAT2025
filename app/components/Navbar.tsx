@@ -213,7 +213,7 @@ const Navbar = ({ startAnimation = true }: { startAnimation?: boolean }) => {
 
             {/* Footer Socials */}
             <motion.div variants={menuItemVariants} custom={6} className="px-8 pb-8 flex items-center gap-6">
-              <a href="#" className="transition-colors hover:opacity-80">
+              <a href="https://www.facebook.com/tedxcusat21/" className="transition-colors hover:opacity-80">
                 <Image
                   src="/facebook.svg"
                   alt="Facebook"
@@ -222,7 +222,7 @@ const Navbar = ({ startAnimation = true }: { startAnimation?: boolean }) => {
                   className="w-5 h-5 text-white"
                 />
               </a>
-              <a href="#" className="transition-colors hover:opacity-80">
+              <a href="https://www.instagram.com/tedxcusat/?hl=en" className="transition-colors hover:opacity-80">
                 <Image
                   src="/instagram.svg"
                   alt="Instagram"
@@ -231,7 +231,7 @@ const Navbar = ({ startAnimation = true }: { startAnimation?: boolean }) => {
                   className="w-5 h-5 text-white"
                 />
               </a>
-              <a href="#" className="transition-colors hover:opacity-80">
+              <a href="https://x.com/tedx_cusat" className="transition-colors hover:opacity-80">
                 <Image
                   src="/twitter.svg"
                   alt="X (Twitter)"
