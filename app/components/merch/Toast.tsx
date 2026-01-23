@@ -199,6 +199,7 @@ export default function MerchToast({ show, onClose }: MerchToastProps) {
             drag
             dragMomentum={false}
             dragElastic={0}
+            onPointerDown={() => { hasMoved.current = false; }}
             onDragStart={handleDragStart}
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}

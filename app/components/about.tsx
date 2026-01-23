@@ -196,7 +196,8 @@ export default function About({ startAnimation }: { startAnimation: boolean }) {
         }
         .float-img {
           width: 180px; 
-          height: auto;
+          aspect-ratio: 3/2;
+          object-fit: cover;
           opacity: 0.8;
           filter: grayscale(100%);
           transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.3s ease;

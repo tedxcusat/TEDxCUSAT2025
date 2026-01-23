@@ -48,6 +48,9 @@ const slideVariants = {
   exit: (direction: number) => ({
     x: direction < 0 ? 800 : -800,
     opacity: 0,
+    position: "absolute",
+    top: 0,
+    width: "100%",
     transition: { duration: 0.3, ease: [0.55, 0.05, 0.55, 0.95] as const },
   }),
 };
@@ -321,8 +324,8 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
           </div>
 
           {/* Speakers Carousel */}
-          <div className="relative w-full min-h-[650px] sm:min-h-[400px]">
-            <AnimatePresence initial={false} custom={direction} mode="wait">
+          <div className="relative w-full min-h-[650px] sm:min-h-[400px] overflow-hidden">
+            <AnimatePresence initial={false} custom={direction} mode="popLayout">
               <motion.div
                 key={page}
                 custom={direction}
