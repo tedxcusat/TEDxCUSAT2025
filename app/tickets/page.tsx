@@ -84,7 +84,7 @@ const faqs = [
   },
   {
     question: "What do I need to bring to the event?",
-    answer: "Bring a digital copy of your e-ticket and Student ID if you have a student ticket.",
+    answer: "Bring a digital copy of your e-ticket and Student ID if you have student ticket.",
   },
 ];
 
