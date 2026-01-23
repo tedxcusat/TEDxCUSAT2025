@@ -163,7 +163,7 @@ const Navbar = ({ startAnimation = true }: { startAnimation?: boolean }) => {
             className="fixed inset-0 bg-black z-[110] flex flex-col pointer-events-auto"
           >
             {/* Menu Items */}
-            <div className="flex-1 flex flex-col justify-center px-8">
+            <div className="flex-1 flex flex-col justify-start pt-24 px-8 overflow-y-auto">
               <div className="space-y-8">
                 {mobileItems.map((item, i) => (
                   <Link
