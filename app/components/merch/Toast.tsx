@@ -98,15 +98,17 @@ export default function MerchToast({ show, onClose }: MerchToastProps) {
         x: dragStartPos.current.x + info.offset.x,
         y: dragStartPos.current.y + info.offset.y
       });
-
-      // Navigate if didn't move significantly
-      if (!hasMoved.current) {
-        window.location.href = "/merch";
-        handleClose();
-      }
     }
 
     setIsOverDropZone(false);
+  };
+
+  const handleTap = () => {
+    // Only navigate if we haven't moved (tap, not drag)
+    if (!hasMoved.current) {
+      window.location.href = "/merch";
+      handleClose();
+    }
   };
 
   // Shake animation variants
@@ -200,6 +202,7 @@ export default function MerchToast({ show, onClose }: MerchToastProps) {
             onDragStart={handleDragStart}
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
+            onTap={handleTap}
             initial={{ opacity: 0, scale: 0.8, x: position.x, y: position.y }}
             animate={{
               opacity: 1,

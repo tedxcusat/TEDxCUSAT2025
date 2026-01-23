@@ -121,9 +121,9 @@ const speakers: Speaker[] = [
 // Speaker Card Component
 const SpeakerCard: React.FC<SpeakerCardProps> = ({ speaker }) => {
   return (
-    <div className="flex gap-3 sm:gap-4 p-3 sm:p-4 bg-black border border-white/20 overflow-hidden group hover:border-[#E62B1E] transition-colors duration-300 min-h-[140px] sm:min-h-[160px]">
+    <div className="flex gap-2 sm:gap-4 p-2 sm:p-4 bg-black border border-white/20 overflow-hidden group hover:border-[#E62B1E] transition-colors duration-300 min-h-[200px] sm:min-h-[160px]">
       {/* Image */}
-      <div className="w-20 sm:w-28 md:w-32 lg:w-36 flex-shrink-0 relative aspect-[3/4]">
+      <div className="w-32 sm:w-28 md:w-32 lg:w-36 flex-shrink-0 relative aspect-[3/4]">
         <Image
           src={speaker.image}
           alt={speaker.name}
@@ -136,12 +136,12 @@ const SpeakerCard: React.FC<SpeakerCardProps> = ({ speaker }) => {
       </div>
 
       {/* Content */}
-      <div className="flex-1 py-1 sm:py-2 flex flex-col justify-center relative">
+      <div className="flex-1 py-1 sm:py-2 flex flex-col justify-start relative">
         {/* Decorative Corner Line */}
         <div className="absolute top-0 right-0 w-6 sm:w-8 h-[1px] bg-[#E62B1E]" />
 
         <h3
-          className="text-[#E62B1E] font-medium text-sm sm:text-base md:text-lg lg:text-xl tracking-[0.05em] leading-tight mb-1"
+          className="text-[#E62B1E] font-medium text-base sm:text-base md:text-lg lg:text-xl tracking-[0.05em] leading-tight mb-1"
           style={{ fontFamily: "'Clash Display', sans-serif" }}
         >
           {speaker.name}
@@ -152,9 +152,9 @@ const SpeakerCard: React.FC<SpeakerCardProps> = ({ speaker }) => {
         >
           {speaker.title}
         </p>
-        <div className="w-6 sm:w-8 h-[1px] bg-white/20 my-2 sm:my-3 group-hover:w-full group-hover:bg-[#E62B1E] transition-all duration-300" />
+        <div className="w-6 sm:w-8 h-[1px] bg-white/20 my-1.5 sm:my-3 group-hover:w-full group-hover:bg-[#E62B1E] transition-all duration-300" />
         <p
-          className="text-gray-400 text-xs sm:text-sm leading-relaxed tracking-[0.04em] line-clamp-3 w-[95%]"
+          className="text-gray-400 text-xs sm:text-sm leading-relaxed tracking-[0.04em] line-clamp-5 w-[95%]"
           style={{ fontFamily: "'Clash Display', sans-serif" }}
         >
           {speaker.description}
@@ -286,7 +286,7 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
       {/* Speakers Section */}
       <motion.div
         className="relative z-20 bg-black h-screen flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-16 py-safe"
-        style={{ opacity: speakersOpacity, y: speakersY }}
+        style={{ opacity: speakersOpacity }}
       >
         <section className="relative w-full max-w-6xl mx-auto flex flex-col items-stretch h-full justify-center max-h-[800px]">
           {/* Speakers Header */}
@@ -298,6 +298,7 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
             </h2>
             <div className="flex gap-3 sm:gap-4">
               <motion.button
+                type="button"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => paginate(-1)}
@@ -307,6 +308,7 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
                 <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </motion.button>
               <motion.button
+                type="button"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => paginate(1)}
@@ -319,7 +321,7 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
           </div>
 
           {/* Speakers Carousel */}
-          <div className="relative w-full">
+          <div className="relative w-full min-h-[650px] sm:min-h-[400px]">
             <AnimatePresence initial={false} custom={direction} mode="wait">
               <motion.div
                 key={page}
@@ -349,11 +351,10 @@ const EchoesHero: React.FC<EchoesHeroProps> = ({ startAnimation = false }) => {
               <button
                 key={index}
                 onClick={() => setPage([index, index > currentPage ? 1 : -1])}
-                className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
-                  index === currentPage
-                    ? "bg-[#E62B1E] w-8 sm:w-10"
-                    : "bg-white/20 hover:bg-white/40 w-4 sm:w-6"
-                }`}
+                className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${index === currentPage
+                  ? "bg-[#E62B1E] w-8 sm:w-10"
+                  : "bg-white/20 hover:bg-white/40 w-4 sm:w-6"
+                  }`}
                 aria-label={`Go to page ${index + 1}`}
               />
             ))}

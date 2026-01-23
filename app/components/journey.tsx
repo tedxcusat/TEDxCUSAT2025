@@ -249,8 +249,8 @@ export default function Journey() {
         </div>
 
         {/* Mobile Content */}
-        <div ref={mobileContentRef} className="w-full max-w-sm space-y-8">
-          <div className="flex justify-between items-end border-b border-gray-800 pb-4">
+        <div ref={mobileContentRef} className="w-full max-w-sm flex flex-col">
+          <div className="flex justify-between items-end border-b border-gray-800 pb-4 mb-6">
             <h2 className="text-2xl font-bold uppercase">Our <span className="text-[#E62B1E]">Journey</span></h2>
             <div className="flex gap-3 sm:gap-4">
               <motion.button
@@ -272,7 +272,8 @@ export default function Journey() {
             </div>
           </div>
 
-          <div className="relative h-[400px] w-full">
+          {/* Carousel container with fixed height */}
+          <div className="relative h-[380px] w-full overflow-visible">
             <AnimatePresence initial={false} custom={direction}>
               <motion.div
                 key={page}
@@ -302,7 +303,7 @@ export default function Journey() {
                 <p className="text-sm text-gray-300 leading-relaxed">
                   {currentEvent.description}
                 </p>
-                <div className="relative w-full h-[200px] bg-gray-900 rounded-lg overflow-hidden border border-gray-800 mt-4 pointer-events-none">
+                <div className="relative w-full h-[180px] bg-gray-900 rounded-lg overflow-hidden border border-gray-800 mt-4 pointer-events-none">
                   <img
                     src={currentEvent.image}
                     alt={currentEvent.title}
@@ -313,13 +314,13 @@ export default function Journey() {
             </AnimatePresence>
           </div>
 
-          {/* Pagination Dots (Mobile) */}
-          <div className="flex justify-center mt-6 gap-2">
+          {/* Pagination Dots (Mobile) - Outside carousel container */}
+          <div className="flex justify-center pt-28 gap-2">
             {journeyEvents.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setPage([index, index > eventIndex ? 1 : -1])}
-                className={`h-1.5 rounded-full transition-all duration-300 ${index === eventIndex
+                className={`h-2 rounded-full transition-all duration-300 ${index === eventIndex
                   ? "bg-[#E62B1E] w-8"
                   : "bg-white/20 hover:bg-white/40 w-4"
                   }`}
@@ -438,7 +439,7 @@ export default function Journey() {
                     <h3 className="text-[#E62B1E] text-3xl font-bold mb-1">
                       {currentEvent.title}
                     </h3>
-                    <p className="text-3xl font-mono text-gray-700 opacity-50">
+                    <p className="text-3xl font-mono text-gray-600 opacity-50">
                       {currentEvent.year}
                     </p>
                   </div>

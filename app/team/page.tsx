@@ -24,43 +24,23 @@ type TechMember = {
 const coreTeam: CoreMember[] = [
   { name: "Deva Nandan S", role: "Organizer", image: "/team/Devan.jpeg" },
   { name: "Adithyan Pramod", role: "Organizer", image: "/team/Pramod.jpeg" },
-  {
-    name: "Sheena K M",
-    role: "Staff Coordinator",
-    image: "/team/Sheena.jpeg",
-  },
-  { name: "Abdul Rayif", role: "Tech Lead", image: "/team/Rayif.jpeg" },
-  { name: "Athira", role: "Ambience Lead", image: "/team/Athira.jpeg" },
-  { name: "Asiya Fyroos", role: "Ambience Lead", image: "/team/Asiya.jpeg" },
-  { name: "Shanif K V", role: "Ambience Lead", image: "/team/Shanif.jpeg" },
-  { name: "Theja Lakshmi", role: "Media Lead", image: "/team/Theja.jpeg" },
-  { name: "Gopikrishnan P R", role: "Media Lead", image: "/team/Gopi.webp" },
-  {
-    name: "Jenoo Liju",
-    role: "Production Lead",
-    image: "/team/Jenoo.jpeg",
-  },
-  {
-    name: "Akshay S",
-    role: "Production Lead",
-    image: "/team/Akshay.jpeg",
-  },
+  { name: "Sheena K M",role: "Staff Coordinator",image: "/team/Sheena.jpeg" },
+  { name: "Kevin Jose Edacheril", role: "Treasurer", image: "/team/Kevin.jpeg" },
+  { name: "Durga Sumesh", role: "Sponsorship Lead", image: "/team/Durga.jpeg" },
+  { name: "Sanjeev Shankar", role: "Sponsorship Lead", image: "/team/Sanjeev.jpg" },
   { name: "Shazia Nannakkal", role: "Curation Lead", image: "/team/Shazia.jpeg" },
   { name: "Anagha", role: "Curation Lead", image: "/team/Anagha.jpeg" },
-  { name: "Arjun ", role: "Content Lead", image: "/team/Arjun.jpg" },
   { name: "Dhaliya Noushad", role: "Outreach Lead", image: "/team/Daliya.jpeg" },
   { name: "Riya Fathima", role: "Outreach Lead", image: "/team/Riya.jpeg" },
-  {
-    name: "Durga Sumesh",
-    role: "Sponsorship Lead",
-    image: "/team/Durga.jpeg",
-  },
-  {
-    name: "Sanjeev Shankar",
-    role: "Sponsorship Lead",
-    image: "/team/Sanjeev.jpg",
-  },
-  { name: "Kevin Jose Edacheril", role: "Treasurer", image: "/team/Kevin.jpeg" },
+  { name: "Jenoo Liju", role: "Production Lead", image: "/team/Jenoo.jpeg" },
+  { name: "Akshay S", role: "Production Lead", image: "/team/Akshay.jpeg" },
+  { name: "Theja Lakshmi", role: "Media Lead", image: "/team/Theja.jpeg" },
+  { name: "Gopikrishnan P R", role: "Media Lead", image: "/team/Gopi.webp" },
+  { name: "Abdul Rayif", role: "Tech Lead", image: "/team/Rayif.jpeg" },
+  { name: "Arjun ", role: "Content Lead", image: "/team/Arjun.jpg" },
+  { name: "Athira", role: "Ambience Lead", image: "/team/Athira.jpeg" },
+  { name: "Asiya Fyroos", role: "Ambience Lead", image: "/team/Asiya.jpeg" },
+  { name: "Shanif K V", role: "Ambience Lead", image: "/team/Shanif.jpeg" }, 
 ];
 
 const techTeam: TechMember[] = [
@@ -286,7 +266,7 @@ export default function TeamPage() {
                     </div>
 
                     <div className="mt-[1rem]">
-                      <h3 className="text-base font-medium font-clash">
+                      <h3 className="text-base font-medium text-[#EB0028] font-clash">
                         {member.name}
                       </h3>
 

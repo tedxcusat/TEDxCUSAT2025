@@ -43,7 +43,7 @@ export default function MerchCard({ product, index, onSelect }: MerchCardProps) 
           {product.name}
         </h3>
         <div className="h-0.5 w-12 bg-[#EB0028] mb-4" />
-        <p className="font-clash text-gray-400 text-sm mb-4 line-clamp-2 flex-1">
+        <p className="font-clash text-gray-400 text-sm mb-4 flex-1">
           {product.description}
         </p>
         <p className="font-clash text-3xl font-semibold text-white">
