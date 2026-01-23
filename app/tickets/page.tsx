@@ -22,13 +22,6 @@ const tickets = [
     disabled: true,
   },
   {
-    type: "Student",
-    price: "₹499",
-    description: "Access for current students with valid ID.",
-    soldOut: false,
-    disabled: true,
-  },
-  {
     type: "Cusatian",
     price: "₹799",
     description: "Access for current students with valid ID.",
@@ -63,8 +56,8 @@ const tickets = [
 ];
 
 const sponsors = [
-  { name: "Sponsor 1", logo: "/infopark.jpg" }, // Placeholder logos
-  { name: "Sponsor 2", logo: "" },
+  { name: "Sponsor 1", logo: "/infopark-logo.svg" }, // Placeholder logos
+  { name: "Sponsor 2", logo: "/makemypass-logo.svg" },
   { name: "Sponsor 3", logo: "" },
   { name: "Sponsor 4", logo: "" },
 ];
@@ -271,7 +264,7 @@ export default function TicketsPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 items-center justify-items-center opacity-70">
             {sponsors.map((sponsor, index) => (
-              <div key={index} className="sponsor-logo w-full max-w-[150px] aspect-[3/2] flex items-center justify-center transition-all duration-500">
+              <div key={index} className="sponsor-logo w-full max-w-[150px] aspect-[3/2] flex items-center justify-center transition-all duration-500 overflow-visible">
                 <div className="w-full h-full flex items-center justify-center">
                   <SponsorLogo name={sponsor.name} logo={sponsor.logo} />
                 </div>
@@ -340,9 +333,9 @@ function SponsorLogo({ name, logo }: { name: string; logo: string }) {
       <Image
         src={logo}
         alt={name}
-        width={160}
-        height={100}
-        className="object-contain"
+        width={200}
+        height={125}
+        className="object-contain w-[200px] h-[125px]"
         onError={() => setFailed(true)}
       />
     );

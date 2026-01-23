@@ -77,7 +77,7 @@ const techTeam: TechMember[] = [
     linkedin: "https://www.linkedin.com/in/arunmathewajay",
   },
   {
-    name: "Shreya Nithin", 
+    name: "Shreya Nithin",
     image: "/team/Shreya.jpeg",
     github: "https://github.com/shreyanithin",
     linkedin: "https://www.linkedin.com/in/shreya-nithin-874872277",
@@ -232,7 +232,7 @@ export default function TeamPage() {
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true, margin: "-50px" }}
-                    className="h-[24rem] rounded-2xl border border-white/10 bg-white/[0.03] p-[1rem] flex flex-col hover:border-[#EB0028] transition group"
+                    className="rounded-2xl border border-white/10 bg-white/[0.03] p-[1rem] flex flex-col hover:border-[#EB0028] transition group"
                   >
                     <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-white/10">
                       <Image

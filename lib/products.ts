@@ -17,8 +17,8 @@ export const products: Product[] = [
     description: "Premium cotton t-shirt featuring the iconic TEDxCUSAT Genesis design. Comfortable fit with screen-printed artwork.",
     images: [
       "/merch/products/tshirt-1.png",
-      "/merch/products/tshirt-2.png",
-      "/merch/products/tshirt-3.png",
+      "/merch/products/tshirt-1.png",
+      "/merch/products/tshirt-1.png",
     ],
     sizes: ["S", "M", "L", "XL", "XXL"],
     inStock: true,
@@ -31,8 +31,8 @@ export const products: Product[] = [
     description: "Cozy fleece-lined hoodie with embroidered TEDxCUSAT logo. Perfect for those cool evenings.",
     images: [
       "/merch/products/hoodie-1.png",
-      "/merch/products/hoodie-2.png",
-      "/merch/products/hoodie-3.png",
+      "/merch/products/hoodie-1.png",
+      "/merch/products/hoodie-1.png",
     ],
     sizes: ["S", "M", "L", "XL", "XXL"],
     inStock: true,

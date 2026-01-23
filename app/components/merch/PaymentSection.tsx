@@ -21,6 +21,7 @@ export default function PaymentSection({ product, size, onBack, onSuccess }: Pay
 
   const [formData, setFormData] = useState({
     name: "",
+    email: "", // Added email state
     phone: "",
     transactionId: "",
     address: "",
@@ -45,6 +46,15 @@ export default function PaymentSection({ product, size, onBack, onSuccess }: Pay
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // 1. Validate Email Format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    // 2. Validate Screenshot
     if (!screenshot) {
       alert("Please upload payment screenshot");
       return;
@@ -59,6 +69,7 @@ export default function PaymentSection({ product, size, onBack, onSuccess }: Pay
       data.append("size", size);
       data.append("price", product.price.toString());
       data.append("customerName", formData.name);
+      data.append("email", formData.email); // Added email to payload
       data.append("phone", formData.phone);
       data.append("transactionId", formData.transactionId);
       data.append("address", formData.address);
@@ -136,6 +147,20 @@ export default function PaymentSection({ product, size, onBack, onSuccess }: Pay
                   onChange={handleInputChange}
                   required
                   placeholder="Enter your full name"
+                  className={inputClasses}
+                />
+              </div>
+
+              {/* Added Email Input Field */}
+              <div>
+                <label className="block font-clash text-gray-400 text-sm mb-2">Email Address *</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="Enter your email address"
                   className={inputClasses}
                 />
               </div>

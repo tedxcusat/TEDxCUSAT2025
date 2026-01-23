@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, ShoppingBag } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, PanInfo } from "framer-motion";
+import { X, ShoppingBag, Trash2 } from "lucide-react";
 import Link from "next/link";
 
 interface MerchToastProps {
@@ -14,6 +14,19 @@ export default function MerchToast({ show, onClose }: MerchToastProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // Mobile drag states
+  const [isDragging, setIsDragging] = useState(false);
+  const [showDropZone, setShowDropZone] = useState(false);
+  const [isOverDropZone, setIsOverDropZone] = useState(false);
+  const [shouldShake, setShouldShake] = useState(false);
+
+  // Persisted position state
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const hasMoved = useRef(false);
+
+  const dragRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (show) {
       const timer = setTimeout(() => {
@@ -23,9 +36,86 @@ export default function MerchToast({ show, onClose }: MerchToastProps) {
     }
   }, [show]);
 
+  // Periodic shake animation
+  useEffect(() => {
+    if (!isVisible || isDragging) return;
+
+    const shakeInterval = setInterval(() => {
+      setShouldShake(true);
+      setTimeout(() => setShouldShake(false), 600);
+    }, 8000); // Shake every 8 seconds
+
+    // Initial shake after 2 seconds
+    const initialShake = setTimeout(() => {
+      setShouldShake(true);
+      setTimeout(() => setShouldShake(false), 600);
+    }, 2000);
+
+    return () => {
+      clearInterval(shakeInterval);
+      clearTimeout(initialShake);
+    };
+  }, [isVisible, isDragging]);
+
   const handleClose = () => {
     setIsVisible(false);
     setTimeout(onClose, 300);
+  };
+
+  const handleDragStart = () => {
+    setIsDragging(true);
+    setShowDropZone(true);
+    hasMoved.current = false;
+    dragStartPos.current = { ...position };
+  };
+
+  const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    // Check if moved significantly (more than 5px)
+    if (Math.abs(info.offset.x) > 5 || Math.abs(info.offset.y) > 5) {
+      hasMoved.current = true;
+    }
+
+    // Check if over drop zone (bottom 100px of screen)
+    const windowHeight = window.innerHeight;
+    const elementRect = dragRef.current?.getBoundingClientRect();
+    if (elementRect && elementRect.bottom > windowHeight - 100) {
+      setIsOverDropZone(true);
+    } else {
+      setIsOverDropZone(false);
+    }
+  };
+
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    setIsDragging(false);
+    setShowDropZone(false);
+
+    if (isOverDropZone) {
+      // Dismiss the toast
+      handleClose();
+    } else {
+      // Update position to persist the new location
+      setPosition({
+        x: dragStartPos.current.x + info.offset.x,
+        y: dragStartPos.current.y + info.offset.y
+      });
+
+      // Navigate if didn't move significantly
+      if (!hasMoved.current) {
+        window.location.href = "/merch";
+        handleClose();
+      }
+    }
+
+    setIsOverDropZone(false);
+  };
+
+  // Shake animation variants
+  const shakeAnimation = {
+    shake: {
+      x: [0, -3, 3, -3, 3, -2, 2, 0],
+      transition: { duration: 0.5, ease: [0.42, 0, 0.58, 1] as const }
+    },
+    idle: { x: 0 }
   };
 
   return (
@@ -101,49 +191,74 @@ export default function MerchToast({ show, onClose }: MerchToastProps) {
             </div>
           </motion.div>
 
-          {/* ============ MOBILE: Minimal bottom bar ============ */}
+          {/* ============ MOBILE: Draggable shopping bag icon ============ */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="md:hidden fixed bottom-0 left-0 right-0 z-[9999]"
+            ref={dragRef}
+            drag
+            dragMomentum={false}
+            dragElastic={0}
+            onDragStart={handleDragStart}
+            onDrag={handleDrag}
+            onDragEnd={handleDragEnd}
+            initial={{ opacity: 0, scale: 0.8, x: position.x, y: position.y }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              x: position.x,
+              y: position.y,
+              ...(shouldShake && !isDragging ? {
+                x: [position.x, position.x - 3, position.x + 3, position.x - 3, position.x + 3, position.x - 2, position.x + 2, position.x],
+              } : {})
+            }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={shouldShake ? { duration: 0.5 } : { type: "spring", stiffness: 400, damping: 30 }}
+            className="md:hidden fixed top-80 left-4 z-[100] touch-none cursor-pointer"
             role="alert"
             aria-live="polite"
+            style={{
+              boxShadow: shouldShake
+                ? "0 0 20px 4px rgba(235, 0, 40, 0.6), 0 4px 15px rgba(0,0,0,0.5)"
+                : "0 4px 15px rgba(0,0,0,0.5)"
+            }}
           >
-            <div className="bg-black/95 backdrop-blur-md border-t border-[#EB0028]/30 px-4 py-2.5 flex items-center justify-between">
-              {/* Left: Icon + Text */}
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 bg-[#EB0028] flex items-center justify-center shrink-0">
-                  <ShoppingBag className="w-4 h-4 text-white" />
-                </div>
-                <span className="font-orbitron font-bold text-[11px] text-white tracking-wide">
-                  MERCH LIVE
-                </span>
-              </div>
-
-              {/* Right: CTA + Close */}
-              <div className="flex items-center gap-2">
-                <Link href="/merch" onClick={handleClose}>
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    className="px-3 py-1.5 bg-[#EB0028] hover:bg-[#B71C1C] text-white font-clash font-medium text-[11px] tracking-wide uppercase transition-colors duration-200"
-                  >
-                    Shop
-                  </motion.button>
-                </Link>
-                <button
-                  onClick={handleClose}
-                  className="p-1.5 text-white/50 hover:text-white transition-colors"
-                  aria-label="Close notification"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
+            <div
+              className={`w-12 h-12 flex items-center justify-center transition-all duration-200 select-none ${isDragging
+                ? 'bg-[#B71C1C] scale-110'
+                : isOverDropZone
+                  ? 'bg-red-700 scale-90'
+                  : 'bg-[#EB0028]'
+                }`}
+            >
+              <ShoppingBag className="w-6 h-6 text-white" />
             </div>
           </motion.div>
+
+          {/* Drop zone - simple trash icon */}
+          <AnimatePresence>
+            {showDropZone && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                className="md:hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-[99]"
+              >
+                <motion.div
+                  animate={{
+                    scale: isOverDropZone ? 1.5 : 1,
+                    backgroundColor: isOverDropZone ? "rgba(239, 68, 68, 1)" : "rgba(0, 0, 0, 0.8)"
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="w-14 h-14 rounded-full flex items-center justify-center border border-white/20"
+                >
+                  <Trash2 className={`transition-all duration-200 ${isOverDropZone ? 'w-7 h-7 text-white' : 'w-5 h-5 text-white/60'}`} />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </>
       )}
     </AnimatePresence>
   );
 }
+
+

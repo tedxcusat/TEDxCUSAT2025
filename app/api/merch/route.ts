@@ -21,13 +21,14 @@ export async function POST(request: NextRequest) {
     const size = formData.get("size") as string;
     const price = parseFloat(formData.get("price") as string);
     const customerName = formData.get("customerName") as string;
+    const email = formData.get("email") as string;
     const phone = formData.get("phone") as string;
     const transactionId = formData.get("transactionId") as string;
     const address = formData.get("address") as string;
     const screenshot = formData.get("screenshot") as File;
 
     // Validate
-    if (!productId || !customerName || !transactionId || !address || !screenshot) {
+    if (!productId || !customerName || !email || !transactionId || !address || !screenshot) {
       return NextResponse.json(
         { success: false, message: "Missing required fields" },
         { status: 400 }
@@ -36,6 +37,7 @@ export async function POST(request: NextRequest) {
 
     // --- STEP 1: Upload the Screenshot Image ---
     const timestamp = Date.now();
+    // Sanitize transaction ID to be filename-safe
     const sanitizedId = transactionId.replace(/[^a-z0-9]/gi, '_');
     const imageExtension = screenshot.name.split(".").pop() || "png";
     const imageFilename = `receipts/${sanitizedId}-${timestamp}.${imageExtension}`;
@@ -58,8 +60,11 @@ export async function POST(request: NextRequest) {
     const orderData = {
       orderId: sanitizedId,
       timestamp: new Date().toISOString(),
+      verified: false, // Default is false until admin verifies payment proof
+      status: "pending", //'pending' | 'accepted' | 'rejected'
       customer: {
         name: customerName,
+        email: email,
         phone: phone,
         address: address,
       },
@@ -71,7 +76,7 @@ export async function POST(request: NextRequest) {
       },
       payment: {
         transactionId: transactionId,
-        screenshotUrl: screenshotUrl, // Link the image here
+        screenshotUrl: screenshotUrl,
       },
     };
 
@@ -81,7 +86,7 @@ export async function POST(request: NextRequest) {
     await r2.send(new PutObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME,
       Key: jsonFilename,
-      Body: JSON.stringify(orderData, null, 2), // Pretty print for readability
+      Body: JSON.stringify(orderData, null, 2),
       ContentType: "application/json",
     }));
 
