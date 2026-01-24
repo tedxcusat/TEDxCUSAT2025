@@ -19,7 +19,7 @@ const tickets = [
     price: "₹699",
     description: "Limited time offer for early bookings.",
     soldOut: false,
-    disabled: true,
+    disabled: false,
     link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=c8a47208-ac03-4724-8d2a-821f5afcdf79",
   },
   {
