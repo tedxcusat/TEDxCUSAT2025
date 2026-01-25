@@ -18,11 +18,10 @@ type Speaker = {
 
 const speakers: Speaker[] = [
   {
-    name: "To Be Announced",
-    title: "Guest Speaker",
-    description:
-      "Speaker details will be announced soon.",
-    img: "/speakers/mystery.jpg",
+    name: "Sujith Vaassudev",
+    title: "Cinematographer and Film Director",
+    description:"Sujith Vasudevan, professionally known as Sujith Vaassudev, is an acclaimed Indian cinematographer and director in modern Malayalam cinema. From camera assistant to independent cinematographer, he shaped iconic films like Drishyam and Lucifer with his visual storytelling. A Kerala State Award winner, he continues redefining cinematic language through bold visuals and direction today globally.",
+    img: "/speakers/Sujith.jpeg",
   },
   {
     name: "To Be Announced",
@@ -136,7 +135,7 @@ const SpeakerFlipCard = ({
               src={speaker.img}
               alt={speaker.name}
               fill
-              className="object-cover grayscale"
+              className="object-cover "
             />
             <div className="absolute inset-0 bg-[#E62B1E] mix-blend-multiply opacity-0 transition-opacity duration-300" />
           </div>
