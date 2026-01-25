@@ -97,17 +97,21 @@ const swipePower = (offset: number, velocity: number): number => Math.abs(offset
 const SpeakerFlipCard = ({
   speaker,
   className = "",
+  onFlip,
 }: {
   speaker: Speaker;
   className?: string;
+  onFlip?: (isOpen: boolean) => void;
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handleFlip = () => {
     if (!isAnimating) {
-      setIsFlipped(!isFlipped);
+      const newFlipState = !isFlipped;
+      setIsFlipped(newFlipState);
       setIsAnimating(true);
+      onFlip?.(newFlipState); 
     }
   };
 
@@ -467,7 +471,7 @@ export default function Newspeakers({
   useEffect(() => {
     let auto: gsap.core.Timeline | null = null;
 
-    if (openIndices.length === 0 && screenType !== 'mobile') {
+    if (openIndices.length === 0 && screenType !== "mobile") {
       auto = gsap.timeline({ repeat: -1 });
 
       auto.to(
@@ -483,6 +487,16 @@ export default function Newspeakers({
       auto?.kill();
     };
   }, [openIndices, screenType]);
+
+  const handleCardFlip = (index: number, isOpen: boolean) => {
+    setOpenIndices((prev) => {
+      if (isOpen) {
+        return [...prev, index];
+      } else {
+        return prev.filter((i) => i !== index);
+      }
+    });
+  };
 
   return (
     <section
@@ -710,7 +724,11 @@ export default function Newspeakers({
                       key={sp.name + i}
                       className={`absolute top-[2%] w-[16rem] sm:w-[15rem] md:w-[14rem] lg:w-[16rem] h-[28rem] md:h-[22rem] lg:h-[24rem] shadow-2xl overflow-visible will-change-transform z-10 perspective-1000`}
                     >
-                      <SpeakerFlipCard speaker={sp} className="h-full" />
+                      <SpeakerFlipCard
+                        speaker={sp}
+                        className="h-full"
+                        onFlip={(isOpen) => handleCardFlip(i, isOpen)}
+                      />
                     </div>
                   );
                 })}
