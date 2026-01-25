@@ -30,7 +30,7 @@ const coreTeam: CoreMember[] = [
   { name: "Sanjeev Shankar", role: "Sponsorship Lead", image: "/team/Sanjeev.jpg" },
   { name: "Shazia Nanakkal", role: "Curation Lead", image: "/team/Shazia.jpeg" },
   { name: "Anagha", role: "Curation Lead", image: "/team/Anagha.jpeg" },
-  { name: "Dhaliya Noushad", role: "Outreach Lead", image: "/team/Daliya.jpeg" },
+  { name: "Dhaliya Noushad", role: "Outreach Lead", image: "/team/Dhaliya.jpeg" },
   { name: "Riya Fathima", role: "Outreach Lead", image: "/team/Riya.jpeg" },
   { name: "Jenoo Liju", role: "Production Lead", image: "/team/Jenoo.jpeg" },
   { name: "Akshay S", role: "Production Lead", image: "/team/Akshay.jpeg" },
