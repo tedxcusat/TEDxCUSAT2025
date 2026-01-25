@@ -19,7 +19,7 @@ const tickets = [
     price: "₹699",
     description: "Limited time offer for early bookings.",
     soldOut: false,
-    disabled: true,
+    disabled: false,
     link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=c8a47208-ac03-4724-8d2a-821f5afcdf79",
   },
   {
@@ -28,7 +28,7 @@ const tickets = [
     description: "Access for current students with valid ID.",
     highlight: false,
     soldOut: false,
-    disabled: true,
+    disabled: false,
     link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=7ff49129-48bb-4354-92d5-0be2c21e947e"
   },
   {
@@ -37,7 +37,7 @@ const tickets = [
     description: "Special rate for CUSAT alumni.",
     highlight: false,
     soldOut: false,
-    disabled: true,
+    disabled: false,
     link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=f05cd3ca-613c-47d8-be83-6752f236328d",
   },
   {
@@ -46,7 +46,7 @@ const tickets = [
     description: "Access for students outside CUSAT.",
     highlight: false,
     soldOut: false,
-    disabled: true,
+    disabled: false,
     link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=d905ceb6-15e8-4bd5-a577-08da99e3df94",
   },
   {
@@ -55,13 +55,13 @@ const tickets = [
     description: "General access for professionals and guests.",
     highlight: false,
     soldOut: false,
-    disabled: true,
+    disabled: false,
     link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=600db8cf-6b62-460a-93b2-e0d357f75dac",
   }
 ];
 
 const sponsors = [
-  { name: "Sponsor 1", logo: "/infopark-logo.svg" }, // Placeholder logos
+  { name: "Sponsor 1", logo: "/infopark-logo.svg" },
   { name: "Sponsor 2", logo: "/makemypass-logo.svg" },
 ];
 
