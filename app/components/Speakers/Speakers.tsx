@@ -18,11 +18,10 @@ type Speaker = {
 
 const speakers: Speaker[] = [
   {
-    name: "To Be Announced",
-    title: "Guest Speaker",
-    description:
-      "Speaker details will be announced soon.",
-    img: "/speakers/mystery.jpg",
+    name: "Sujith Vaassudev",
+    title: "Cinematographer and Film Director",
+    description:"Sujith Vasudevan, professionally known as Sujith Vaassudev, is an acclaimed Indian cinematographer and director in modern Malayalam cinema. From camera assistant to independent cinematographer, he shaped iconic films like Drishyam and Lucifer with his visual storytelling. A Kerala State Award winner, he continues redefining cinematic language through bold visuals and direction today globally.",
+    img: "/speakers/Sujith.jpeg",
   },
   {
     name: "To Be Announced",
@@ -98,17 +97,21 @@ const swipePower = (offset: number, velocity: number): number => Math.abs(offset
 const SpeakerFlipCard = ({
   speaker,
   className = "",
+  onFlip,
 }: {
   speaker: Speaker;
   className?: string;
+  onFlip?: (isOpen: boolean) => void;
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handleFlip = () => {
     if (!isAnimating) {
-      setIsFlipped(!isFlipped);
+      const newFlipState = !isFlipped;
+      setIsFlipped(newFlipState);
       setIsAnimating(true);
+      onFlip?.(newFlipState); 
     }
   };
 
@@ -136,7 +139,7 @@ const SpeakerFlipCard = ({
               src={speaker.img}
               alt={speaker.name}
               fill
-              className="object-cover grayscale"
+              className="object-cover "
             />
             <div className="absolute inset-0 bg-[#E62B1E] mix-blend-multiply opacity-0 transition-opacity duration-300" />
           </div>
@@ -468,7 +471,7 @@ export default function Newspeakers({
   useEffect(() => {
     let auto: gsap.core.Timeline | null = null;
 
-    if (openIndices.length === 0 && screenType !== 'mobile') {
+    if (openIndices.length === 0 && screenType !== "mobile") {
       auto = gsap.timeline({ repeat: -1 });
 
       auto.to(
@@ -484,6 +487,16 @@ export default function Newspeakers({
       auto?.kill();
     };
   }, [openIndices, screenType]);
+
+  const handleCardFlip = (index: number, isOpen: boolean) => {
+    setOpenIndices((prev) => {
+      if (isOpen) {
+        return [...prev, index];
+      } else {
+        return prev.filter((i) => i !== index);
+      }
+    });
+  };
 
   return (
     <section
@@ -711,7 +724,11 @@ export default function Newspeakers({
                       key={sp.name + i}
                       className={`absolute top-[2%] w-[16rem] sm:w-[15rem] md:w-[14rem] lg:w-[16rem] h-[28rem] md:h-[22rem] lg:h-[24rem] shadow-2xl overflow-visible will-change-transform z-10 perspective-1000`}
                     >
-                      <SpeakerFlipCard speaker={sp} className="h-full" />
+                      <SpeakerFlipCard
+                        speaker={sp}
+                        className="h-full"
+                        onFlip={(isOpen) => handleCardFlip(i, isOpen)}
+                      />
                     </div>
                   );
                 })}
