@@ -24,11 +24,11 @@ const speakers: Speaker[] = [
     img: "/speakers/Sujith.jpeg",
   },
   {
-    name: "To Be Announced",
-    title: "Guest Speaker",
+    name: "Khaif Muhammed",
+    title: "Entrepreneur and CEO",
     description:
-      "Speaker details will be announced soon.",
-    img: "/speakers/mystery.jpg",
+      "Kerala-based entrepreneur and multipreneur Kaif Muhammed is shaping the fresh food and beverage space. Founder of Zee Sip, he expanded into Zee Commerce, Zee Chai, and BakeZee. Now CEO of Listo Beverages, he builds impactful brands while sharing practical insights on entrepreneurship, fundraising, branding, innovation, resilience, and startup growth through experience and execution.",
+    img: "/speakers/Khaif.jpeg",
   },
   {
     name: "To Be Announced",
