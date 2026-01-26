@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState, FormEvent, ChangeEvent, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowLeft, Upload } from "lucide-react";
@@ -11,20 +11,67 @@ interface PaymentSectionProps {
   size: string;
   onBack: () => void;
   onSuccess: () => void;
+  initialCoupon?: string;
 }
 
-export default function PaymentSection({ product, size, onBack, onSuccess }: PaymentSectionProps) {
+export default function PaymentSection({ product, size, onBack, onSuccess, initialCoupon = "" }: PaymentSectionProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [screenshot, setScreenshot] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>("");
 
   const [formData, setFormData] = useState({
     name: "",
-    email: "", // Added email state
+    email: "",
     phone: "",
     transactionId: "",
     address: "",
   });
+
+  // Referral State
+  const [couponCode, setCouponCode] = useState(initialCoupon || "");
+  const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
+  const [referralData, setReferralData] = useState<{ valid: boolean; referrer: string } | null>(null);
+  const [referralMessage, setReferralMessage] = useState("");
+
+  const handleVerifyCoupon = async () => {
+    if (!couponCode) return;
+    setIsValidatingCoupon(true);
+    setReferralMessage("");
+    try {
+      const res = await fetch("/api/coupons/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: couponCode }),
+      });
+      const data = await res.json();
+      if (data.success && data.valid) {
+        setReferralData({ valid: true, referrer: data.referrer });
+        setReferralMessage(`Referral applied! Supporting: ${data.referrer}`);
+      } else {
+        setReferralData({ valid: false, referrer: "" });
+        setReferralMessage("Invalid referral code");
+      }
+    } catch (e) {
+      setReferralMessage("Error checking code");
+    } finally {
+      setIsValidatingCoupon(false);
+    }
+  };
+
+  // Auto-validate if initialCoupon exists
+  const [hasAutoValidated, setHasAutoValidated] = useState(false);
+  if (initialCoupon && !hasAutoValidated && !referralData && !isValidatingCoupon) {
+    setHasAutoValidated(true);
+    // We need to call verification, but we can't call async in render.
+    // Use useEffect instead.
+  }
+
+  useEffect(() => {
+    if (initialCoupon && !referralData) {
+      handleVerifyCoupon();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run once on mount
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -64,11 +111,14 @@ export default function PaymentSection({ product, size, onBack, onSuccess }: Pay
       data.append("size", size);
       data.append("price", product.price.toString());
       data.append("customerName", formData.name);
-      data.append("email", formData.email); // Added email to payload
+      data.append("email", formData.email);
       data.append("phone", formData.phone);
       data.append("transactionId", formData.transactionId);
       data.append("address", formData.address);
       data.append("screenshot", screenshot);
+      if (referralData?.valid) {
+        data.append("couponCode", couponCode);
+      }
 
       const response = await fetch("/api/merch", {
         method: "POST",
@@ -146,7 +196,6 @@ export default function PaymentSection({ product, size, onBack, onSuccess }: Pay
                 />
               </div>
 
-              {/* Added Email Input Field */}
               <div>
                 <label className="block font-clash text-gray-400 text-sm mb-2">Email Address *</label>
                 <input
@@ -201,28 +250,67 @@ export default function PaymentSection({ product, size, onBack, onSuccess }: Pay
               </div>
 
               <div>
-                <label className="block font-clash text-gray-400 text-sm mb-2">Payment Screenshot *</label>
-                <div className="relative">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    required
-                    className="hidden"
-                    id="screenshot-upload"
-                  />
-                  <label
-                    htmlFor="screenshot-upload"
-                    className={`${inputClasses} flex items-center justify-center gap-2 cursor-pointer hover:border-[#EB0028]`}
-                  >
-                    <Upload size={20} />
-                    <span>{screenshot ? screenshot.name : "Upload Screenshot"}</span>
-                  </label>
+                <label
+                  htmlFor="screenshot-upload"
+                  className={`${inputClasses} flex items-center justify-center gap-2 cursor-pointer hover:border-[#EB0028]`}
+                >
+                  <Upload size={20} />
+                  <span>{screenshot ? screenshot.name : "Upload Screenshot"}</span>
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  required
+                  className="hidden"
+                  id="screenshot-upload"
+                />
+              </div>
+              {previewUrl && (
+                <div className="mt-3 relative w-32 h-32 border border-white/20">
+                  <Image src={previewUrl} alt="Preview" fill className="object-cover" />
                 </div>
-                {previewUrl && (
-                  <div className="mt-3 relative w-32 h-32 border border-white/20">
-                    <Image src={previewUrl} alt="Preview" fill className="object-cover" />
-                  </div>
+              )}
+
+              {/* Referral Code Section */}
+              <div className="pt-4 border-t border-white/10">
+                <label className="block font-clash text-gray-400 text-sm mb-2">Referral Code (Optional)</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    placeholder="TXC-XXXXXXXX"
+                    className={`${inputClasses} uppercase`}
+                    disabled={isValidatingCoupon || referralData?.valid}
+                  />
+                  {!referralData?.valid && (
+                    <button
+                      type="button"
+                      onClick={handleVerifyCoupon}
+                      disabled={!couponCode || isValidatingCoupon}
+                      className="px-4 py-2 bg-white/10 border border-white/20 text-white font-clash hover:bg-white/20 disabled:opacity-50 transition-colors"
+                    >
+                      {isValidatingCoupon ? "Checking..." : "Apply"}
+                    </button>
+                  )}
+                  {referralData?.valid && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setReferralData(null);
+                        setCouponCode("");
+                      }}
+                      className="px-4 py-2 bg-red-500/20 border border-red-500/40 text-red-400 font-clash hover:bg-red-500/30 transition-colors"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+                {referralMessage && (
+                  <p className={`mt-2 text-sm font-clash ${referralData?.valid ? "text-green-400" : "text-red-400"}`}>
+                    {referralMessage}
+                  </p>
                 )}
               </div>
 
