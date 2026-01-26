@@ -24,18 +24,18 @@ const speakers: Speaker[] = [
     img: "/speakers/Sujith.jpeg",
   },
   {
-    name: "Khaif Muhammed",
+    name: "Kaif Muhammad",
     title: "Entrepreneur and CEO",
     description:
-      "Kerala-based entrepreneur and multipreneur Kaif Muhammed is shaping the fresh food and beverage space. Founder of Zee Sip, he expanded into Zee Commerce, Zee Chai, and BakeZee. Now CEO of Listo Beverages, he builds impactful brands while sharing practical insights on entrepreneurship, fundraising, branding, innovation, resilience, and startup growth through experience and execution.",
+      "Kerala-based entrepreneur and multipreneur Kaif Muhammad is shaping the fresh food and beverage space. Founder of Zee Sip, he expanded into Zee Commerce, Zee Chai, and BakeZee. Now CEO of Listo Beverages, he builds impactful brands while sharing practical insights on entrepreneurship, fundraising, branding, innovation, resilience, and startup growth through experience and execution.",
     img: "/speakers/Khaif.jpeg",
   },
   {
-    name: "To Be Announced",
-    title: "Guest Speaker",
+    name: "Aparna Premraj",
+    title: "Entrepreneur and Influencer",
     description:
-      "Speaker details will be announced soon.",
-    img: "/speakers/mystery.jpg",
+      "Aparna Premraj is a versatile media personality working as a television anchor, model, and digital creator. Known for hosting the podcast 'Unfiltered by Aparna', she sparks honest conversations on culture, creativity, and growth. A LIVA Miss Diva 2023 participant from Kerala, Aparna inspires audiences through authentic storytelling, presence, and impactful social media content.",
+    img: "/speakers/Aparna.jpeg",
   },
   {
     name: "To Be Announced",
