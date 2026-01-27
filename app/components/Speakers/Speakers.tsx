@@ -38,32 +38,25 @@ const speakers: Speaker[] = [
     img: "/speakers/Aparna.jpeg",
   },
   {
-    name: "To Be Announced",
-    title: "Guest Speaker",
+    name: "Ahmad Al Kaashekh",
+    title: "Digital Creator and Standup Comedian",
     description:
-      "Speaker details will be announced soon.",
-    img: "/speakers/mystery.jpg",
+      "Ahmad Al Kaashekh is a multidisciplinary creator blending intellect, performance, and digital storytelling. Known for reaction videos, humor, and cultural insight, he creates with depth and authenticity. A content creator, astronomer, singer, and actor, he mastered creation early. Originally from Kerala and now based in the UAE, Ahmad focuses on connection and purpose.",
+    img: "/speakers/Ahmad.jpeg",
   },
   {
-    name: "To Be Announced",
-    title: "Guest Speaker",
+    name: "Dr. Fahed VP",
+    title: "Doctor and RFC Champion",
     description:
-      "Speaker details will be announced soon.",
-    img: "/speakers/mystery.jpg",
+      "Dr. Mohammed Fahed VP is an Ayurvedic doctor and accomplished off-road racer from Kerala. RFC India 2024 Champion, he dominated 26 grueling stages with co-driver Rajeev Lal to qualify for the Global Series Finale. Balancing medicine and motorsport, he mentors enthusiasts and exemplifies discipline, resilience, and passion through competition, community, and personal growth.",
+    img: "/speakers/Fahed.jpeg",
   },
   {
-    name: "To Be Announced",
-    title: "Guest Speaker",
+    name: "Sreeraj Gopi",
+    title: "Innovator and Scientist",
     description:
-      "Speaker details will be announced soon.",
-    img: "/speakers/mystery.jpg",
-  },
-  {
-    name: "To Be Announced",
-    title: "Guest Speaker",
-    description:
-      "Speaker details will be announced soon.",
-    img: "/speakers/mystery.jpg",
+      "From a small village in Kerala to the global stage, Dr. Sreeraj Gopi is a world-renowned scientist in natural products, nanotechnology, and drug delivery. Founder of Molecules Biolabs, he holds 75+ patents, 125+ publications, ranks in Stanford’s top 2%, and pioneers liposomal technologies impacting over 50 countries worldwide as a global advisor today.",
+    img: "/speakers/Sreeraj.jpeg",
   },
 ];
 
@@ -111,7 +104,7 @@ const SpeakerFlipCard = ({
       const newFlipState = !isFlipped;
       setIsFlipped(newFlipState);
       setIsAnimating(true);
-      onFlip?.(newFlipState); 
+      onFlip?.(newFlipState);
     }
   };
 
@@ -207,6 +200,7 @@ export default function Newspeakers({
   const cardsContainerRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
   const startIndex = useRef(0);
+  const lastStartIndex = useRef(0);
   const isManual = useRef(false);
   const isAnimating = useRef(false);
   const [screenType, setScreenType] = useState<"mobile" | "tablet" | "desktop">("desktop");
@@ -367,6 +361,17 @@ export default function Newspeakers({
         duration: 6,
       };
 
+    // Detect wrap direction
+    const diff = startIndex.current - lastStartIndex.current;
+    const isNext = diff === 1 || diff === -(total - 1);
+    const isPrev = diff === -1 || diff === (total - 1);
+
+    // Create a main timing tween to return. This decouples the "global" completion
+    // from individual card tweens, allowing us to use onComplete on cards safely.
+    // Use a dummy object to animate so we don't affect DOM.
+    const mainDuration = isManual.current ? 0.7 : config.duration;
+    let mainTween = gsap.to({}, { duration: mainDuration });
+
     cardRefs.current.forEach((card, i) => {
       if (!card) return;
 
@@ -378,20 +383,65 @@ export default function Newspeakers({
       const rotFactor = Math.abs(offset) <= 1 ? 5.5 : 4.8;
       const rotation = offset * rotFactor;
 
-      animate(card, {
-        x: offset * (config.width + config.gap),
-        y: config.baseY + Math.abs(offset) * config.yOffsetBase + (offset === 0 ? config.yOffsetCenter : 0),
-        rotation: rotation,
-        opacity: Math.abs(offset) > config.visibleRange ? 0 : 1,
+      let targetX = offset * (config.width + config.gap);
+      let targetY = config.baseY + Math.abs(offset) * config.yOffsetBase + (offset === 0 ? config.yOffsetCenter : 0);
+      let targetRot = rotation;
+      let targetOpacity = Math.abs(offset) > config.visibleRange ? 0 : 1;
+
+      // Standard Animation Vars
+      const vars: gsap.TweenVars = {
+        x: targetX,
+        y: targetY,
+        rotation: targetRot,
+        opacity: targetOpacity,
         immediateRender: false,
-        duration: isManual.current ? 0.7 : config.duration,
+        duration: mainDuration,
         ease: "linear",
         overwrite: "auto",
-        zIndex: Math.abs(offset) === 0 ? 50 : 10, // Ensure center card is on top
-      });
+        zIndex: Math.abs(offset) === 0 ? 50 : 10,
+      };
+
+      // Wrap-around fix: Prevent flying across screen
+      if (isNext && offset === 3) {
+        // Moving Left: Card wraps from -2 to 3. 
+        // 1. Force it to animate to virtual -3 (Hidden Left) instead of flying Right.
+        const virtualOffset = -3;
+        vars.x = virtualOffset * (config.width + config.gap);
+        vars.y = config.baseY + Math.abs(virtualOffset) * config.yOffsetBase;
+        vars.rotation = virtualOffset * 4.8;
+        vars.opacity = 0;
+
+        // 2. AFTER it fades out at -3, silently move it to +3 (Hidden Right)
+        // so it's ready to enter from the Right on the next step.
+        vars.onComplete = () => {
+          const resetOffset = 3;
+          gsap.set(card, {
+            x: resetOffset * (config.width + config.gap),
+            y: config.baseY + Math.abs(resetOffset) * config.yOffsetBase,
+            rotation: resetOffset * 4.8,
+            opacity: 0
+          });
+        };
+      }
+
+      if (isPrev && offset === -2) {
+        // Moving Right: Card wraps from 3 to -2. 
+        // Snap it to virtual -3 (Hidden Left) BEFORE animating to -2.
+        const virtualOffset = -3;
+        gsap.set(card, {
+          x: virtualOffset * (config.width + config.gap),
+          y: config.baseY + Math.abs(virtualOffset) * config.yOffsetBase,
+          rotation: virtualOffset * 4.8,
+          opacity: 0,
+        });
+      }
+
+      animate(card, vars);
     });
 
-    return lastTween;
+    lastStartIndex.current = startIndex.current;
+
+    return mainTween;
   };
 
   useEffect(() => {
@@ -668,7 +718,7 @@ export default function Newspeakers({
           {/* Cards Area */}
           <div
             ref={cardsContainerRef}
-            className={`relative flex items-center justify-center overflow-hidden opacity-0 mt-12 md:mt-5 transition-all duration-300
+            className={`relative flex items-center justify-center overflow-hidden opacity-0 mt-12 md:mt-5 transition-all duration-300 z-20
               ${screenType === 'mobile' ? 'h-[440px]' : 'h-[25rem] md:h-[31.25rem]'}
             `}
           >
