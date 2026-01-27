@@ -38,25 +38,25 @@ const speakers: Speaker[] = [
     img: "/speakers/Aparna.jpeg",
   },
   {
-    name: "To Be Announced",
-    title: "Guest Speaker",
+    name: "Ahmad Al Kaashekh",
+    title: "Digital Creator and Standup Comedian",
     description:
-      "Speaker details will be announced soon.",
-    img: "/speakers/mystery.jpg",
+      "Ahmad Al Kaashekh is a multidisciplinary creator blending intellect, performance, and digital storytelling. Known for reaction videos, humor, and cultural insight, he creates with depth and authenticity. A content creator, astronomer, singer, and actor, he mastered creation early. Originally from Kerala and now based in the UAE, Ahmad focuses on connection and purpose.",
+    img: "/speakers/Ahmad.jpeg",
   },
   {
-    name: "To Be Announced",
-    title: "Guest Speaker",
+    name: "Dr. Fahed VP",
+    title: "Doctor and RFC Champion",
     description:
-      "Speaker details will be announced soon.",
-    img: "/speakers/mystery.jpg",
+      "Dr. Mohammed Fahed VP is an Ayurvedic doctor and accomplished off-road racer from Kerala. RFC India 2024 Champion, he dominated 26 grueling stages with co-driver Rajeev Lal to qualify for the Global Series Finale. Balancing medicine and motorsport, he mentors enthusiasts and exemplifies discipline, resilience, and passion through competition, community, and personal growth.",
+    img: "/speakers/Fahed.jpeg",
   },
   {
-    name: "To Be Announced",
-    title: "Guest Speaker",
+    name: "Sreeraj Gopi",
+    title: "Innovator and Scientist",
     description:
-      "Speaker details will be announced soon.",
-    img: "/speakers/mystery.jpg",
+      "From a small village in Kerala to the global stage, Dr. Sreeraj Gopi is a world-renowned scientist in natural products, nanotechnology, and drug delivery. Founder of Molecules Biolabs, he holds 75+ patents, 125+ publications, ranks in Stanford’s top 2%, and pioneers liposomal technologies impacting over 50 countries worldwide as a global advisor today.",
+    img: "/speakers/Sreeraj.jpeg",
   },
 ];
 
