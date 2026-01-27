@@ -14,7 +14,7 @@ export const products: Product[] = [
     id: "tshirt-genesis",
     name: "Genesis Tee",
     price: 369,
-    description: "Premium cotton t-shirt featuring the iconic TEDxCUSAT Genesis design. Comfortable fit with screen-printed artwork.",
+    description: "A clean streetwear-style tee with a small front logo and the large-scale, intricate 'Genesis' phoenix illustration centered across the shoulders and back.",
     images: [
       "/merch/products/tshirt-3.png",
       "/merch/products/tshirt-2.png",
@@ -27,7 +27,7 @@ export const products: Product[] = [
     id: "hoodie-genesis",
     name: "Genesis Hoodie",
     price: 749,
-    description: "Cozy fleece-lined hoodie with embroidered TEDxCUSAT logo. Perfect for those cool evenings.",
+    description: "This hoodie features a minimalist TEDxCUSAT chest logo on the front and a bold, detailed white phoenix graphic on the back titled 'Genesis' with red accents and '2026' branding.",
     images: [
       "/merch/products/hoodie-3.png",
       "/merch/products/hoodie-2.png",
