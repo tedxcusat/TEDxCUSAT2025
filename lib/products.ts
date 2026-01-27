@@ -13,16 +13,16 @@ export const products: Product[] = [
   {
     id: "tshirt-genesis",
     name: "Genesis Tee",
-    price: 399,
+    price: 369,
     description: "Premium cotton t-shirt featuring the iconic TEDxCUSAT Genesis design. Comfortable fit with screen-printed artwork.",
     images: [
       "/merch/products/tshirt-1.png",
       "/merch/products/tshirt-1.png",
       "/merch/products/tshirt-1.png",
     ],
-    sizes: ["S", "M", "L", "XL", "XXL"],
+    sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
     inStock: true,
-    disabled: false,
+    disabled: true,
   },
   {
     id: "hoodie-genesis",
@@ -34,7 +34,7 @@ export const products: Product[] = [
       "/merch/products/hoodie-1.png",
       "/merch/products/hoodie-1.png",
     ],
-    sizes: ["S", "M", "L", "XL", "XXL"],
+    sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
     inStock: true,
     disabled: true,
   },

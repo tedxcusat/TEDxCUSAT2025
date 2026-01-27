@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Product } from "@/lib/products";
 import SizeSelector from "@/app/components/merch/SizeSelector";
+import SizeChartModal from "@/app/components/merch/SizeChartModal";
 
 interface ProductDetailProps {
   product: Product;
@@ -16,6 +17,7 @@ interface ProductDetailProps {
 export default function ProductDetail({ product, onClose, onBuy }: ProductDetailProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string>("");
+  const [showSizeChart, setShowSizeChart] = useState(false);
 
   const nextImage = () => {
     setCurrentImageIndex((prev) =>
@@ -144,6 +146,14 @@ export default function ProductDetail({ product, onClose, onBuy }: ProductDetail
               onSelect={setSelectedSize}
             />
 
+            {/* Size Chart Link */}
+            <button
+              onClick={() => setShowSizeChart(true)}
+              className="font-clash text-sm text-gray-400 hover:text-[#EB0028] underline underline-offset-4 mt-2 mb-0 transition-colors self-start"
+            >
+              View Size Chart
+            </button>
+
             {/* Buy Button */}
             <motion.button
               whileHover={{ scale: 1.02 }}
@@ -151,10 +161,10 @@ export default function ProductDetail({ product, onClose, onBuy }: ProductDetail
               onClick={handleBuy}
               disabled={!selectedSize || !product.inStock || product.disabled}
               className={`w-full py-4 mt-8 font-clash font-bold text-lg tracking-wide uppercase transition-all duration-300 ${product.disabled
-                  ? "bg-gray-800 text-gray-500 cursor-not-allowed"
-                  : selectedSize && product.inStock
-                    ? "bg-[#EB0028] hover:bg-[#c00020] text-white cursor-pointer"
-                    : "bg-gray-800 text-gray-500 cursor-not-allowed"
+                ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                : selectedSize && product.inStock
+                  ? "bg-[#EB0028] hover:bg-[#c00020] text-white cursor-pointer"
+                  : "bg-gray-800 text-gray-500 cursor-not-allowed"
                 }`}
             >
               {!product.inStock ? "Out of Stock" : product.disabled ? "Coming Soon" : selectedSize ? "Buy Now" : "Select Size"}
@@ -166,6 +176,11 @@ export default function ProductDetail({ product, onClose, onBuy }: ProductDetail
         <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#EB0028]" />
         <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#EB0028]" />
       </motion.div>
+
+      {/* Size Chart Modal */}
+      <AnimatePresence>
+        {showSizeChart && <SizeChartModal onClose={() => setShowSizeChart(false)} />}
+      </AnimatePresence>
     </motion.div>
   );
 }
