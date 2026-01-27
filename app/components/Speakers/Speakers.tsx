@@ -111,7 +111,7 @@ const SpeakerFlipCard = ({
       const newFlipState = !isFlipped;
       setIsFlipped(newFlipState);
       setIsAnimating(true);
-      onFlip?.(newFlipState); 
+      onFlip?.(newFlipState);
     }
   };
 
@@ -668,7 +668,7 @@ export default function Newspeakers({
           {/* Cards Area */}
           <div
             ref={cardsContainerRef}
-            className={`relative flex items-center justify-center overflow-hidden opacity-0 mt-12 md:mt-5 transition-all duration-300
+            className={`relative flex items-center justify-center overflow-hidden opacity-0 mt-12 md:mt-5 transition-all duration-300 z-20
               ${screenType === 'mobile' ? 'h-[440px]' : 'h-[25rem] md:h-[31.25rem]'}
             `}
           >

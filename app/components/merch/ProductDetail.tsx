@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Product } from "@/lib/products";
@@ -14,21 +14,48 @@ interface ProductDetailProps {
   onBuy: (product: Product, size: string) => void;
 }
 
+const variants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 300 : -300,
+    opacity: 0,
+  }),
+  center: {
+    zIndex: 1,
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    zIndex: 0,
+    x: direction < 0 ? 300 : -300,
+    opacity: 0,
+  }),
+};
+
+const swipeConfidenceThreshold = 10000;
+const swipePower = (offset: number, velocity: number) => {
+  return Math.abs(offset) * velocity;
+};
+
+const wrap = (min: number, max: number, v: number) => {
+  const range = max - min;
+  return ((((v - min) % range) + range) % range) + min;
+};
+
 export default function ProductDetail({ product, onClose, onBuy }: ProductDetailProps) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [[page, direction], setPage] = useState([0, 0]);
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [showSizeChart, setShowSizeChart] = useState(false);
 
-  const nextImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev === product.images.length - 1 ? 0 : prev + 1
-    );
+  // We only have 3 images, so we can wrap the index
+  const imageIndex = wrap(0, product.images.length, page);
+
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
   };
 
-  const prevImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? product.images.length - 1 : prev - 1
-    );
+  const jumpTo = (index: number) => {
+    const direction = index > imageIndex ? 1 : -1;
+    setPage([index, direction]);
   };
 
   const handleBuy = () => {
@@ -67,42 +94,60 @@ export default function ProductDetail({ product, onClose, onBuy }: ProductDetail
           {/* Image Gallery */}
           <div className="relative bg-gradient-to-br from-gray-900 to-black">
             {/* Main Image */}
-            <div className="relative aspect-square">
-              <AnimatePresence mode="wait">
+            <div className="relative aspect-square overflow-hidden">
+              <AnimatePresence initial={false} custom={direction} mode="popLayout">
                 <motion.div
-                  key={currentImageIndex}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute inset-0"
+                  key={page}
+                  custom={direction}
+                  variants={variants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{
+                    x: { type: "spring", stiffness: 300, damping: 30 },
+                    opacity: { duration: 0.2 },
+                  }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={1}
+                  onDragEnd={(e, { offset, velocity }: PanInfo) => {
+                    const swipe = swipePower(offset.x, velocity.x);
+
+                    if (swipe < -swipeConfidenceThreshold) {
+                      paginate(1);
+                    } else if (swipe > swipeConfidenceThreshold) {
+                      paginate(-1);
+                    }
+                  }}
+                  className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing"
                 >
                   <Image
-                    src={product.images[currentImageIndex]}
-                    alt={`${product.name} - Image ${currentImageIndex + 1}`}
+                    src={product.images[imageIndex]}
+                    alt={`${product.name} - Image ${imageIndex + 1}`}
                     fill
                     className="object-contain p-8"
                     unoptimized
+                    draggable={false}
                   />
                 </motion.div>
               </AnimatePresence>
 
               {/* Red Glow */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(235,0,40,0.1)_0%,_transparent_60%)]" />
+              <div className="absolute inset-0" />
             </div>
 
             {/* Navigation Arrows */}
             {product.images.length > 1 && (
               <>
                 <button
-                  onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-black/50 border border-white/30 hover:border-[#EB0028] hover:text-[#EB0028] transition-colors"
+                  onClick={(e) => { e.stopPropagation(); paginate(-1); }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-black/50 border border-white/30 hover:border-[#EB0028] hover:text-[#EB0028] transition-colors"
                 >
                   <ChevronLeft size={20} />
                 </button>
                 <button
-                  onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-black/50 border border-white/30 hover:border-[#EB0028] hover:text-[#EB0028] transition-colors"
+                  onClick={(e) => { e.stopPropagation(); paginate(1); }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-black/50 border border-white/30 hover:border-[#EB0028] hover:text-[#EB0028] transition-colors"
                 >
                   <ChevronRight size={20} />
                 </button>
@@ -115,8 +160,8 @@ export default function ProductDetail({ product, onClose, onBuy }: ProductDetail
                 {product.images.map((_, index) => (
                   <button
                     key={index}
-                    onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(index); }}
-                    className={`w-2 h-2 rounded-full transition-colors ${index === currentImageIndex ? "bg-[#EB0028]" : "bg-white/30 hover:bg-white/50"
+                    onClick={(e) => { e.stopPropagation(); jumpTo(index); }}
+                    className={`w-2 h-2 rounded-full transition-colors z-20 ${index === imageIndex ? "bg-[#EB0028]" : "bg-white/30 hover:bg-white/50"
                       }`}
                   />
                 ))}
