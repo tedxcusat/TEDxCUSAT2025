@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import nodemailer from "nodemailer";
 
 // 1. Initialize R2 Client
@@ -159,6 +159,7 @@ export async function POST(request: NextRequest) {
     const transactionId = formData.get("transactionId") as string;
     const address = formData.get("address") as string;
     const screenshot = formData.get("screenshot") as File;
+    const couponCode = formData.get("couponCode") as string; // Optional
 
     // Validate
     if (
@@ -173,6 +174,33 @@ export async function POST(request: NextRequest) {
         { success: false, message: "Missing required fields" },
         { status: 400 },
       );
+    }
+
+    // --- STEP 0: Process Coupon (if exists) ---
+    let validatedCouponCode = null;
+    let validatedReferrer = null;
+
+    if (couponCode) {
+      try {
+        const couponKey = `coupons/coupon-${couponCode}.json`;
+        const getCommand = new GetObjectCommand({
+          Bucket: process.env.R2_BUCKET_NAME,
+          Key: couponKey,
+        });
+        const response = await r2.send(getCommand);
+        const str = await response.Body?.transformToString();
+
+        if (str) {
+          const couponData = JSON.parse(str);
+          // Only verify existence. Usage counting is done by aggregation.
+
+          validatedCouponCode = couponCode;
+          validatedReferrer = couponData.referrer;
+        }
+      } catch (e) {
+        console.error("Error processing coupon:", e);
+        // We continue even if coupon fails, but we don't record it
+      }
     }
 
     // --- STEP 1: Upload the Screenshot Image ---
@@ -220,6 +248,10 @@ export async function POST(request: NextRequest) {
         transactionId: transactionId,
         screenshotUrl: screenshotUrl,
       },
+      referral: validatedCouponCode ? {
+        code: validatedCouponCode,
+        referrer: validatedReferrer
+      } : null
     };
 
     // Upload this JSON object as a file to R2
@@ -238,7 +270,7 @@ export async function POST(request: NextRequest) {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
-      secure: true, // MUST be true for 465
+      secure: process.env.SMTP_SECURE === "true",
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
