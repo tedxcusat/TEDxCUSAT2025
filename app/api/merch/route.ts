@@ -72,7 +72,7 @@ function getOrderEmailHTML(params: {
                 Thank you for your order!
               </h2>
               <p style="color:#6b7280;font-size:16px">
-                Hi <strong>${customerName}</strong>, we’ve received your order.
+                Hi <strong>${customerName}</strong>, we’ve placed your order.
               </p>
               <p style="color:#9ca3af;font-size:14px; line-height: 1.6;">
                 We will notify you once your order is confirmed.
@@ -81,41 +81,45 @@ function getOrderEmailHTML(params: {
           </tr>
 
           <!-- Order Details -->
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f9fafb; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e7eb;">
-                                <tr>
-                                    <td style="padding: 24px;">
-                                        <h3 style="margin: 0 0 16px 0; color: #1f2937; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">Order Details</h3>
-                                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                                            <tr>
-                                                <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Order ID</td>
-                                                <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-family: monospace;">#${orderId.toUpperCase()}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Product</td>
-                                                <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right;">${productName}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Size</td>
-                                                <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right;">${size}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Transaction ID</td>
-                                                <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-family: monospace;">${transactionId}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" style="padding-top: 16px; border-top: 1px solid #e5e7eb;">
-                                                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                                                        <tr>
-                                                            <td style="color: #1f2937; font-size: 18px; font-weight: bold;">Total Paid</td>
-                                                            <td style="color: #16a34a; font-size: 18px; font-weight: bold; text-align: right;">₹${price.toLocaleString("en-IN")}</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
+          <tr>
+            <td style="padding: 0 32px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f9fafb; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e7eb;">
+                <tr>
+                  <td style="padding: 24px;">
+                    <h3 style="margin: 0 0 16px 0; color: #1f2937; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">Order Details</h3>
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Order ID</td>
+                        <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-family: monospace;">#${orderId.toUpperCase()}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Product</td>
+                        <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right;">${productName}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Size</td>
+                        <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right;">${size}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Transaction ID</td>
+                        <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-family: monospace;">${transactionId}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" style="padding-top: 16px; border-top: 1px solid #e5e7eb;">
+                          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                            <tr>
+                              <td style="color: #1f2937; font-size: 18px; font-weight: bold;">Total Paid</td>
+                              <td style="color: #16a34a; font-size: 18px; font-weight: bold; text-align: right;">₹${price.toLocaleString("en-IN")}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
           <!-- Address -->
           <tr>
@@ -182,24 +186,42 @@ export async function POST(request: NextRequest) {
 
     if (couponCode) {
       try {
-        const couponKey = `coupons/coupon-${couponCode}.json`;
+        // Try new Referral system first
+        const referralKey = `referrals/ref-${couponCode}.json`;
         const getCommand = new GetObjectCommand({
           Bucket: process.env.R2_BUCKET_NAME,
-          Key: couponKey,
+          Key: referralKey,
         });
         const response = await r2.send(getCommand);
         const str = await response.Body?.transformToString();
 
         if (str) {
-          const couponData = JSON.parse(str);
-          // Only verify existence. Usage counting is done by aggregation.
-
+          const referralData = JSON.parse(str);
           validatedCouponCode = couponCode;
-          validatedReferrer = couponData.referrer;
+          validatedReferrer = referralData.referrer;
         }
-      } catch (e) {
-        console.error("Error processing coupon:", e);
-        // We continue even if coupon fails, but we don't record it
+      } catch (e: any) {
+        if (e.name !== 'NoSuchKey') {
+          console.error("Error processing referral:", e);
+        }
+
+        // Fallback: Check for legacy coupons (optional, can be removed if strictly deprecated)
+        try {
+          const couponKey = `coupons/coupon-${couponCode}.json`;
+          const getCommand = new GetObjectCommand({
+            Bucket: process.env.R2_BUCKET_NAME,
+            Key: couponKey,
+          });
+          const response = await r2.send(getCommand);
+          const str = await response.Body?.transformToString();
+          if (str) {
+            const couponData = JSON.parse(str);
+            validatedCouponCode = couponCode;
+            validatedReferrer = couponData.referrer;
+          }
+        } catch (legacyError) {
+          // Ignore legacy errors
+        }
       }
     }
 
@@ -280,7 +302,7 @@ export async function POST(request: NextRequest) {
     const mailOptions = {
       from: `"TEDxCUSAT Merch" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: `Order Received - #${sanitizedId.toUpperCase()} | TEDxCUSAT`,
+      subject: `Order Placed - #${sanitizedId.toUpperCase()} | TEDxCUSAT`,
       html: getOrderEmailHTML({
         customerName,
         orderId: sanitizedId,

@@ -154,9 +154,10 @@ export default function Footer({ startAnimation = false }: { startAnimation?: bo
             {/* Map */}
             <div className="my-8 h-[200px] md:h-[260px] w-full border border-white/30 overflow-hidden">
               <iframe
-                title="Seminar Complex, CUSAT"
-                src="https://www.google.com/maps?q=2956+JM8,+Athulya+Rd,+Infopark+Campus,+Kakkanad,+Kerala+682042&output=embed"
+                title="Athulya Hall Map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d491.9871703379792!2d76.35881086686064!3d10.0100123609999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080c9d3187a329%3A0xd94d7ee5b1619cf!2sAthulya%20Hall!5e0!3m2!1sen!2sus!4v1769549107413!5m2!1sen!2sus"
                 className="h-full w-full"
+                allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />

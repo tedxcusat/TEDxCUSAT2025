@@ -174,7 +174,7 @@ export default function MerchPage() {
             size={selectedSize}
             onBack={handleBackFromPayment}
             onSuccess={handlePaymentSuccess}
-            initialCoupon={new URLSearchParams(window.location.search).get("coupon") || ""}
+            initialCoupon={new URLSearchParams(window.location.search).get("ref") || new URLSearchParams(window.location.search).get("coupon") || ""}
           />
         )}
       </AnimatePresence>

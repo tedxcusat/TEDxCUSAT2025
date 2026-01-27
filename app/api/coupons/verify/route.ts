@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: "Code is required" }, { status: 400 });
     }
 
-    const filename = `coupons/coupon-${code}.json`;
+    const filename = `referrals/ref-${code}.json`;
 
     try {
       const getCommand = new GetObjectCommand({
