@@ -8,6 +8,8 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
+
+
 type CoreMember = {
   name: string;
   role: string;
@@ -16,9 +18,11 @@ type CoreMember = {
 
 type TechMember = {
   name: string;
+  role: string;
   image: string;
   github?: string;
   linkedin?: string;
+  behance?: string;
 };
 
 const coreTeam: CoreMember[] = [
@@ -46,54 +50,71 @@ const coreTeam: CoreMember[] = [
 const techTeam: TechMember[] = [
   {
     name: "Abdul Rayif",
+    role: "Tech Lead",
     image: "/team/Rayif.jpeg",
     github: "https://github.com/Abdulrayifvp",
     linkedin: "https://www.linkedin.com/in/rayifvp",
   },
   {
     name: "Arun Mathew Ajay",
+    role: "Developer",
     image: "/team/ArunM.jpeg",
     github: "https://github.com/BluJay04",
     linkedin: "https://www.linkedin.com/in/arunmathewajay",
   },
   {
     name: "Shreya Nithin",
+    role: "Developer",
     image: "/team/Shreya.jpeg",
     github: "https://github.com/shreyanithin",
     linkedin: "https://www.linkedin.com/in/shreya-nithin-874872277",
   },
   {
     name: "Akarsh Balachandran",
+    role: "Designer",
     image: "/team/Akarsh.jpeg",
     github: "https://github.com/akrsh47",
     linkedin: "https://www.linkedin.com/in/akarshbalachandran",
   },
   {
+    name: "Suraj Sunil",
+    role: "Designer",
+    image: "/team/Suraj.png",
+    github: "https://github.com/thisisonebit",
+    linkedin: "https://www.linkedin.com/in/itssurajsunil",
+    behance: "https://www.behance.net/surajsunil1",
+  },
+  {
     name: "Sebin Thomas",
+    role: "Developer",
     image: "/team/Sebin.jpeg",
     github: "https://github.com/Abyssalwolf",
     linkedin: "https://www.linkedin.com/in/sebinthomas78",
   },
   {
     name: "Shiva Sajay",
+    role: "Developer",
     image: "/team/Shiva.jpeg",
     github: "https://github.com/shivaacodes",
     linkedin: "https://www.linkedin.com/in/shiva-sajay-03a473288",
   },
   {
     name: "Josh Joseph",
+    role: "Developer",
     image: "/team/Josh.jpeg",
     github: "https://github.com/JoshJoseph1234",
     linkedin: "https://www.linkedin.com/in/josh-joseph-b90a2829a",
   },
   {
     name: "Adithya Menon",
+    role: "Developer",
     image: "/team/Adithya.jpeg",
     github: "https://github.com/apm2004",
     linkedin: "https://www.linkedin.com/in/adithya-p-menon",
   },
   {
     name: "Akshay Sunil",
+    role: "Developer",
     image: "/team/Java.jpg",
     github: "https://github.com/Akshay6405",
     linkedin: "https://www.linkedin.com/in/akshay-sunil-b541b825a",
@@ -259,6 +280,7 @@ export default function TeamPage() {
                         src={member.image}
                         alt={member.name}
                         fill
+                        unoptimized
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       />
@@ -269,6 +291,9 @@ export default function TeamPage() {
                       <h3 className="text-base font-medium text-[#EB0028] font-clash">
                         {member.name}
                       </h3>
+                      <p className="mt-[0.25rem] text-sm text-white/60">
+                        {member.role}
+                      </p>
 
                       <div className="mt-[0.75rem] flex gap-[1rem]">
                         {member.github && (
@@ -292,6 +317,24 @@ export default function TeamPage() {
                             className="text-white/60 transition"
                           >
                             <Linkedin size={18} />
+                          </motion.a>
+                        )}
+
+                        {member.behance && (
+                          <motion.a
+                            whileHover={{ scale: 1.2 }}
+                            href={member.behance}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="transition"
+                          >
+                            <Image
+                              src="/behance.png"
+                              alt="Behance"
+                              width={18}
+                              height={18}
+                              className="opacity-60 hover:opacity-100 transition-opacity"
+                            />
                           </motion.a>
                         )}
                       </div>
