@@ -89,6 +89,18 @@ export default function PaymentSection({ product, size, onBack, onSuccess, initi
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    // 0. Validate Referral Code
+    if (couponCode.trim() !== "") {
+      if (isValidatingCoupon) {
+        alert("Please wait for referral code validation.");
+        return;
+      }
+      if (!referralData?.valid) {
+        alert("Please enter a valid referral code or clear the field.");
+        return;
+      }
+    }
+
     // 1. Validate Email Format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
