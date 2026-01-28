@@ -20,6 +20,7 @@ const tickets = [
     description: "Limited time offer for early bookings.",
     soldOut: false,
     disabled: false,
+    label: "Few tickets left",
     link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=c8a47208-ac03-4724-8d2a-821f5afcdf79",
   },
   {
@@ -216,7 +217,7 @@ export default function TicketsPage() {
             >
               {/* Card Content */}
               <div>
-                <h3 className="font-orbitron font-bold text-2xl tracking-wider mb-2 text-white">
+                <h3 className="font-orbitron font-bold text-2xl tracking-wider mb-2 text-white flex items-center gap-3">
                   {ticket.type}
                 </h3>
                 <div className="h-0.5 w-15 bg-[#EB0028] mb-6"></div>
@@ -229,13 +230,20 @@ export default function TicketsPage() {
               </div>
 
               {/* Book Button */}
+              {/* @ts-ignore */}
+              {ticket.label && !ticket.soldOut && !ticket.disabled && (
+                <p className="text-[#EB0028] font-clash font-bold text-sm tracking-wider uppercase animate-pulse">
+                  {/* @ts-ignore */}
+                  {ticket.label}
+                </p>
+              )}
               <button
                 onClick={() => ticket.link && window.open(ticket.link, "_blank")}
                 disabled={ticket.soldOut || ticket.disabled}
-                className={`w-full py-4 mt-8 bg-transparent border font-clash font-medium tracking-wide transition-colors duration-300 uppercase
+                className={`w-full py-4 bg-transparent border font-clash font-medium tracking-wide transition-colors duration-300 uppercase
                   ${ticket.soldOut || ticket.disabled
-                    ? 'border-white/20 text-white/40 cursor-not-allowed'
-                    : 'border-[#EB0028] text-white hover:bg-[#EB0028]'
+                    ? 'border-white/20 text-white/40 cursor-not-allowed hidden'
+                    : 'border-[#EB0028] text-white hover:bg-[#EB0028] mt-0'
                   }
                 `}
               >
