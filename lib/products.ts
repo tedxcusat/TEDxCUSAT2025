@@ -16,8 +16,8 @@ export const products: Product[] = [
     price: 369,
     description: "A clean streetwear-style tee with a small front logo and the large-scale, intricate 'Genesis' phoenix illustration centered across the shoulders and back.",
     images: [
-      "/merch/products/tshirt-3.png",
-      "/merch/products/tshirt-2.png",
+      "/merch/products/tshirt-5.png",
+      "/merch/products/tshirt-4.png",
     ],
     sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
     inStock: true,
@@ -29,8 +29,8 @@ export const products: Product[] = [
     price: 749,
     description: "This hoodie features a minimalist TEDxCUSAT chest logo on the front and a bold, detailed white phoenix graphic on the back titled 'Genesis' with red accents and '2026' branding.",
     images: [
-      "/merch/products/hoodie-3.png",
-      "/merch/products/hoodie-2.png",
+      "/merch/products/hoodie-5.png",
+      "/merch/products/hoodie-4.png",
     ],
     sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
     inStock: true,
