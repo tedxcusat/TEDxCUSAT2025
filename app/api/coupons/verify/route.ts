@@ -40,7 +40,9 @@ export async function POST(req: NextRequest) {
         success: true,
         valid: true,
         referrer: couponData.referrer?.name || "Unknown",
-        code: couponData.code
+        code: couponData.code,
+        discountValue: couponData.discountValue || 0,
+        discountType: couponData.discountType || "fixed"
       });
 
     } catch (e: any) {

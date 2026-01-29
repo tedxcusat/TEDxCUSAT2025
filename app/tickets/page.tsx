@@ -15,6 +15,46 @@ gsap.registerPlugin(ScrollTrigger);
 
 const tickets = [
   {
+    type: "Deluxe Bundle",
+    price: "₹5499",
+    description: "The ultimate takeover. Bring the whole squad and own the night.",
+    soldOut: false,
+    disabled: false,
+    link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=52db7c75-210f-41ad-b064-9821de746526",
+    isBundle: true,
+    count: "10 Tickets"
+  },
+  {
+    type: "Premier Bundle",
+    price: "₹2999",
+    description: "The perfect circle. Upgrade your experience without missing a beat.",
+    soldOut: false,
+    disabled: false,
+    link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=17e321b6-1f37-460c-97b9-367d65eaf0ee",
+    isBundle: true,
+    count: "5 Tickets"
+  },
+  {
+    type: "Trio Bundle",
+    price: "₹1999",
+    description: "Three's a party. More friends, more memories, better value.",
+    soldOut: false,
+    disabled: false,
+    link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=1b92dcd7-41b3-4f62-b57a-d1445a5c21ab",
+    isBundle: true,
+    count: "3 Tickets"
+  },
+  {
+    type: "Couple Bundle",
+    price: "₹1399",
+    description: "Double the fun. Because the best moments are meant to be shared.",
+    soldOut: false,
+    disabled: false,
+    link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=17074073-d06d-4b1d-8371-14a4fc0ef261",
+    isBundle: true,
+    count: "2 Tickets"
+  },
+  {
     type: "Early Bird",
     price: "₹699",
     description: "Limited time offer for early bookings.",
@@ -209,18 +249,28 @@ export default function TicketsPage() {
         </div>
 
         {/* Ticket Cards Grid */}
-        <div ref={cardsRef} className="flex flex-wrap justify-center gap-6 mb-32 max-w-5xl mx-auto">
+        <div ref={cardsRef} className="flex flex-wrap justify-center gap-6 mb-32 max-w-7xl mx-auto">
           {tickets.map((ticket, index) => (
             <motion.div
               key={index}
-              className={`ticket-card opacity-0 relative group p-8 border border-white/20 hover:border-white/50 bg-black/50 backdrop-blur-sm flex flex-col justify-between min-h-[380px] w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] transition-all duration-300`}
+              className={`ticket-card opacity-0 relative group p-8 border backdrop-blur-sm flex flex-col justify-between min-h-[400px] w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] transition-all duration-300
+                ${/* @ts-ignore */
+                ticket.isBundle
+                  ? 'bg-gradient-to-br from-black/80 to-[#EB0028]/10 border-[#EB0028]/40 hover:border-[#EB0028] hover:shadow-[0_0_30px_-5px_rgba(235,0,40,0.3)]'
+                  : 'bg-black/50 border-white/20 hover:border-white/50'
+                }
+              `}
             >
               {/* Card Content */}
               <div>
-                <h3 className="font-orbitron font-bold text-2xl tracking-wider mb-2 text-white flex items-center gap-3">
-                  {ticket.type}
-                </h3>
-                <div className="h-0.5 w-15 bg-[#EB0028] mb-6"></div>
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className={`font-orbitron font-bold text-2xl tracking-wider text-white flex items-center gap-3 ${/* @ts-ignore */ ticket.isBundle ? 'text-[#EB0028] drop-shadow-sm' : ''}`}>
+                    {ticket.type}
+                  </h3>
+                </div>
+
+                <div className={`h-0.5 w-16 mb-6 ${/* @ts-ignore */ ticket.isBundle ? 'bg-[#EB0028]' : 'bg-white/50'}`}></div>
+
                 <p className="font-clash text-5xl font-semibold mb-4 text-white">
                   {ticket.price}
                 </p>
@@ -231,11 +281,12 @@ export default function TicketsPage() {
 
               {/* Book Button */}
               {/* @ts-ignore */}
-              {ticket.label && !ticket.soldOut && !ticket.disabled && (
-                <p className="text-[#EB0028] font-clash font-bold text-sm tracking-wider uppercase animate-pulse">
-                  {/* @ts-ignore */}
-                  {ticket.label}
-                </p>
+              {(ticket.count || ticket.label) && !ticket.soldOut && !ticket.disabled && (
+                <div className="mt-auto">
+                  <p className={`text-[#EB0028] font-clash font-bold text-sm tracking-widest uppercase mb-4 ${/* @ts-ignore */ ticket.label ? 'animate-pulse' : ''}`}>
+                    {/* @ts-ignore */ ticket.count || ticket.label}
+                  </p>
+                </div>
               )}
               <button
                 onClick={() => ticket.link && window.open(ticket.link, "_blank")}
@@ -243,7 +294,9 @@ export default function TicketsPage() {
                 className={`w-full py-4 bg-transparent border font-clash font-medium tracking-wide transition-colors duration-300 uppercase
                   ${ticket.soldOut || ticket.disabled
                     ? 'border-white/20 text-white/40 cursor-not-allowed hidden'
-                    : 'border-[#EB0028] text-white hover:bg-[#EB0028] mt-0'
+                    : /* @ts-ignore */ ticket.isBundle
+                      ? 'border-[#EB0028] bg-[#EB0028] text-white hover:bg-[#EB0028]/80 hover:border-[#EB0028]/80 mt-0 font-bold shadow-[0_0_15px_rgba(235,0,40,0.4)]'
+                      : 'border-[#EB0028] text-white hover:bg-[#EB0028] mt-0'
                   }
                 `}
               >
@@ -251,8 +304,8 @@ export default function TicketsPage() {
               </button>
 
               {/* Decorative Corners */}
-              <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-white/30 group-hover:border-[#EB0028] transition-colors"></div>
-              <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-white/30 group-hover:border-[#EB0028] transition-colors"></div>
+              <div className={`absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 transition-colors ${/* @ts-ignore */ ticket.isBundle ? 'border-[#EB0028]' : 'border-white/30 group-hover:border-[#EB0028]'}`}></div>
+              <div className={`absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 transition-colors ${/* @ts-ignore */ ticket.isBundle ? 'border-[#EB0028]' : 'border-white/30 group-hover:border-[#EB0028]'}`}></div>
 
               {/* Sold Out Overlay */}
               {ticket.soldOut && (
