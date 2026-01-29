@@ -30,7 +30,12 @@ export default function PaymentSection({ product, size, onBack, onSuccess, initi
   // Referral State
   const [couponCode, setCouponCode] = useState(initialCoupon || "");
   const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
-  const [referralData, setReferralData] = useState<{ valid: boolean; referrer: string } | null>(null);
+  const [referralData, setReferralData] = useState<{
+    valid: boolean;
+    referrer: string;
+    discountValue: number;
+    discountType: "fixed" | "percentage"
+  } | null>(null);
   const [referralMessage, setReferralMessage] = useState("");
 
   const handleVerifyCoupon = async () => {
@@ -45,10 +50,16 @@ export default function PaymentSection({ product, size, onBack, onSuccess, initi
       });
       const data = await res.json();
       if (data.success && data.valid) {
-        setReferralData({ valid: true, referrer: data.referrer });
-        setReferralMessage(`Referral applied! Supporting: ${data.referrer}`);
+        setReferralData({
+          valid: true,
+          referrer: data.referrer,
+          discountValue: data.discountValue,
+          discountType: data.discountType
+        });
+        const discountText = data.discountType === "percentage" ? `${data.discountValue}%` : `₹${data.discountValue}`;
+        setReferralMessage(`Referral applied! ${discountText} OFF (Supporting: ${data.referrer})`);
       } else {
-        setReferralData({ valid: false, referrer: "" });
+        setReferralData({ valid: false, referrer: "", discountValue: 0, discountType: "fixed" });
         setReferralMessage("Invalid referral code");
       }
     } catch (e) {
@@ -116,12 +127,26 @@ export default function PaymentSection({ product, size, onBack, onSuccess, initi
 
     setIsSubmitting(true);
 
+    const calculateFinalPrice = () => {
+      if (!referralData?.valid) return product.price;
+
+      let finalPrice = product.price;
+      if (referralData.discountType === "percentage") {
+        finalPrice = product.price * (1 - referralData.discountValue / 100);
+      } else {
+        finalPrice = product.price - referralData.discountValue;
+      }
+      return Math.max(0, Math.floor(finalPrice));
+    };
+
+    const finalPrice = calculateFinalPrice();
+
     try {
       const data = new FormData();
       data.append("productId", product.id);
       data.append("productName", product.name);
       data.append("size", size);
-      data.append("price", product.price.toString());
+      data.append("price", finalPrice.toString());
       data.append("customerName", formData.name);
       data.append("email", formData.email);
       data.append("phone", formData.phone);
@@ -182,7 +207,18 @@ export default function PaymentSection({ product, size, onBack, onSuccess, initi
               <p className="font-orbitron text-lg text-white">{product.name}</p>
               <p className="font-clash text-gray-400">Size: {size}</p>
             </div>
-            <p className="font-clash text-2xl font-semibold text-[#EB0028]">₹{product.price}</p>
+            <div className="text-right">
+              {referralData?.valid && (
+                <p className="font-clash text-sm text-gray-500 line-through">₹{product.price}</p>
+              )}
+              <p className="font-clash text-2xl font-semibold text-[#EB0028]">
+                ₹{referralData?.valid
+                  ? (referralData.discountType === "percentage"
+                    ? Math.max(0, Math.floor(product.price * (1 - referralData.discountValue / 100)))
+                    : Math.max(0, product.price - referralData.discountValue))
+                  : product.price}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -363,7 +399,11 @@ export default function PaymentSection({ product, size, onBack, onSuccess, initi
               </p>
 
               <p className="font-clash text-center text-xl font-semibold text-[#EB0028] ">
-                Amount: ₹{product.price}
+                Amount: ₹{referralData?.valid
+                  ? (referralData.discountType === "percentage"
+                    ? Math.max(0, Math.floor(product.price * (1 - referralData.discountValue / 100)))
+                    : Math.max(0, product.price - referralData.discountValue))
+                  : product.price}
               </p>
             </div>
           </div>
