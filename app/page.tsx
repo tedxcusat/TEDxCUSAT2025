@@ -14,6 +14,7 @@ import About from "./components/about";
 import EchoesHero from "./components/EchoesHero";
 import Journey from "./components/journey";
 import MerchToast from "./components/merch/Toast";
+import HappyHourPopup from "./components/HappyHourPopup";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -148,6 +149,12 @@ export default function Home() {
       <MerchToast
         show={showMerchToast}
         onClose={() => setShowMerchToast(false)}
+      />
+
+      {/* Happy Hour Popup */}
+      <HappyHourPopup
+        show={heroFinished}
+        onClose={() => { }} // Optional: If you want to track close, but internal logic handles navigation or overlay click
       />
     </main>
   );

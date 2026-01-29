@@ -138,6 +138,21 @@ export default function TicketsPage() {
   const cardsRef = useRef<HTMLDivElement>(null);
   const sponsorsRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
+  const [isHappyHour, setIsHappyHour] = useState(false);
+
+  useEffect(() => {
+    // Check if Happy Hour is still active (Deadline: Jan 29 10:30 PM IST)
+    const checkTime = () => {
+      const deadline = new Date("2026-01-29T22:30:00+05:30").getTime();
+      const now = new Date().getTime();
+      setIsHappyHour(now < deadline);
+    };
+
+    checkTime();
+    // Re-check every minute
+    const interval = setInterval(checkTime, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const toggleFaq = (index: number) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -271,9 +286,30 @@ export default function TicketsPage() {
 
                 <div className={`h-0.5 w-16 mb-6 ${/* @ts-ignore */ ticket.isBundle ? 'bg-[#EB0028]' : 'bg-white/50'}`}></div>
 
-                <p className="font-clash text-5xl font-semibold mb-4 text-white">
-                  {ticket.price}
-                </p>
+                <div className="flex flex-col mb-4">
+                  {/* @ts-ignore */}
+                  {isHappyHour && !ticket.isBundle ? (
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <p className="font-clash text-xl text-gray-500 line-through decoration-[#EB0028]/50 decoration-2">
+                          {ticket.price}
+                        </p>
+                        <div className="px-2 py-0.5 rounded bg-[#EB0028]/20 border border-[#EB0028]/30">
+                          <span className="text-xs font-bold text-[#EB0028] uppercase tracking-wider">30% OFF</span>
+                        </div>
+                      </div>
+                      <p className="font-clash text-5xl font-semibold text-white mt-1">
+                        {/* Calculate 30% off */}
+                        ₹{(parseInt(ticket.price.replace('₹', '')) * 0.7).toFixed(2)}
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="font-clash text-5xl font-semibold text-white">
+                      {ticket.price}
+                    </p>
+                  )}
+                </div>
+
                 <p className="font-clash text-gray-400 leading-relaxed text-lg">
                   {ticket.description}
                 </p>
