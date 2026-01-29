@@ -141,9 +141,8 @@ export default function TicketsPage() {
   const [isHappyHour, setIsHappyHour] = useState(false);
 
   useEffect(() => {
-    // Check if Happy Hour is still active (Deadline: Jan 29 10:30 PM IST)
     const checkTime = () => {
-      const deadline = new Date("2026-01-29T22:30:00+05:30").getTime();
+      const deadline = new Date("2026-01-29T23:00:00+05:30").getTime();
       const now = new Date().getTime();
       setIsHappyHour(now < deadline);
     };
