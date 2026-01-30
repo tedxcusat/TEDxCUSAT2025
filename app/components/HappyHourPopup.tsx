@@ -90,7 +90,7 @@ export default function HappyHourPopup({ show, onClose }: HappyHourPopupProps) {
               </p>
 
               <p className="font-clash text-gray-400 text-sm mb-4 max-w-[240px]">
-                On all individual tickets. Grab yours before time runs out!
+                On all tickets. Grab yours before time runs out!
               </p>
 
               <div className="bg-[#EB0028]/10 border border-[#EB0028]/20 rounded-lg px-4 py-2 mb-6">
@@ -99,12 +99,6 @@ export default function HappyHourPopup({ show, onClose }: HappyHourPopupProps) {
                 </p>
                 <p className="font-orbitron text-xl text-[#EB0028] font-black tracking-widest select-all">
                   HAPPY30
-                </p>
-              </div>
-
-              <div className="bg-white/5 border border-white/10 rounded-lg py-1.5 px-3 mb-6">
-                <p className="font-clash text-xs text-[#EB0028] uppercase tracking-widest font-bold">
-                  Ends at 11:00 AM on Jan 31st
                 </p>
               </div>
 

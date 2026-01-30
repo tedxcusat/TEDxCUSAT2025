@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Plus, Minus } from "lucide-react";
 import Link from "next/link";
-
 import Footer from "../components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -103,6 +102,7 @@ const tickets = [
 
 const sponsors = [
   { name: "Sponsor 1", logo: "/infopark-logo.svg" },
+  { name: "Sponsor 3", logo: "/cakePots_logo.svg" },
   { name: "Sponsor 2", logo: "/makemypass-logo.svg" },
 ];
 
@@ -287,7 +287,7 @@ export default function TicketsPage() {
 
                 <div className="flex flex-col mb-4">
                   {/* @ts-ignore */}
-                  {isHappyHour && !ticket.isBundle ? (
+                  {isHappyHour ? (
                     <div>
                       <div className="flex items-center gap-3">
                         <p className="font-clash text-xl text-gray-500 line-through decoration-[#EB0028]/50 decoration-2">
