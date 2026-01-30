@@ -18,7 +18,7 @@ export default function HappyHourPopup({ show, onClose }: HappyHourPopupProps) {
 
   useEffect(() => {
     const checkTime = () => {
-      const deadline = new Date("2026-01-29T23:00:00+05:30").getTime();
+      const deadline = new Date("2026-01-31T11:00:00+05:30").getTime();
       const now = new Date().getTime();
       setIsActive(now < deadline);
     };
@@ -104,7 +104,7 @@ export default function HappyHourPopup({ show, onClose }: HappyHourPopupProps) {
 
               <div className="bg-white/5 border border-white/10 rounded-lg py-1.5 px-3 mb-6">
                 <p className="font-clash text-xs text-[#EB0028] uppercase tracking-widest font-bold">
-                  Ends at 11:00 PM Today
+                  Ends at 11:00 AM on Jan 31st
                 </p>
               </div>
 
