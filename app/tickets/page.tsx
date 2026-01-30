@@ -14,6 +14,16 @@ gsap.registerPlugin(ScrollTrigger);
 
 const tickets = [
   {
+    type: "Flash Sale",
+    price: "₹450",
+    description: "Limited time offer. Grab it before it's gone!",
+    soldOut: false,
+    disabled: false,
+    link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=d75cf885-fda9-467c-b6d9-0266bd420430",
+    excludeFromHappyHour: true,
+    isGold: true
+  },
+  {
     type: "Deluxe Bundle",
     price: "₹5499",
     description: "The ultimate takeover. Bring the whole squad and own the night.",
@@ -271,23 +281,25 @@ export default function TicketsPage() {
                 ${/* @ts-ignore */
                 ticket.isBundle
                   ? 'bg-gradient-to-br from-black/80 to-[#EB0028]/10 border-[#EB0028]/40 hover:border-[#EB0028] hover:shadow-[0_0_30px_-5px_rgba(235,0,40,0.3)]'
-                  : 'bg-black/50 border-white/20 hover:border-white/50'
+                  : /* @ts-ignore */ ticket.isGold
+                    ? 'bg-gradient-to-br from-black/80 to-[#FFD700]/10 border-[#FFD700]/40 hover:border-[#FFD700] hover:shadow-[0_0_30px_-5px_rgba(255,215,0,0.3)]'
+                    : 'bg-black/50 border-white/20 hover:border-white/50'
                 }
               `}
             >
               {/* Card Content */}
               <div>
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className={`font-orbitron font-bold text-2xl tracking-wider text-white flex items-center gap-3 ${/* @ts-ignore */ ticket.isBundle ? 'text-[#EB0028] drop-shadow-sm' : ''}`}>
+                  <h3 className={`font-orbitron font-bold text-2xl tracking-wider text-white flex items-center gap-3 ${/* @ts-ignore */ ticket.isBundle ? 'text-[#EB0028] drop-shadow-sm' : /* @ts-ignore */ ticket.isGold ? 'text-[#FFD700] drop-shadow-sm' : ''}`}>
                     {ticket.type}
                   </h3>
                 </div>
 
-                <div className={`h-0.5 w-16 mb-6 ${/* @ts-ignore */ ticket.isBundle ? 'bg-[#EB0028]' : 'bg-white/50'}`}></div>
+                <div className={`h-0.5 w-16 mb-6 ${/* @ts-ignore */ ticket.isBundle ? 'bg-[#EB0028]' : /* @ts-ignore */ ticket.isGold ? 'bg-[#FFD700]' : 'bg-white/50'}`}></div>
 
                 <div className="flex flex-col mb-4">
                   {/* @ts-ignore */}
-                  {isHappyHour ? (
+                  {isHappyHour && !ticket.excludeFromHappyHour ? (
                     <div>
                       <div className="flex items-center gap-3">
                         <p className="font-clash text-xl text-gray-500 line-through decoration-[#EB0028]/50 decoration-2">
@@ -318,7 +330,7 @@ export default function TicketsPage() {
               {/* @ts-ignore */}
               {(ticket.count || ticket.label) && !ticket.soldOut && !ticket.disabled && (
                 <div className="mt-auto">
-                  <p className={`text-[#EB0028] font-clash font-bold text-sm tracking-widest uppercase mb-4 ${/* @ts-ignore */ ticket.label ? 'animate-pulse' : ''}`}>
+                  <p className={`text-[#EB0028] font-clash font-bold text-sm tracking-widest uppercase mb-4 ${/* @ts-ignore */ ticket.label ? 'animate-pulse' : ''} ${/* @ts-ignore */ ticket.isGold ? 'text-[#FFD700]' : ''}`}>
                     {/* @ts-ignore */ ticket.count || ticket.label}
                   </p>
                 </div>
@@ -331,7 +343,9 @@ export default function TicketsPage() {
                     ? 'border-white/20 text-white/40 cursor-not-allowed hidden'
                     : /* @ts-ignore */ ticket.isBundle
                       ? 'border-[#EB0028] bg-[#EB0028] text-white hover:bg-[#EB0028]/80 hover:border-[#EB0028]/80 mt-0 font-bold shadow-[0_0_15px_rgba(235,0,40,0.4)]'
-                      : 'border-[#EB0028] text-white hover:bg-[#EB0028] mt-0'
+                      : /* @ts-ignore */ ticket.isGold
+                        ? 'border-[#FFD700] bg-[#FFD700] text-white hover:bg-[#FFD700]/80 hover:border-[#FFD700]/80 mt-0 font-bold shadow-[0_0_15px_rgba(255,215,0,0.4)]'
+                        : 'border-[#EB0028] text-white hover:bg-[#EB0028] mt-0'
                   }
                 `}
               >
@@ -339,8 +353,8 @@ export default function TicketsPage() {
               </button>
 
               {/* Decorative Corners */}
-              <div className={`absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 transition-colors ${/* @ts-ignore */ ticket.isBundle ? 'border-[#EB0028]' : 'border-white/30 group-hover:border-[#EB0028]'}`}></div>
-              <div className={`absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 transition-colors ${/* @ts-ignore */ ticket.isBundle ? 'border-[#EB0028]' : 'border-white/30 group-hover:border-[#EB0028]'}`}></div>
+              <div className={`absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 transition-colors ${/* @ts-ignore */ ticket.isBundle ? 'border-[#EB0028]' : /* @ts-ignore */ ticket.isGold ? 'border-[#FFD700]' : 'border-white/30 group-hover:border-[#EB0028]'}`}></div>
+              <div className={`absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 transition-colors ${/* @ts-ignore */ ticket.isBundle ? 'border-[#EB0028]' : /* @ts-ignore */ ticket.isGold ? 'border-[#FFD700]' : 'border-white/30 group-hover:border-[#EB0028]'}`}></div>
 
               {/* Sold Out Overlay */}
               {ticket.soldOut && (
