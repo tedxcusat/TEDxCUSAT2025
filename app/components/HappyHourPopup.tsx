@@ -102,12 +102,6 @@ export default function HappyHourPopup({ show, onClose }: HappyHourPopupProps) {
                 </p>
               </div>
 
-              <div className="bg-white/5 border border-white/10 rounded-lg py-1.5 px-3 mb-6">
-                <p className="font-clash text-xs text-[#EB0028] uppercase tracking-widest font-bold">
-                  Ends at 11:00 AM on Jan 31st
-                </p>
-              </div>
-
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
