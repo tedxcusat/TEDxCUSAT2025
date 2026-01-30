@@ -21,7 +21,7 @@ const clashDisplay = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "TEDxCUSAT 6th Edition | Genesis | Ideas Worth Spreading",
+  title: "TEDxCUSAT 6th Edition | Genesis | From Concept to Impact",
   description: "Join TEDxCUSAT 6th Edition at Athulya Hall, Infopark Kochi on Jan 31, 2026. Explore the theme 'Genesis: From Concept to Impact' with speakers like Sujith Vaassudev and Kaif Muhammad. Organized by Deva Nandan S and Adithyan Pramod.",
   keywords: ["TEDx", "CUSAT", "conference", "innovation", "ideas", "talks", "speakers", "TEDxCUSAT 6th Edition", "Genesis", "From Concept to Impact", "Kochi", "Kerala", "Infopark", "Athulya Hall", "Sujith Vaassudev", "Kaif Muhammad", "Aparna Premraj", "Ahmad Al Kaashekh", "Dr. Fahed VP", "Sreeraj Gopi", "Deva Nandan S", "Adithyan Pramod", "Infopark", "Makemypass", "CakePots", "Technology", "Entertainment", "Design"],
   authors: [{ name: "TEDxCUSAT" }, { name: "Deva Nandan S" }, { name: "Adithyan Pramod" }],
