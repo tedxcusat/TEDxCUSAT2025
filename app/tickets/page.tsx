@@ -102,8 +102,8 @@ const tickets = [
 
 const sponsors = [
   { name: "Sponsor 1", logo: "/infopark-logo.svg" },
+  { name: "Sponsor 3", logo: "/cakePots_logo.svg" },
   { name: "Sponsor 2", logo: "/makemypass-logo.svg" },
-  { name: "Sponsor 3", logo: "/cakePots_logo.png" },
 ];
 
 const faqs = [
