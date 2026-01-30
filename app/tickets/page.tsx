@@ -14,6 +14,15 @@ gsap.registerPlugin(ScrollTrigger);
 
 const tickets = [
   {
+    type: "Flash Sale",
+    price: "₹450",
+    description: "Limited time offer. Grab it before it's gone!",
+    soldOut: false,
+    disabled: false,
+    link: "https://makemypass.com/event/tedxcusat-2025?ticket_id=d75cf885-fda9-467c-b6d9-0266bd420430",
+    excludeFromHappyHour: true
+  },
+  {
     type: "Deluxe Bundle",
     price: "₹5499",
     description: "The ultimate takeover. Bring the whole squad and own the night.",
@@ -287,7 +296,7 @@ export default function TicketsPage() {
 
                 <div className="flex flex-col mb-4">
                   {/* @ts-ignore */}
-                  {isHappyHour ? (
+                  {isHappyHour && !ticket.excludeFromHappyHour ? (
                     <div>
                       <div className="flex items-center gap-3">
                         <p className="font-clash text-xl text-gray-500 line-through decoration-[#EB0028]/50 decoration-2">
