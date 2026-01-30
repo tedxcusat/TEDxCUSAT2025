@@ -142,7 +142,7 @@ export default function TicketsPage() {
 
   useEffect(() => {
     const checkTime = () => {
-      const deadline = new Date("2026-01-29T23:00:00+05:30").getTime();
+      const deadline = new Date("2026-01-31T11:00:00+05:30").getTime();
       const now = new Date().getTime();
       setIsHappyHour(now < deadline);
     };
